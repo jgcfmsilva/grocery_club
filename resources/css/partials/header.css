@@ -1,0 +1,492 @@
+#theme-container .theme-icon path {
+    fill: var(--bs-icon-header-color);
+}
+
+#theme-container .theme-icon:hover path {
+    fill: var(--bs-icon-header-color-hover);
+}
+
+@media (max-width: 991.98px) {
+    .gheader {
+        background-color: #fff;
+        -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+        box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    }
+}
+
+.ghead-topbar {
+    padding: 10px 0 44px 0;
+}
+
+.topbar-info-right {
+    gap: 48px;
+}
+
+.topbar-info-right li {
+    position: relative;
+    color: #fff;
+    font-size: 0.875rem;
+}
+
+.topbar-info-right li a {
+    font-size: 0.875rem;
+}
+
+.topbar-info-right li a:not(.dropdown-menu a) {
+    color: #fff;
+}
+
+.topbar-info-right li::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background-color: #fff;
+}
+
+.topbar-info-right li :not(:last-child) {
+    margin-right: 0;
+}
+
+.topbar-info-right li img {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 50%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    -webkit-box-shadow: 0 2px 4px 0 rgba(25, 29, 40, 0.05);
+    box-shadow: 0 2px 4px 0 rgba(25, 29, 40, 0.05);
+}
+
+.topbar-info-right li:first-child:before {
+    display: none;
+}
+
+.topbar-info-right .list-inline-item:not(:last-child) {
+    margin-right: 0;
+}
+
+.topbar-info-right .dropdown ul.dropdown-menu {
+    min-width: auto !important;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border: none;
+}
+
+.topbar-info-right .dropdown ul.dropdown-menu li {
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    min-width: 100%;
+}
+
+.topbar-info-right .dropdown ul.dropdown-menu li a {
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.topbar-info-right .dropdown ul.dropdown-menu li.dropdown-toggle:after {
+    margin-left: 0;
+}
+
+.topbar-info-right .dropdown ul.dropdown-menu li:hover a {
+    background-color: rgba(0, 0, 0, 0);
+    color: #6eb356;
+}
+
+.gshop-navbar-right::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 1px;
+    height: 80px;
+    background-color: rgba(110, 179, 86, 0.1);
+}
+
+.gshop-navbar {
+    margin-top: -32px;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+}
+
+@media (max-width: 991.98px) {
+    .gshop-navbar {
+        margin-top: 0;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.gshop-navbar-right::before {
+    left: -37px;
+}
+
+@media (max-width: 991.98px) {
+    .gshop-navbar-right::before {
+        display: none;
+    }
+}
+
+.category-dropdown-box {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 650px;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+}
+
+.category-dropdown-box.active {
+    top: 40px;
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 1199.98px) {
+    .category-dropdown-box {
+        right: -330px;
+        left: auto;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .category-dropdown-box {
+        right: -180px;
+        left: auto;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .category-dropdown-box {
+        left: auto;
+        right: 0;
+        width: 320px;
+        height: 325px;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-dropdown-box {
+        right: -70px;
+    }
+}
+
+.category-dropdown-menu {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.category-dropdown-menu li {
+    width: calc(33% - 10px);
+}
+
+.category-dropdown-menu li a {
+    display: block;
+    color: #5d6374;
+    font-weight: 500;
+    font-size: 14px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.category-dropdown-menu li a:hover {
+    -webkit-transform: translateY(-3px);
+    transform: translateY(-3px);
+    color: #6eb356;
+}
+
+@media (max-width: 767.98px) {
+    .category-dropdown-menu li {
+        width: 100%;
+    }
+}
+
+.category-dropdown-btn {
+    font-size: 15px;
+}
+
+.category-dropdown-btn span i {
+    font-size: 12px;
+}
+
+.gshop-navmenu ul li a {
+    display: inline-block;
+    padding: 24px 15px;
+    font-weight: 500;
+    color: #5d6374;
+    font-size: 15px;
+}
+
+.gshop-navmenu ul li a:hover {
+    color: #6eb356;
+}
+
+.gshop-navmenu > ul > .has-submenu {
+    position: relative;
+}
+
+.gshop-navmenu > ul > .has-submenu a span i {
+    font-size: 12px;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 6px);
+    background-color: #fff;
+    min-width: 200px;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border-radius: 0 0 4px 4px;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul.submenu-double-line {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    min-width: 350px;
+    grid-column-gap: 16px;
+    padding: 10px 12px;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul.submenu-double-line li {
+    width: calc(50% - 8px);
+}
+
+.gshop-navmenu > ul > .has-submenu > ul.submenu-double-line li + li a {
+    border-top: 0;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li + li a {
+    border-top: 1px solid rgba(233, 233, 233, 0.3);
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li a {
+    padding: 8px 15px;
+    display: block;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li a:hover {
+    padding-left: 20px;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li.has-submenu {
+    position: relative;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li.has-submenu > ul {
+    position: absolute;
+    left: calc(100% + 6px);
+    top: 0;
+    min-width: 200px;
+    background-color: #fff;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border-radius: 0 0 4px 4px;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.gshop-navmenu > ul > .has-submenu > ul li.has-submenu:hover > ul {
+    left: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+.gshop-navmenu > ul > .has-submenu:hover > ul {
+    opacity: 1;
+    visibility: visible;
+    top: 100%;
+}
+
+.gshop-header-icons {
+    gap: 24px;
+}
+
+.gshop-header-icons .header-icon {
+    background-color: transparent !important;
+    padding: 0;
+}
+
+.gshop-header-icons .header-icon svg path {
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.gshop-header-user .user-menu-wrapper {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -15px;
+    width: 200px;
+    padding-top: 20px;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.gshop-header-user:hover .header-icon svg path {
+    fill: #6eb356;
+}
+
+.gshop-header-wishlist:hover .header-icon svg path {
+    fill: #6eb356;
+}
+
+.gshop-header-user:hover .user-menu-wrapper {
+    top: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+.gshop-header-wishlist:hover .header-icon svg path {
+    fill: #6eb356;
+}
+
+.gshop-header-search .dropdown-menu {
+    background-color: var(--bs-body-bg);
+    min-width: 20rem;
+    padding: 16px;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border-radius: 4px;
+}
+
+.user-menu {
+    background-color: #fff;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border-radius: 0 0 4px 4px;
+}
+
+.user-menu li a {
+    display: block;
+    color: #5d6374;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 12px 15px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-menu li a:hover {
+    padding-left: 20px;
+    color: #6eb356;
+}
+
+.cart-box-wrapper {
+    position: absolute;
+    min-width: 400px;
+    top: calc(100% + 10px);
+    padding-top: 20px;
+    right: -50px;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.apt_cart_box {
+    background: #fff;
+    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
+    border-radius: 4px;
+    padding: 16px 20px 30px 20px;
+}
+
+.apt_cart_box .simplebar-track {
+    right: -10px;
+    width: 6px;
+}
+
+.apt_cart_box ul {
+    max-height: 300px;
+}
+
+.apt_cart_box ul li {
+    position: relative;
+}
+
+.apt_cart_box ul li .thumb-wrapper {
+    width: 65px;
+}
+
+.apt_cart_box ul li .items-content h6,
+.apt_cart_box ul li .items-content .h6 {
+    font-size: 14px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.apt_cart_box ul li .items-content h6:hover,
+.apt_cart_box ul li .items-content .h6:hover {
+    color: #6eb356;
+}
+
+.apt_cart_box ul li .items-content .products_meta .price {
+    font-size: 13px;
+}
+
+.apt_cart_box ul li .items-content .products_meta .count {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.apt_cart_box ul li .remove_cart_btn {
+    color: rgba(255, 4, 6, 0.5);
+    font-size: 14px;
+}
+
+.apt_cart_box ul li .remove_cart_btn:hover {
+    color: #ff0406;
+}
+
+.apt_cart_box ul li + li {
+    border-top: 1px solid rgba(233, 233, 233, 0.6);
+}
+
+.gshop-header-cart:hover .header-icon svg path {
+    fill: #6eb356;
+}
+
+.gshop-header-cart:hover .cart-box-wrapper {
+    opacity: 1;
+    visibility: visible;
+    top: 100%;
+}

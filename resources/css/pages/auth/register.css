@@ -1,0 +1,8 @@
+#register-form label {
+    color: var(--bs-input-label);
+}
+
+#register-form input,
+#register-form select {
+    color: var(--bs-input-field);
+}

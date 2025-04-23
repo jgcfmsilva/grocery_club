@@ -1,0 +1,11 @@
+.list-group-item-action:hover {
+    color: var(--bs-primary) !important;
+    transition: color 0.3s;
+}
+
+.list-group-item.active {
+    z-index: 2;
+    color: var(--bs-white) !important;
+    background-color: var(--bs-primary) !important;
+    border-color: var(--bs-primary) !important;
+}

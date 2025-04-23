@@ -1,0 +1,8 @@
+#personal-data-form label {
+    color: var(--bs-input-label);
+}
+
+#personal-data-form input,
+#personal-data-form select {
+    color: var(--bs-input-field);
+}
