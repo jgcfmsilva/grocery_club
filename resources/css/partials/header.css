@@ -1,23 +1,4 @@
-#theme-container .theme-icon path {
-    fill: var(--bs-icon-header-color);
-}
-
-#theme-container .theme-icon:hover path {
-    fill: var(--bs-icon-header-color-hover);
-}
-
-@media (max-width: 991.98px) {
-    .gheader {
-        background-color: #fff;
-        -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
-        box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
-    }
-}
-
-.ghead-topbar {
-    padding: 10px 0 44px 0;
-}
-
+/* CONTACTOS DA TOP BAR */
 .topbar-info-right {
     gap: 48px;
 }
@@ -100,40 +81,7 @@
     color: #6eb356;
 }
 
-.gshop-navbar-right::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
-    width: 1px;
-    height: 80px;
-    background-color: rgba(110, 179, 86, 0.1);
-}
-
-.gshop-navbar {
-    margin-top: -32px;
-    -webkit-box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
-    box-shadow: 0px 14px 20px rgba(0, 4, 94, 0.04);
-}
-
-@media (max-width: 991.98px) {
-    .gshop-navbar {
-        margin-top: 0;
-        -webkit-box-shadow: none !important;
-        box-shadow: none !important;
-    }
-}
-
-.gshop-navbar-right::before {
-    left: -37px;
-}
-
-@media (max-width: 991.98px) {
-    .gshop-navbar-right::before {
-        display: none;
-    }
-}
+/* CATEGORIAS DROPDOWN */
 
 .category-dropdown-box {
     position: absolute;
@@ -233,6 +181,7 @@
     font-size: 12px;
 }
 
+/* ITENS DA BARRA DE NAVEGAÇÃO */
 .gshop-navmenu ul li a {
     display: inline-block;
     padding: 24px 15px;
@@ -334,6 +283,7 @@
     top: 100%;
 }
 
+/* ICONS DE AÇÃO DA BARRA DE NAVEGAÇÃO (SEARCH, CART, WISHLIST, USER)*/
 .gshop-header-icons {
     gap: 24px;
 }
@@ -346,6 +296,14 @@
 .gshop-header-icons .header-icon svg path {
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+}
+
+#theme-container .theme-icon path {
+    fill: var(--bs-icon-header-color);
+}
+
+#theme-container .theme-icon:hover path {
+    fill: var(--bs-icon-header-color-hover);
 }
 
 .gshop-header-user .user-menu-wrapper {

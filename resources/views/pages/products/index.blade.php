@@ -19,20 +19,9 @@
         {{-- Lista de produtos --}}
         <div class="row">
             @forelse($products as $product)
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        @if ($product->image)
-                            <img src="{{ asset('storage/products/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
-                        @endif
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text">{{ number_format($product->price, 2, ',', '.') }} €</p>
-                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Ver mais</a>
-                        </div>
-                    </div>
-                </div>
+                <x-product-card :product="$product" />
             @empty
-                <p>Nenhum produto encontrado.</p>
+                <p>No products found.</p>
             @endforelse
         </div>
 

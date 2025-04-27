@@ -9,68 +9,72 @@
 @source '../../vendor/livewire/flux/stubs/**/*.blade.php';
 @source '../../storage/framework/views/*.php'; 
 
-
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme { 
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
     --background-image-logo-light: url('../img/politecnico_h.svg'); 
     --background-image-logo-dark: url('../img/politecnico_h_white.svg'); 
+
+    --container-padding-x: 0.75rem;
+    --container-padding-y: 0;
+    --container-max-sm: 540px;
+    --container-max-md: 720px;
+    --container-max-lg: 960px;
+    --container-max-xl: 1140px;
+    --container-max-2xl: 1344px;
 } 
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-
-    --color-zinc-50: #fafafa;
-    --color-zinc-100: #f5f5f5;
-    --color-zinc-200: #e5e5e5;
-    --color-zinc-300: #d4d4d4;
-    --color-zinc-400: #a3a3a3;
-    --color-zinc-500: #737373;
-    --color-zinc-600: #525252;
-    --color-zinc-700: #404040;
-    --color-zinc-800: #262626;
-    --color-zinc-900: #171717;
-    --color-zinc-950: #0a0a0a;
-
-    --color-accent: var(--color-neutral-800);
-    --color-accent-content: var(--color-neutral-800);
-    --color-accent-foreground: var(--color-white);
-}
-
-@layer theme {
-    .dark {
-        --color-accent: var(--color-white);
-        --color-accent-content: var(--color-white);
-        --color-accent-foreground: var(--color-neutral-800);
+@layer components {
+    .custom-container {
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: calc(var(--container-padding-x) * 0.5);
+      padding-right: calc(var(--container-padding-x) * 0.5);
+      z-index: 100;
+    }
+  
+    @media (min-width: 640px) {
+      .custom-container {
+        max-width: var(--container-max-sm);
+      }
+    }
+  
+    @media (min-width: 768px) {
+      .custom-container {
+        max-width: var(--container-max-md);
+      }
+    }
+  
+    @media (min-width: 1024px) {
+      .custom-container {
+        max-width: var(--container-max-lg);
+      }
+    }
+  
+    @media (min-width: 1280px) {
+      .custom-container {
+        max-width: var(--container-max-xl);
+      }
+    }
+  
+    @media (min-width: 1536px) {
+      .custom-container {
+        max-width: var(--container-max-2xl);
+      }
     }
 }
+  
 
-@layer base {
+@layer components {
+    .topbar-info-right {
+        @apply gap-[30px];
+    }
 
-    *,
-    ::after,
-    ::before,
-    ::backdrop,
-    ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+    .topbar-info-right li::before {
+      @apply absolute left-[-16px];
+    }
+
+    .theme-light .topbar-info-right a:not(.dropdown-menu a) {
+      @apply text-white;
     }
 }
-
-[data-flux-field]:not(ui-radio, ui-checkbox) {
-    @apply grid gap-2;
-}
-
-[data-flux-label] {
-    @apply  !mb-0 !leading-tight;
-}
-
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
-}
-
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */

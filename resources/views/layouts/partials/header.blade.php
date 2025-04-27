@@ -1,17 +1,17 @@
-<header class="gheader position-relative z-2">
-    <div class="ghead-topbar bg-primary d-none d-lg-block">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-xxl-4 col-xl-3">
+<header class="relative z-20">
+    <div class="hidden lg:block pt-5 pb-13 bg-primary">
+        <div class="custom-container">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full xl:w-3/12 xxl:w-1/4">
                     <div class="topbar-info d-none d-xl-block">
                         <p class="text-white fs-sm fw-medium mb-0">{{ config('vars.welcome_message') }}</p>
                     </div>
 
                 </div>
-                <div class="col-xxl-8 col-xl-9">
-                    <ul class="d-flex align-items-center justify-content-center justify-content-xl-end topbar-info-right">
-                        <li class="nav-item">
-                            <a href="tel:{{ config('vars.contact_number') }}" class="text-light d-flex align-items-center">
+                <div class="w-full xl:w-9/12 xxl:w-3/4">
+                    <ul class="flex items-baseline justify-center xl:justify-end topbar-info-right">
+                        <li>
+                            <a href="tel:{{ config('vars.contact_number') }}" class="text-white flex items-center">
                                 <span class="me-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="-5 3 27 14" fill="none" >
                                         <path fill="white" d="M21 15.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15.92z"></path>
@@ -21,8 +21,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="mailto:{{ config('vars.email') }}" class="text-light d-flex align-items-center">
+                        <li>
+                            <a href="mailto:{{ config('vars.email') }}" class="text-white flex items-center">
                                 <span class="me-2">
                                     <svg width="16" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -34,8 +34,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="javascript:void(0)" class="btn btn-link p-0 tt-theme-toggle fw-normal text-light">
+                        <li>
+                            <a href="javascript:void(0)" class="inline-flex items-center text-white font-normal p-0 hover:underline tt-theme-toggle">
                                 <div class="tt-theme-light" data-bs-toggle="tooltip" data-bs-placement="left"
                                     data-bs-title="Dark">Dark <i class="fas fa-moon fs-lg ms-1"></i>
                                 </div>
@@ -49,9 +49,9 @@
             </div>
         </div>
     </div>
-    <div class="container" id="theme-container">
-        <div class="gshop-navbar bg-white rounded-full ps-lg-5 pe-lg-10 position-relative">
-            <div class="row align-items-center">
+    <div class="custom-container" id="theme-container">
+        <div class="mt-0 lg:-mt-8 bg-white rounded-full relative lg:ps-5 lg:pe-10">
+            <div class="flex flex-wrap items-center">
                 <div class="col-xxl-2 col-xl-3 col-md-3 col-5">
                     <a href="{{ route('home') }}" class="logo">
                         <img src="{{ asset('assets/img/logo-light.png') }}" alt="Logo Claro" class="img-fluid logo-light">
@@ -59,8 +59,8 @@
                     </a>
                 </div>
                 <div class="col-xxl-10 col-xl-9 col-md-9 col-7">
-                    <div class="d-flex align-items-center justify-content-between position-relative w-100">
-                        <div class="gshop-navbar-center mx-auto d-none d-md-flex align-items-center">
+                    <div class="flex items-center justify-between relative w-full">
+                        <div class="hidden md:flex items-center mx-auto">
                             <div class="category-dropdown position-relative d-none d-md-inline-block">
                                 <a href="javascript:void(0)" class="category-dropdown-btn fw-bold d-none d-sm-inline-block">
                                     Categories <span class="ms-1"><i class="fa-solid fa-angle-down"></i></span>
@@ -89,13 +89,14 @@
                                 </div>
                             </div>
 
-                            <nav class="gshop-navmenu ms-3 d-none d-xl-block">
-                                <ul class="d-flex align-items-center justify-content-center">
+                            <nav class="gshop-navmenu ml-3 hidden xl:block">
+                                <ul class="flex items-center justify-center">
                                     <li><a href="{{ route('products.index') }}">Products</a></li>
                                 </ul>
                             </nav>
+                            
                         </div>
-                        <div class="gshop-header-icons d-none d-md-inline-flex align-items-center justify-content-end ms-3">
+                        <div class="gshop-header-icons hidden md:inline-flex items-center justify-end ms-3">
                             <div class="gshop-header-search dropdown">
                                 <button type="button" class="header-icon theme-icon" data-bs-toggle="dropdown">
                                     <svg width="20" height="23" viewBox="0 0 22 23" fill="none"
@@ -109,7 +110,7 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end border-0">
-                                    <form class="search-form d-flex align-items-center"
+                                    <form class="search-form flex items-center"
                                         action="{{ route('products.index') }}">
                                         <input type="text" placeholder="Search products"
                                             class="w-100" name="search"
@@ -120,7 +121,7 @@
                                 </div>
                             </div>
 
-                            <div class="gshop-header-wishlist position-relative">
+                            <div class="gshop-header-wishlist relative">
                                 <button type="button" class="header-icon theme-icon">
                                     <svg fill="none" width="24" height="23" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                                         <path 
@@ -130,7 +131,7 @@
                                 </button>
                             </div>
 
-                            <div class="gshop-header-cart position-relative">
+                            <div class="gshop-header-cart relative">
                                 <!--
                                 código para o carrinho
                                 -->
@@ -143,7 +144,7 @@
                                             fill="#5D6374" />
                                     </svg>
                                     <span
-                                        class="cart-counter badge bg-primary rounded-circle p-0 {{ 2 > 0 ? '' : 'd-none' }}">x2</span>
+                                        class="cart-counter badge bg-primary rounded-circle p-0 {{ 2 > 0 ? '' : 'hidden' }}">x2</span>
                                 </button>
                                 <div class="cart-box-wrapper">
                                     <div class="apt_cart_box theme-scrollbar">
@@ -152,12 +153,12 @@
 
                                             <!--cart listing-->
                                         </ul>
-                                        <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <div class="flex items-center justify-between mt-3">
                                             <h6 class="mb-0">Subtotal:</h6>
                                             <span
                                                 class="fw-semibold text-secondary sub-total-price">20,00€</span>
                                         </div>
-                                        <div class="row align-items-center justify-content-between">
+                                        <div class="row items-center justify-between">
                                             <div class="col-6">
                                                 <a href="{{ route('cart') }}"
                                                     class="btn btn-secondary btn-md mt-4 w-100"><span
@@ -166,7 +167,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <a href="{{ route('checkout') }}"
-                                                    class="btn btn-primary btn-md mt-4 w-100"><span class="me-2"><i
+                                                    class="btn btn-primary btn-md mt-4 w-full"><span class="me-2"><i
                                                             class="fa-solid fa-credit-card"></i></span>Checkout</a>
                                             </div>
                                         </div>
@@ -174,7 +175,7 @@
                                 </div>
                             </div>
 
-                            <div class="gshop-header-user position-relative">
+                            <div class="gshop-header-user relative">
                                 <button type="button" class="header-icon theme-icon">
                                     <svg width="20" height="25" viewBox="0 0 22 25" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -186,23 +187,23 @@
                                             fill="#5D6374" stroke="#5D6374" stroke-width="0.2" />
                                     </svg>
                                 </button>
-                                <div class="user-menu-wrapper">
+                                <div class="user-menu-wrapper absolute left-0 mt-2 z-10 w-full">
                                     <ul class="user-menu">
                                         @auth
                                             @if (auth()->user()->type == 'member' || auth()->user()->type == 'employee')
-                                                <li><a href="{{ route('my-account.index') }}"><span class="me-2"><i
+                                                <li><a href="{{ route('my-account.index') }}" class="text-dark"><span class="me-2"><i
                                                                 class="fa-solid fa-user"></i></span>My Account</a>
                                                 </li>
                                             @elseif(auth()->user()->type == 'board')
-                                                <li><a href="{{ route('admin.dashboard') }}"><span class="me-2"><i
+                                                <li><a href="{{ route('admin.dashboard') }}" class="text-dark"><span class="me-2"><i
                                                                 class="fa-solid fa-bars"></i></span>Dashboard</a>
                                                 </li>
                                             @endif
                                                 <li>
-                                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-dark">
                                                         <span class="me-2"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>Logout
                                                     </a>
-                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                                                         @csrf
                                                     </form>
                                                 </li>
@@ -210,10 +211,10 @@
 
 
                                         @guest
-                                            <li><a href="{{ route('login') }}"><span class="me-2"><i
+                                            <li><a href="{{ route('login') }}" class="text-dark"><span class="me-2"><i
                                                             class="fa-solid fa-arrow-right-from-bracket"></i></span>Log In</a>
                                             </li>
-                                            <li><a href="{{ route('register') }}"><span class="me-2"><i
+                                            <li><a href="{{ route('register') }}" class="text-dark"><span class="me-2"><i
                                                             class="fa-solid fa-user-plus"></i></span>Registration</a>
                                             </li>
                                         @endguest

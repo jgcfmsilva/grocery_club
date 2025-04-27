@@ -3,17 +3,17 @@
     <head>
         @include('layouts.partials.head')
     </head>
-    <body>
-        <div class="main-wrapper bg-bs-body">
+    <body class="flex flex-col min-h-screen">
+        <div class="bg-bs-body flex flex-col flex-1">
             @if (!isset($exception) || $exception->getStatusCode() != 503)
                 @include('layouts.partials.header')
             @endif
 
-            <main class="container mx-auto mt-6">
+            <main class="container mx-auto mt-6 flex-1 z-1">
                 @yield('content')
             </main>
 
-            <footer class="text-center p-4 text-sm text-red-200 mt-10 bg-red-800">
+            <footer class="text-center p-4 text-sm text-white mt-10 bg-gray-800">
                 &copy; {{ date('Y') }} Grocery Club. All rights reserved.
             </footer>
         </div>
