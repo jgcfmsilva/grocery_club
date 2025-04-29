@@ -9,6 +9,9 @@
         class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md space-y-6">
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
+
+        <h2 class="text-2xl font-semibold text-gray-700">Reset password</h2>
+
         <div class="gap-6">
             <!-- Email -->
             <div>
