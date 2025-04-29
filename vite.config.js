@@ -19,7 +19,8 @@ export default defineConfig({
                 // JS
                 "resources/js/app.js",
                 "resources/js/pages/auth/register.js",
-                "resources/js/pages/auth/forgot-password.js",
+                "resources/js/pages/auth/login.js",
+                "resources/js/pages/auth/reset-password.js",
                 "resources/js/pages/my-account/personal-data.js",
                 "resources/js/pages/my-account/orders.js",
                 "resources/js/pages/home.js",
