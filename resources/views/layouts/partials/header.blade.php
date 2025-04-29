@@ -13,8 +13,11 @@
                         <li>
                             <a href="tel:{{ config('vars.contact_number') }}" class="text-white flex items-center">
                                 <span class="me-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="-5 3 27 14" fill="none" >
-                                        <path fill="white" d="M21 15.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15.92z"></path>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14"
+                                        viewBox="-5 3 27 14" fill="none">
+                                        <path fill="white"
+                                            d="M21 15.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 15.92z">
+                                        </path>
                                     </svg>
                                 </span>
                                 {{ config('vars.contact_number') }}
@@ -24,7 +27,8 @@
                         <li>
                             <a href="mailto:{{ config('vars.email') }}" class="text-white flex items-center">
                                 <span class="me-2">
-                                    <svg width="16" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="16" height="14" viewBox="0 0 20 14" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M18.2422 0H1.75781C0.790547 0 0 0.783572 0 1.75V12.25C0 13.2168 0.791055 14 1.75781 14H18.2422C19.2095 14 20 13.2164 20 12.25V1.75C20 0.783339 19.2091 0 18.2422 0ZM17.9723 1.16667C17.4039 1.73433 10.7283 8.40194 10.4541 8.67588C10.225 8.90462 9.77512 8.90478 9.54594 8.67588L2.02773 1.16667H17.9723ZM1.17188 12.0355V1.96447L6.21348 7L1.17188 12.0355ZM2.02773 12.8333L7.04078 7.82631L8.71598 9.49951C9.40246 10.1852 10.5978 10.1849 11.2841 9.49951L12.9593 7.82635L17.9723 12.8333H2.02773ZM18.8281 12.0355L13.7865 7L18.8281 1.96447V12.0355Z"
                                             fill="white" />
@@ -35,7 +39,8 @@
                         </li>
 
                         <li>
-                            <a href="javascript:void(0)" class="inline-flex items-center text-white font-normal p-0 hover:underline tt-theme-toggle">
+                            <a href="javascript:void(0)"
+                                class="inline-flex items-center text-white font-normal p-0 hover:underline tt-theme-toggle">
                                 <div class="tt-theme-light" data-bs-toggle="tooltip" data-bs-placement="left"
                                     data-bs-title="Dark">Dark <i class="fas fa-moon fs-lg ms-1"></i>
                                 </div>
@@ -54,15 +59,18 @@
             <div class="flex flex-wrap items-center">
                 <div class="col-xxl-2 col-xl-3 col-md-3 col-5">
                     <a href="{{ route('home') }}" class="logo">
-                        <img src="{{ asset('assets/img/logo-light.png') }}" alt="Logo Claro" class="img-fluid logo-light">
-                        <img src="{{ asset('assets/img/logo-dark.png') }}" alt="Logo Escuro" class="img-fluid logo-dark d-none">
+                        <img src="{{ asset('assets/img/logo-light.png') }}" alt="Logo Claro"
+                            class="img-fluid logo-light">
+                        <img src="{{ asset('assets/img/logo-dark.png') }}" alt="Logo Escuro"
+                            class="img-fluid logo-dark d-none">
                     </a>
                 </div>
                 <div class="col-xxl-10 col-xl-9 col-md-9 col-7">
                     <div class="flex items-center justify-between relative w-full">
                         <div class="hidden md:flex items-center mx-auto">
                             <div class="category-dropdown position-relative d-none d-md-inline-block">
-                                <a href="javascript:void(0)" class="category-dropdown-btn fw-bold d-none d-sm-inline-block">
+                                <a href="javascript:void(0)"
+                                    class="category-dropdown-btn fw-bold d-none d-sm-inline-block">
                                     Categories <span class="ms-1"><i class="fa-solid fa-angle-down"></i></span>
                                 </a>
                                 <div class="category-dropdown-box scrollbar">
@@ -73,13 +81,13 @@
                                         @endphp
                                         @foreach ($categories as $category)
                                             <li>
-                                                <a href="{{ route('products.category', $category->id) }}" class="d-flex align-items-center">
+                                                <a href="{{ route('products.category', $category->id) }}"
+                                                    class="d-flex align-items-center">
                                                     <div class="me-2 avatar-icon">
-                                                    <img src="{{ 
-                                                        $category->image ? 
-                                                        asset('storage/categories/' . $category->image) : 
-                                                        asset('storage/categories/category_no_image.png') }}" 
-                                                        alt="" class="rounded-circle h-100 w-100">
+                                                        <img src="{{ $category->image
+                                                            ? asset('storage/categories/' . $category->image)
+                                                            : asset('storage/categories/category_no_image.png') }}"
+                                                            alt="" class="rounded-circle h-100 w-100">
                                                     </div>
                                                     <span>{{ $category->name }}</span>
                                                 </a>
@@ -94,7 +102,7 @@
                                     <li><a href="{{ route('products.index') }}">Products</a></li>
                                 </ul>
                             </nav>
-                            
+
                         </div>
                         <div class="gshop-header-icons hidden md:inline-flex items-center justify-end ms-3">
                             <div class="gshop-header-search dropdown">
@@ -110,10 +118,9 @@
                                     </svg>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end border-0">
-                                    <form class="search-form flex items-center"
-                                        action="{{ route('products.index') }}">
-                                        <input type="text" placeholder="Search products"
-                                            class="w-100" name="search"
+                                    <form class="search-form flex items-center" action="{{ route('products.index') }}">
+                                        <input type="text" placeholder="Search products" class="w-100"
+                                            name="search"
                                             @isset($searchKey) value="{{ $searchKey }}" @endisset>
                                         <button type="submit" class="submit-icon-btn-secondary"><i
                                                 class="fa-solid fa-magnifying-glass"></i></button>
@@ -121,7 +128,11 @@
                                 </div>
                             </div>
 
-                            <livewire:header-wishlist />
+                            <!--  checks if the user is logged in -->
+                            @if (Auth::check())
+                                <livewire:header-wishlist />
+                            @endif
+
 
                             <livewire:header-cart-menu />
 
