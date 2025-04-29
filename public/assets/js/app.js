@@ -5,7 +5,7 @@ jQuery(function ($) {
     $(window).ready(function () {
         $("#preloader").delay(100).fadeOut("fade");
     });
-
+    
     //1. data background
     $("[data-background]").each(function () {
         var $data_bg = $(this).attr("data-background");

@@ -26,7 +26,7 @@
             <p class="card-text text-gray-600">
                 @if ($product->discount)
                     <span class="line-through text-red-500">{{ number_format($product->price, 2, ',', '.') }} €</span>
-                    <span class="text-gray-800 font-semibold ml-2">{{ number_format($product->price - $product->discount, 2, ',', '.') }} €</span>
+                    <span class="text-gray-800 font-semibold ml-2">{{ number_format(calculate_price_with_discount($product->price, $product->discount), 2, ',', '.') }} €</span>
                 @else
                     <span class="text-dark font-semibold">{{ number_format($product->price, 2, ',', '.') }} € / unit</span>
                 @endif
@@ -46,32 +46,16 @@
 
             <!-- Quantity Selector & Add to Cart -->
             @if ($product->stock > 0 || $product->stock <= 0)
-                <form>
-                    @csrf
-                    <div class="flex flex-col gap-4 mt-4">
-                        <!-- Button and Wishlist Icon -->
-                        <div class="flex justify-between items-center mt-2 gap-4">
-                            <!-- Input Quantity -->
-                            <input type="number" name="quantity" value="1" min="1" class="w-20 p-2 border-1 border-gray-400 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out select-none" placeholder="Qt.">
-                            
-                            <!-- Add to Cart Button -->
-                            <button type="submit" class="btn btn-primary w-full py-2 px-3 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out">
-                                Add to Cart
-                            </button>
-                            
-                            <!-- Wishlist Icon -->
-                            @if (1 == 1)
-                                <button type="button" class="text-gray-500 hover:text-red-500 focus:outline-none">
-                                    <i class="far fa-heart fa-lg"></i>
-                                </button>
-                            @else
-                                <button type="button" class="text-red-500 hover:text-red-400 focus:outline-none">
-                                    <i class="fas fa-heart fa-lg"></i>
-                                </button>
-                            @endif
-                        </div>
+                <div class="flex flex-col gap-4 mt-4">
+                    <!-- Button and Wishlist Icon -->
+                    <div class="flex justify-between items-center mt-2 gap-4">
+                        <!-- Add to Cart Button and Input Quantity -->
+                        <livewire:add-to-cart :productId="$product->id" />
+                        
+                        <!-- Wishlist Icon -->
+                        <livewire:wishlist-button :productId="$product->id" />
                     </div>
-                </form>
+                </div>
             @endif
         </div>
     </div>

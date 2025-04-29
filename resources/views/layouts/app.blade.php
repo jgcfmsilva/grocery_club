@@ -2,6 +2,7 @@
 <html lang="pt">
     <head>
         @include('layouts.partials.head')
+        @livewireStyles
     </head>
     <body class="flex flex-col min-h-screen">
         <div class="bg-bs-body flex flex-col flex-1">
@@ -17,5 +18,6 @@
                 &copy; {{ date('Y') }} Grocery Club. All rights reserved.
             </footer>
         </div>
+        @livewireScripts
     </body>
 </html>

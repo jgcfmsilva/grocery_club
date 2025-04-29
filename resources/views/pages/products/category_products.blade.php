@@ -6,7 +6,7 @@
 
         <div class="row">
             @forelse($products as $product)
-                <x-product-card :product="$product" />
+                <livewire:product-card :product="$product" :key="$product->id" />
             @empty
                 <p>No products found.</p>
             @endforelse
