@@ -1,12 +1,10 @@
 <?php
 
+use App\Http\Controllers\Cart\CartController;
 use Illuminate\Support\Facades\Route;
 
-// Sem sessão iniciada
-Route::middleware('guest')->group(function () {
 
-    // Carrinho
-    Route::get('/cart', function () {
-        return view('pages.cart.index');
-    })->name('cart');
-});
+// Carrinho
+Route::get('/cart', [CartController::class, 'show'])->name('cart');
+
+
