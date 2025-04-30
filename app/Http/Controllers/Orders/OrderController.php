@@ -28,7 +28,7 @@ class OrderController extends Controller
         $orders = Order::where('member_id', Auth::id())
             ->orderBy('date', 'desc')
             ->paginate(10);
-            
+
         return view('pages.my-account.orders.index', compact('orders'));
     }
 
@@ -38,9 +38,9 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $this->authorize('view', $order);
-        
+
         $order->load('items.product');
-        
+
         return view('pages.my-account.orders.show', compact('order'));
     }
 
@@ -57,14 +57,14 @@ class OrderController extends Controller
         if (!file_exists($receiptsDir) && !mkdir($receiptsDir, 0755, true) && !is_dir($receiptsDir)) {
             throw new \RuntimeException('Cannot create receipts directory');
         }
-        
+
         $filename = $order->pdf_receipt;
         $filePath = "{$receiptsDir}/{$filename}";
 
         if ($order->pdf_receipt && file_exists($filePath)) {
             $pdfModifiedTime = filemtime($filePath);
             $orderModifiedTime = $order->updated_at->timestamp;
-            
+
             if ($pdfModifiedTime >= $orderModifiedTime) {
                 return response()->download($filePath, $filename);
             }
@@ -79,22 +79,26 @@ class OrderController extends Controller
     public function cancel(Request $request, Order $order)
     {
         $this->authorize('cancel', $order);
-        
+
         $validated = $request->validate([
             'reason' => 'required|string|max:255'
         ]);
-        
+
         $order->update([
             'status' => OrderStatus::CANCELED,
             'cancel_reason' => $validated['reason']
         ]);
-        
+
         // TODO: implementar a lógica para reembolsar o cartão virtual
         // Exemplo:
         // $order->member->card->credit($order->total, 'order_cancellation', $order->id);
-        
-        return redirect()->route('my-account.orders.show', $order)
-            ->with('success', 'Order has been canceled successfully. Your refund will be processed shortly.');
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->success("Order has been canceled successfully. Your refund will be processed shortly.");
+
+        return redirect()->route('my-account.orders.show', $order);
     }
 
     /**
@@ -103,8 +107,11 @@ class OrderController extends Controller
     public function reorder(Order $order)
     {
         $this->authorize('view', $order);
-        
-        $newOrder = Auth::user()->orders()->create([
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $newOrder = $user->orders()->create([
             'status' => OrderStatus::PENDING,
             'date' => now(),
             'total_items' => 0,
@@ -113,19 +120,19 @@ class OrderController extends Controller
             'delivery_address' => $order->delivery_address,
             'nif' => $order->nif
         ]);
-        
+
         foreach ($order->items as $item) {
             $product = Product::find($item->product_id);
-            
+
             if ($product) {
                 $unitPrice = $product->price;
                 $discount = 0;
-                
+
 
                 if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
                     $discount = $product->discount;
                 }
-                
+
                 $newOrder->items()->create([
                     'product_id' => $product->id,
                     'quantity' => $item->quantity,
@@ -135,11 +142,15 @@ class OrderController extends Controller
                 ]);
             }
         }
-        
+
         $this->updateOrderTotals($newOrder);
-        
-        return redirect()->route('my-account.orders.show', $newOrder)
-            ->with('success', 'New order created from your previous order #' . $order->id);
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->success('New order created from your previous order #' . $order->id);
+
+        return redirect()->route('my-account.orders.show', $newOrder);
     }
 
     /**
@@ -149,7 +160,7 @@ class OrderController extends Controller
     {
         try {
             $order->load(['items.product', 'member.card']);
-            
+
             $pdf = Pdf::loadView('pdf.receipt', [
                 'order' => $order,
                 'items' => $order->items
@@ -158,24 +169,24 @@ class OrderController extends Controller
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true,
             ]);
-    
+
             $filename = "receipt_{$order->id}_" . time() . '.pdf';
             $filePath = storage_path("app/private/receipts/{$filename}");
-    
+
             $pdf->save($filePath);
-    
+
             $order->update(['pdf_receipt' => $filename]);
-    
+
             return $download ? $pdf->download($filename) : $filePath;
-    
+
         } catch (\Exception $e) {
             Log::error("Failed to generate receipt for order {$order->id}: " . $e->getMessage());
-            
+
             if ($download) {
                 return redirect()->back()
                     ->with('error', 'Failed to generate receipt. Please try again later.');
             }
-            
+
             throw $e;
         }
     }
@@ -186,11 +197,11 @@ class OrderController extends Controller
     protected function updateOrderTotals(Order $order)
     {
         $order->load('items');
-        
+
         $totalItems = $order->items->sum('subtotal');
         $shippingCost = $this->calculateShippingCost($totalItems);
         $total = $totalItems + $shippingCost;
-        
+
         $order->update([
             'total_items' => $totalItems,
             'shipping_cost' => $shippingCost,

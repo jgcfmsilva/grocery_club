@@ -12,6 +12,10 @@ return [
             'styles' => [
                 '/vendor/flasher/themes/theme.sapphire.min.css',
             ],
+            'options' => [
+                'timeout' => 3000,
+                'position' => 'bottom-right'
+            ]
         ],
     ],
 ];

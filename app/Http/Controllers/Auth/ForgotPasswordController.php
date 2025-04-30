@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 
 class ForgotPasswordController extends Controller
 {
@@ -29,10 +30,8 @@ class ForgotPasswordController extends Controller
         endif;
     }
 
-    public function sendEmailVerification(Request $request)
+    public function sendEmailVerification(ForgotPasswordRequest  $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
-
         $status = Password::sendResetLink(
             $request->only('email')
         );

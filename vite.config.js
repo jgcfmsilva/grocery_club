@@ -1,7 +1,5 @@
-import {
-    defineConfig
-} from 'vite';
-import laravel from 'laravel-vite-plugin';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
@@ -15,6 +13,7 @@ export default defineConfig({
                 "resources/css/pages/my-account/main.css",
                 "resources/css/pages/my-account/personal-data.css",
                 "resources/css/pages/my-account/orders.css",
+                "resources/css/pages/my-account/virtual-card.css",
 
                 // JS
                 "resources/js/app.js",

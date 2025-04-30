@@ -22,23 +22,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('orders')->name('orders.')->group(function () {
             // Lista de pedidos
             Route::get('/', [OrderController::class, 'index'])->name('index');
-            
+
             // Detalhes do pedido
             Route::get('/{order}', [OrderController::class, 'show'])->name('show');
-            
+
             // Download do recibo
             Route::get('/{order}/download', [OrderController::class, 'downloadReceipt'])->name('download');
-            
+
             // Cancelar pedido
             Route::post('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
-            
+
             // Encomendar pedido anterior
             Route::post('/{order}/reorder', [OrderController::class, 'reorder'])->name('reorder');
         });
 
         // Cartão Virtual
         Route::get('/virtual-card', [CardController::class, 'index'])->name('virtual-card.index');
-        Route::post('/virtual-card/topup', [CardController::class, 'showTopUp'])->name('virtual-card.topup');
+        Route::post('/virtual-card/topup', [CardController::class, 'topUpCard'])->name('virtual-card.topup');
 
         // Transações
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');

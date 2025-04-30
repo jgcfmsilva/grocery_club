@@ -25,8 +25,7 @@ class OrderPolicy
     public function cancel(User $user, Order $order): bool
     {
         return $user->id === $order->member_id &&
-               $order->status === OrderStatus::PENDING &&
-               $order->created_at->diffInHours(now()) < 24;;
+               $order->status === OrderStatus::PENDING;
     }
 
     /**
