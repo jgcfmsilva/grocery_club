@@ -48,7 +48,6 @@
                     </div>
                     <div class="virtual-card-back">
                     <div class="virtual-card-signature">{{ auth()->user()->name }}</div>
-                    <div class="virtual-card-seccode">123</div>
                     </div>
                 </div>
             </div>
@@ -60,11 +59,11 @@
                     <h5>Add Funds</h5>
                 </div>
                 <div class="card-body table-order-show-card bg-white border-sm">
-                    <form method="POST" action="{{ route('my-account.virtual-card.topup') }}" class="space-y-6">
+                    <form id="topup-card-form" method="POST" action="{{ route('my-account.virtual-card.topup') }}" class="space-y-6">
                         @csrf
                         <div class="form-group">
-                            <label for="payment_type" class="block font-medium mb-1">Payment Method:</label>
-                            <select name="payment_type" id="payment_type" required class="mt-1 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                            <label for="default_payment_type" class="block font-medium mb-1">Payment Method:</label>
+                            <select name="default_payment_type" id="default_payment_type" required class="mt-1 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                                 <option value="">-- Select --</option>
                                 <option value="Visa" {{ old('payment_type', auth()->user()->default_payment_type) == 'Visa' ? 'selected' : '' }}>Visa</option>
                                 <option value="PayPal" {{ old('payment_type', auth()->user()->default_payment_type) == 'PayPal' ? 'selected' : '' }}>PayPal</option>
@@ -72,10 +71,17 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="payment_reference" class="block font-medium mb-1">Payment Reference:</label>
-                            <input type="text" name="payment_reference" id="payment_reference" required
+                        <div id="paymentReferenceWrapper" class="form-group hidden">
+                            <label for="default_payment_reference" id="paymentReferenceLabel" class="block font-medium mb-1">Payment Reference:</label>
+                            <input type="text" name="default_payment_reference" id="default_payment_reference" required
                                 value="{{ old('payment_reference', auth()->user()->default_payment_reference) }}"
+                                class="mt-2 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+
+                        </div>
+
+                        <div id="cardVisaCvc" class="form-group hidden">
+                            <label for="cardVisaCvc_input" id="paymentReferenceLabel" class="block font-medium mb-1">CVC Visa:</label>
+                            <input type="text" name="cardVisaCvc_input" id="cardVisaCvc_input" required
                                 class="mt-2 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
 
                         </div>
@@ -85,7 +91,7 @@
                             <input type="number" name="value" id="value" min="1" required class="mt-2 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-full py-4 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="submit" id="submitButton" class="btn btn-primary w-full py-4 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             Confirm Add Funds
                         </button>
                     </form>
@@ -98,4 +104,8 @@
 
 @push('styles')
     @vite('resources/css/pages/my-account/virtual-card.css')
+@endpush
+
+@push('scripts')
+    @vite('resources/js/pages/my-account/virtual-card.js')
 @endpush

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
 use App\Enums\OrderStatus;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Order\CancelOrderRequest;
 
 class OrderController extends Controller
 {
@@ -76,13 +76,11 @@ class OrderController extends Controller
     /**
      * Cancel the specified order.
     */
-    public function cancel(Request $request, Order $order)
+    public function cancel(CancelOrderRequest $request, Order $order)
     {
         $this->authorize('cancel', $order);
 
-        $validated = $request->validate([
-            'reason' => 'required|string|max:255'
-        ]);
+        $validated = $request->validated();
 
         $order->update([
             'status' => OrderStatus::CANCELED,
@@ -108,8 +106,7 @@ class OrderController extends Controller
     {
         $this->authorize('view', $order);
 
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = authUser();
 
         $newOrder = $user->orders()->create([
             'status' => OrderStatus::PENDING,

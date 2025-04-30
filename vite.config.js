@@ -23,6 +23,7 @@ export default defineConfig({
                 "resources/js/pages/my-account/personal-data.js",
                 "resources/js/pages/my-account/orders.js",
                 "resources/js/pages/home.js",
+                "resources/js/pages/my-account/virtual-card.js",
             ],
             refresh: [`resources/views/**/*`],
         }),

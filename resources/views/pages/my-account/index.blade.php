@@ -13,12 +13,6 @@
         </div>
     @endif
 
-    @if(session('success'))
-        <div id="success-alert" class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <form id="personal-data-form" action="{{ route('my-account.personal-data.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')

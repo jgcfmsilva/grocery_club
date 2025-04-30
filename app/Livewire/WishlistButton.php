@@ -13,7 +13,7 @@ class WishlistButton extends Component
     public function mount($productId)
     {
         $this->productId = $productId;
-        $this->inWishlist = in_array($this->productId, Auth::user()->custom['wishlist'] ?? []);
+        $this->inWishlist = in_array($this->productId, authUser()->custom['wishlist'] ?? []);
     }
 
     public function toggleWishlist()
@@ -22,7 +22,7 @@ class WishlistButton extends Component
             abort(403, 'You need to be logged in to manage your wishlist!');
         }
 
-        $user = Auth::user();
+        $user = authUser();
         $custom = $user->custom ?? [];
         $custom['wishlist'] = $custom['wishlist'] ?? [];
         $wishlist = $custom['wishlist'] ?? [];

@@ -2,12 +2,25 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 # Get user id
 if (!function_exists('userID')) {
     function userID()
     {
         return Auth::check() ? Auth::id() : null;
+    }
+}
+
+if (! function_exists('authUser')) {
+    /**
+     * Retorna o usuário autenticado como uma instância de App\Models\User
+     *
+     * @return \App\Models\User
+     */
+    function authUser(): User
+    {
+        return Auth::user();
     }
 }
 

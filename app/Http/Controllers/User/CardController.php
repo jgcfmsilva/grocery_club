@@ -5,7 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Operation;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Payment;
 use Illuminate\Support\Facades\DB;
 
@@ -13,19 +12,20 @@ class CardController extends Controller
 {
     public function index()
     {
-        $card = Auth::user()->card;
+        $card = authUser()->card;
         return view('pages.my-account.virtual-card.index', compact('card'));
     }
 
     public function topUpCard(Request $request)
     {
+        var_dump($request);
         $request->validate([
             'payment_type' => 'required|in:Visa,PayPal,MB WAY',
             'payment_reference' => 'required',
             'value' => 'required|numeric|min:1',
         ]);
 
-        $user = Auth::user();
+        $user = authUser();
         $card = $user->card;
         $success = false;
 

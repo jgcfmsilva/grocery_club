@@ -20,7 +20,7 @@ class MemberMiddleware
             return redirect()->route('login');
         }
 
-        if (!in_array(Auth::user()->type, ['member', 'board'])) {
+        if (!in_array(authUser()->type, ['member', 'board'])) {
             abort(403, 'Access denied. Only club members can access this page.');
         }
 

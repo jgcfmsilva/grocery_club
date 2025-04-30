@@ -8,14 +8,14 @@ use App\Models\Product;
 use Livewire\WithPagination;
 
 class WishlistPage extends Component
-{  
+{
     use WithPagination;
 
     protected $listeners = ['wishlistUpdated' => '$refresh'];
-    
+
     public function render()
     {
-        $user = Auth::user();
+        $user = authUser();
         $wishlistIds = $user->custom['wishlist'] ?? [];
 
         $products = Product::whereIn('id', $wishlistIds)
