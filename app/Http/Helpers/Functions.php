@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserType;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -12,12 +13,22 @@ if (!function_exists('userID')) {
     }
 }
 
+
+# Calculate shipping cost based on order total.
+
+if (! function_exists('calculateShippingCost')) {
+    function calculateShippingCost(float $total): float
+    {
+        if ($total > 100) {
+            return 0; // Portes grátis para pedidos acima de 100€
+        } elseif ($total > 50) {
+            return 5; // 5€ para pedidos entre 50€ e 100€
+        }
+        return 10; // 10€ para pedidos abaixo de 50€
+    }
+}
+
 if (! function_exists('authUser')) {
-    /**
-     * Retorna o usuário autenticado como uma instância de App\Models\User
-     *
-     * @return \App\Models\User
-     */
     function authUser(): User
     {
         return Auth::user();
@@ -52,7 +63,7 @@ if (! function_exists('calculate_price_with_discount')) {
 if (!function_exists('isEmployee')) {
     function isEmployee()
     {
-        return Auth::user()->user_type == "employee";
+        return Auth::user()->user_type === UserType::Employee;
     }
 }
 
@@ -60,7 +71,7 @@ if (!function_exists('isEmployee')) {
 if (!function_exists('isAdmin')) {
     function isAdmin()
     {
-        return Auth::user()->user_type == 'board';
+        return Auth::user()->user_type === UserType::Board;
     }
 }
 

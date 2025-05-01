@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\CreditType;
+use App\Enums\DebitType;
+use App\Enums\PaymentMethod;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Operation extends Model
+class CardOperation extends Model
 {
     protected $table = 'operations';
 
@@ -26,37 +30,29 @@ class Operation extends Model
         'value' => 'decimal:2',
         'date' => 'date',
         'custom' => 'array',
+        'type' => TransactionType::class,
+        'debit_type' => DebitType::class,
+        'credit_type' => CreditType::class,
+        'payment_type' => PaymentMethod::class,
     ];
 
-    /**
-     * Relação com o cartão virtual (belongsTo).
-     */
     public function card(): BelongsTo
     {
         return $this->belongsTo(Card::class);
     }
 
-    /**
-     * Relação com a encomenda associada (se houver).
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
-    /**
-     * Define se a operação é crédito.
-     */
     public function isCredit(): bool
     {
-        return $this->type === 'credit';
+        return $this->type === TransactionType::Credit;
     }
 
-    /**
-     * Define se a operação é débito.
-     */
     public function isDebit(): bool
     {
-        return $this->type === 'debit';
+        return $this->type === TransactionType::Debit;
     }
 }

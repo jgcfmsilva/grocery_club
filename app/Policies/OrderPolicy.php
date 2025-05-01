@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Enums\OrderStatus;
+use App\Enums\UserType;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -16,7 +17,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
-        return $user->id === $order->member_id || $user->type === 'board';
+        return $user->id === $order->member_id || $user->type === UserType::Board;
     }
 
     /**
@@ -50,6 +51,6 @@ class OrderPolicy
      */
     public function viewAny(User $user): bool
     {
-        return in_array($user->type, ['member', 'board']);
+        return in_array($user->type, [UserType::Member, UserType::Board]);
     }
 }

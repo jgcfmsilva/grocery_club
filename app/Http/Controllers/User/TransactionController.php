@@ -3,18 +3,20 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\CardOperation;
 
 class TransactionController extends Controller
 {
 
     public function index()
     {
-        return view('pages.my-account.transactions.index');
-    }
+        $cardId = authUser()->card->id;
 
-    public function funcao(Request $request)
-    {
-        // Vai ser implementado mais tarde
+        $operations = CardOperation::with('order')
+        ->where('card_id', $cardId)
+        ->orderByDesc('created_at')
+        ->get();
+
+        return view('pages.my-account.transactions.index', compact('operations'));
     }
 }

@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Enums\OrderStatus;
+use App\Enums\CreditType;
+use App\Enums\TransactionType;
+use App\Enums\DebitType;
+use App\Enums\UserType;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Order\CancelOrderRequest;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -50,7 +55,7 @@ class OrderController extends Controller
     public function downloadReceipt(Order $order)
     {
         $this->authorize('downloadReceipt', $order);
-        $order->load(['items.product', 'member']);
+        $order->load(['items.product', UserType::Member->value]);
 
         $receiptsDir = storage_path('app/private/receipts');
 
@@ -82,21 +87,52 @@ class OrderController extends Controller
 
         $validated = $request->validated();
 
-        $order->update([
-            'status' => OrderStatus::CANCELED,
-            'cancel_reason' => $validated['reason']
-        ]);
+        $cancelReason = authUser()->type === UserType::Member ? null : $validated['reason'];
 
-        // TODO: implementar a lógica para reembolsar o cartão virtual
-        // Exemplo:
-        // $order->member->card->credit($order->total, 'order_cancellation', $order->id);
+        DB::beginTransaction();
 
-        flash()
-            ->option('position', 'bottom-right')
-            ->option('timeout', 3000)
-            ->success("Order has been canceled successfully. Your refund will be processed shortly.");
+        try {
+            
+            $order->update([
+                'status' => OrderStatus::CANCELED,
+                'cancel_reason' => $cancelReason
+            ]);
 
-        return redirect()->route('my-account.orders.show', $order);
+            $card = $order->member->card;
+
+            if ($card) {
+                $card->balance += $order->total;
+                $card->save();
+        
+                $card->operations()->create([
+                    'type' => TransactionType::Credit,
+                    'value' => $order->total,
+                    'date' => now()->toDateString(),
+                    'credit_type' => CreditType::OrderCancellation->value,
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            DB::commit();
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->success("Order has been canceled successfully. Your refund will be processed shortly.");
+
+            return redirect()->route('my-account.orders.show', $order);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            report($e);
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error("There was an error canceling the order. Please try again.");
+
+            return redirect()->route('my-account.orders.show', $order);
+        }
     }
 
     /**
@@ -108,46 +144,75 @@ class OrderController extends Controller
 
         $user = authUser();
 
-        $newOrder = $user->orders()->create([
-            'status' => OrderStatus::PENDING,
-            'date' => now(),
-            'total_items' => 0,
-            'shipping_cost' => 0,
-            'total' => 0,
-            'delivery_address' => $order->delivery_address,
-            'nif' => $order->nif
-        ]);
+        DB::beginTransaction();
 
-        foreach ($order->items as $item) {
-            $product = Product::find($item->product_id);
+        try {
+            $newOrder = $user->orders()->create([
+                'status' => OrderStatus::PENDING,
+                'date' => now(),
+                'total_items' => 0,
+                'shipping_cost' => 0,
+                'total' => 0,
+                'delivery_address' => $order->delivery_address,
+                'nif' => $order->nif
+            ]);
 
-            if ($product) {
-                $unitPrice = $product->price;
-                $discount = 0;
+            $card = $user->card;
 
-
-                if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
-                    $discount = $product->discount;
-                }
-
-                $newOrder->items()->create([
-                    'product_id' => $product->id,
-                    'quantity' => $item->quantity,
-                    'unit_price' => $unitPrice,
-                    'discount' => $discount,
-                    'subtotal' => ($unitPrice - $discount) * $item->quantity
+            if ($card) {
+                $card->operations()->create([
+                    'type' => TransactionType::Debit,
+                    'value' => $order->total,
+                    'date' => now()->toDateString(),
+                    'credit_type' => DebitType::Order,
+                    'order_id' => $newOrder->id,
                 ]);
             }
+
+            foreach ($order->items as $item) {
+                $product = Product::find($item->product_id);
+
+                if ($product) {
+                    $unitPrice = $product->price;
+                    $discount = 0;
+
+
+                    if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
+                        $discount = $product->discount;
+                    }
+
+                    $newOrder->items()->create([
+                        'product_id' => $product->id,
+                        'quantity' => $item->quantity,
+                        'unit_price' => $unitPrice,
+                        'discount' => $discount,
+                        'subtotal' => ($unitPrice - $discount) * $item->quantity
+                    ]);
+                }
+            }
+
+            $this->updateOrderTotals($newOrder);
+
+            DB::commit();
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->success('New order created from your previous order #' . $order->id);
+
+            return redirect()->route('my-account.orders.show', $newOrder);
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            report($e);
+    
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error('There was an error creating the new order. Please try again.');
+    
+            return redirect()->route('my-account.orders.show', $order);
         }
-
-        $this->updateOrderTotals($newOrder);
-
-        flash()
-            ->option('position', 'bottom-right')
-            ->option('timeout', 3000)
-            ->success('New order created from your previous order #' . $order->id);
-
-        return redirect()->route('my-account.orders.show', $newOrder);
     }
 
     /**
@@ -204,18 +269,5 @@ class OrderController extends Controller
             'shipping_cost' => $shippingCost,
             'total' => $total
         ]);
-    }
-
-    /**
-     * Calculate shipping cost based on order total.
-    */
-    protected function calculateShippingCost(float $total): float
-    {
-        if ($total > 100) {
-            return 0; // Portes grátis para pedidos acima de 100€
-        } elseif ($total > 50) {
-            return 5; // 5€ para pedidos entre 50€ e 100€
-        }
-        return 10; // 10€ para pedidos abaixo de 50€
     }
 }

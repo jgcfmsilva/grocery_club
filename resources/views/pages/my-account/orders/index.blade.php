@@ -1,7 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
 @section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-8">My Orders</h4>
+    <h4 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h4>
 
     @include('layouts.partials.alerts')
 
@@ -12,19 +12,19 @@
     @else
         <div class="overflow-x-auto rounded-lg shadow-md orders-div">
             <table class="min-w-full text-sm text-left text-gray-700">
-                <thead class="bg-gray-100 text-xs uppercase tracking-wider text-gray-600">
+                <thead class="bg-primary text-xs uppercase tracking-wider text-white">
                     <tr>
-                        <th class="px-6 py-4">Order #</th>
-                        <th class="px-6 py-4">Date</th>
-                        <th class="px-6 py-4">Items</th>
-                        <th class="px-6 py-4">Total</th>
-                        <th class="px-6 py-4">Status</th>
-                        <th class="px-6 py-4">Actions</th>
+                        <th class="px-6 py-4 font-semibold">Order #</th>
+                        <th class="px-6 py-4 font-semibold">Date</th>
+                        <th class="px-6 py-4 font-semibold">Items</th>
+                        <th class="px-6 py-4 font-semibold">Total</th>
+                        <th class="px-6 py-4 font-semibold">Status</th>
+                        <th class="px-6 py-4 font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 table-order-item">
                     @foreach($orders as $order)
-                    <tr class="hover:bg-gray-50 transition">
+                    <tr class="transition">
                         <td class="px-6 py-4 font-medium">{{ $order->id }}</td>
                         <td class="px-6 py-4">{{ $order->date->format('d/m/Y') }}</td>
                         <td class="px-6 py-4">{{ $order->items->sum('quantity') }}</td>

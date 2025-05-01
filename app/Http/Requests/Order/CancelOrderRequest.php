@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\UserType;
 
 class CancelOrderRequest extends FormRequest
 {
@@ -21,8 +22,10 @@ class CancelOrderRequest extends FormRequest
      */
     public function rules(): array
     {
+        $user = $this->user();
+
         return [
-            'reason' => 'required|string|max:255',
+            'reason' => $user->type === UserType::Member ? 'nullable' : 'required|string|max:255',
         ];
     }
 }

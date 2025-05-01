@@ -60,7 +60,7 @@
                     </thead>
                     <tbody class="order-table-items divide-y divide-gray-200">
                         @foreach($order->items as $item)
-                            <tr class="hover:bg-gray-50 transition duration-200">
+                            <tr class="transition duration-200">
                                 <td class="px-4 py-3">{{ $item->product->name }}</td>
                                 <td class="px-4 py-3">€{{ number_format($item->unit_price, 2) }}</td>
                                 <td class="px-4 py-3">{{ $item->quantity }}</td>
@@ -92,23 +92,22 @@
         @if($order->status === \App\Enums\OrderStatus::PENDING)
             <form action="{{ route('my-account.orders.cancel', $order) }}" method="POST">
                 @csrf
-                <div class="flex gap-2 items-center w-full">
-                    <input type="text" name="reason" placeholder="Cancel reason" class="form-control flex-1 min-w-0" required>
-                    <button type="submit" class="btn btn-danger rounded-md transition whitespace-nowrap h-full">
-                        <i class="fa fa-ban me-1"></i>Cancel Order
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-danger btn-sm rounded-md transition">
+                    <i class="fa fa-ban me-2"></i>Cancel Order
+                </button>
             </form>
         @else
             <form action="{{ route('my-account.orders.reorder', $order) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-warning btn-sm rounded-md transition"><i class="fas fa-shopping-cart me-1"></i>Reorder These Items</button>
+                <button type="submit" class="btn btn-warning btn-sm rounded-md transition">
+                    <i class="fas fa-shopping-cart me-2"></i>Reorder These Items
+                </button>
             </form>
         @endif
 
         @if($order->status === \App\Enums\OrderStatus::COMPLETED)
             <a href="{{ route('my-account.orders.download', $order) }}" class="btn btn-info btn-sm rounded-md transition">
-            <i class="fas fa-download me-1"></i> Download Receipt
+                <i class="fas fa-download me-2"></i> Download Receipt
             </a>
         @endif
     </div>

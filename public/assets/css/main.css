@@ -18563,7 +18563,7 @@ fieldset:disabled .btn {
     ) !important;
 }
 .text-bg-warning {
-    color: #000 !important;
+    color: #373737 !important;
     background-color: RGBA(
         var(--bs-warning-rgb),
         var(--bs-bg-opacity, 1)
@@ -36271,12 +36271,6 @@ ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-}
-button {
-    border: 0;
-    background-color: rgba(0, 0, 0, 0);
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
 }
 .rounded-bottom-2 {
     border-bottom-right-radius: 8px;

@@ -42,7 +42,7 @@ class Order extends Model
         'shipping_cost' => 'decimal:2',
         'total' => 'decimal:2',
         'custom' => 'array',
-        'status' => OrderStatus::class, // Cast para o enum
+        'status' => OrderStatus::class,
     ];
 
     /**

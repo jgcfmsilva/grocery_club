@@ -26,7 +26,7 @@ enum OrderStatus: string
     public function badgeClass(): string
     {
         return match($this) {
-            self::PENDING => 'bg-warning text-dark',
+            self::PENDING => 'bg-warning text-bg-warning',
             self::COMPLETED => 'bg-success',
             self::CANCELED => 'bg-danger',
         };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Card;
@@ -9,6 +10,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\RegisterUserRequest;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterUserController extends Controller
 {
@@ -40,14 +42,14 @@ class RegisterUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'password' => Hash::make($request->password),
             'gender' => $request->gender,
             'nif' => $request->nif,
             'default_delivery_address' => $request->default_delivery_address,
             'default_payment_type' => $request->default_payment_type,
             'default_payment_reference' => $request->default_payment_reference,
             'photo' => $photoPath,
-            'type' => 'member',
+            'type' => UserType::Member->value,
         ]);
 
         do {

@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const referenceWrapper = document.getElementById("paymentReferenceWrapper");
     const referenceLabel = document.getElementById("paymentReferenceLabel");
     const referenceInput = document.getElementById("default_payment_reference");
-    const cvcInput = document.getElementById("cardVisaCvc_input");
+    const cvcInput = document.getElementById("payment_cvc");
+
+    const defaultPaymentType = paymentType.value;
+    const defaultReferenceValue = referenceInput.value;
 
     function hideFields() {
         referenceWrapper.classList.add("hidden");
@@ -27,10 +30,22 @@ document.addEventListener("DOMContentLoaded", function () {
             referenceLabel.textContent = "PayPal Email";
             referenceWrapper.classList.remove("hidden");
             cvcDiv.classList.add("hidden");
+
+            referenceInput.required = true;
+            cvcInput.required = false;
         } else if (type === "MB WAY") {
             referenceLabel.textContent = "Phone Number (MB WAY)";
             referenceWrapper.classList.remove("hidden");
             cvcDiv.classList.add("hidden");
+
+            referenceInput.required = true;
+            cvcInput.required = false;
+        }
+
+        if (type !== defaultPaymentType) {
+            referenceInput.value = "";
+        } else {
+            referenceInput.value = defaultReferenceValue;
         }
     }
 
