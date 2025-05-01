@@ -28,7 +28,7 @@ export default defineConfig({
                 "resources/js/pages/my-account/transactions.js",
             ],
             refresh: [`resources/views/**/*`],
-        }),
+        }),  
         tailwindcss(),
     ],
     server: {

@@ -133,8 +133,14 @@
                                 <livewire:header-wishlist />
                             @endif
 
+                            @php
+                                $currentRouteName = Route::currentRouteName();
+                            @endphp
 
-                            <livewire:header-cart-menu />
+
+                            @if ($currentRouteName != 'cart')
+                                <livewire:header-cart-menu />
+                            @endif
 
                             <livewire:header-user-menu />
 
