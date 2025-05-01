@@ -9,6 +9,17 @@ class CartController extends Controller
 {
     //
     public function show(){
-        return view('pages.cart.index');
+        // gets the cart
+        $cart = session()->get('cart', []);
+
+        if(empty($cart)):
+           // redirects
+           return redirect() -> route('products.index');
+        else:
+            // shows the view
+            return view('pages.cart.index', [
+                'cart' => $cart
+            ]);
+        endif;
     }
 }
