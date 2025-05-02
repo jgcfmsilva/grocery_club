@@ -7,25 +7,25 @@
         <main class="lg:w-2/3">
             @if (count($cart) > 0)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="hidden md:flex bg-gray-50 px-6 py-4 border-b">
-                        <div class="w-2/5 font-semibold text-gray-700">Product</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-center">Price</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-center">Quantity</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-right">Total</div>
+                    <div class="bg-primary text-white hidden md:flex px-6 py-4">
+                        <div class="w-2/5 font-semibold">Product</div>
+                        <div class="w-1/5 font-semibold text-center">Price</div>
+                        <div class="w-1/5 font-semibold text-center">Quantity</div>
+                        <div class="w-1/5 font-semibold text-right">Total</div>
                     </div>
 
                     <!-- Lista de itens -->
                     <div id="cart-items">
                         @foreach ($cart as $id => $item)
-                            <div class="flex flex-col md:flex-row items-stretch p-6 border-b min-h-[120px] md:min-h-0">
-                                <div class="w-full md:w-2/5 flex items-center mb-4 md:mb-0">
+                            <div class="flex flex-col md:flex-row items-stretch p-6 border-b border-b-gray-400 last:border-b-0 min-h-[120px] md:min-h-0">
+                                <div class="w-full md:w-2/5 flex items-center mb-2 md:mb-0">
                                     <a href="{{ route('products.show', $item['id']) }}"><img src="{{ asset('storage/products/' . $item['photo']) }}" alt="{{ $item['name'] }}"
                                         class="w-20 h-20 object-cover rounded"></a>
-                                        <div class="ml-4 pt-4">
+                                        <div class="ml-4 pt-2">
                                             <a href="{{ route('products.show', $item['id']) }}">
-                                                <h4 class="font-semibold text-gray-800">{{ $item['name'] }}</h4>
+                                                <h4 class="font-semibold text-dark">{{ $item['name'] }}</h4>
                                             </a>
-                                            <p class="category-name text-gray-600">{{ $item['category_name'] }}</p>
+                                            <p class="category-name text-dark opacity-70">{{ $item['category_name'] }}</p>
 
                                             @if ($item['stock'] === 0 || $item['stock'] < $item['quantity'])
                                                 <p class="text-sm text-red-500 font-medium">
@@ -130,25 +130,25 @@
 
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal</span>
+                        <span class="text-dark">Subtotal</span>
                         <span class="font-semibold">€{{ number_format($subtotal, 2) }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Discounts</span>
+                        <span class="text-dark">Discounts</span>
                         <span class="text-green-600">-€{{ number_format($discount, 2) }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Shipping</span>
+                        <span class="text-dark">Shipping</span>
                         <span class="font-semibold">€{{ number_format($shipping, 2) }}</span>
                     </div>
-                    <div class="border-t pt-4 flex justify-between">
-                        <span class="text-lg font-bold text-gray-800">Total</span>
-                        <span class="text-xl font-bold text-gray-800">€{{ number_format($grandTotal, 2) }}</span>
+                    <div class="border-t border-t-gray-400 pt-4 flex justify-between">
+                        <span class="text-lg font-bold text-dark">Total</span>
+                        <span class="text-xl font-bold text-dark">€{{ number_format($grandTotal, 2) }}</span>
                     </div>
                 </div>
 
                 <button
-                    class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                    class="w-full py-3 bg-green-600 rounded text-white hover:bg-green-700 transition-colors font-semibold">
                     Purchase
                 </button>
             </div>

@@ -50,6 +50,7 @@ class HeaderCartMenu extends Component
 
         $this->cartItems = $cart;
         $this->calculateSubtotal();
+        $this->dispatch('cartUpdated');
     }
 
     public function calculateSubtotal()

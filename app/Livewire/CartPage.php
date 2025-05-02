@@ -19,7 +19,6 @@ class CartPage extends Component
     public function mount()
     {
         $this->loadCart();
-        $this->calculateTotals();
     }
 
     public function loadCart()
@@ -35,6 +34,8 @@ class CartPage extends Component
                 $item['stock'] = 0;
             }
         }
+
+        $this->calculateTotals();
     }
 
     public function calculateTotals()
