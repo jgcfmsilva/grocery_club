@@ -29,7 +29,7 @@ if (! function_exists('calculateShippingCost')) {
 }
 
 if (! function_exists('authUser')) {
-    function authUser(): User
+    function authUser(): User | null
     {
         return Auth::user();
     }

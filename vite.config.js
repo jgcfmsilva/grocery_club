@@ -15,6 +15,7 @@ export default defineConfig({
                 "resources/css/pages/my-account/orders.css",
                 "resources/css/pages/my-account/virtual-card.css",
                 "resources/css/pages/my-account/transactions.css",
+                "resources/css/pages/cart/cart.css",
 
                 // JS
                 "resources/js/app.js",
@@ -28,7 +29,7 @@ export default defineConfig({
                 "resources/js/pages/my-account/transactions.js",
             ],
             refresh: [`resources/views/**/*`],
-        }),  
+        }),
         tailwindcss(),
     ],
     server: {

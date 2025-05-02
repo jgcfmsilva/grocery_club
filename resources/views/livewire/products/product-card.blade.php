@@ -1,19 +1,28 @@
 <div class="col-md-3 mb-4">
     <div class="card h-100 shadow-lg flex flex-col">
         @if ($product->photo)
-            <img src="{{ asset('storage/products/' . $product->photo) }}" class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+            <a href="{{ route('products.show', $product->id) }}">
+                <img src="{{ asset('storage/products/' . $product->photo) }}"
+                class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+            </a>
         @else
-            <img src="{{ asset('storage/products/product_no_image.png') }}" class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+            <a href="{{ route('products.show', $product->id) }}">
+                <img src="{{ asset('storage/products/product_no_image.png') }}"
+                class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+            </a>
         @endif
         <div class="card-body flex flex-col justify-between flex-grow">
             <!-- Product Name and Category -->
-            <h5 class="card-title text-xl font-semibold text-gray-800">{{ $product->name }}</h5>
+            <a href="{{ route('products.show', $product->id) }}">
+                <h5 class="card-title text-xl font-semibold text-gray-800">{{ $product->name }}</h5>
+            </a>
+
             <p class="text-gray-500 text-sm">{{ $product->category->name }}</p>
 
             <!-- Price and Discount -->
             @if ($product->discount)
                 <small class="text-sm text-green-700">
-                    Buy {{$product->discount_min_qty}} 
+                    Buy {{$product->discount_min_qty}}
                     @if ($product->discount_min_qty == 1)
                         unit
                     @else
@@ -26,7 +35,7 @@
             <p class="card-text text-gray-600">
                 @if ($product->discount)
                     <span class="line-through text-red-500">{{ number_format($product->price, 2, ',', '.') }} €</span>
-                    <span class="text-gray-800 font-semibold ml-2">{{ number_format(calculate_price_with_discount($product->price, $product->discount), 2, ',', '.') }} €</span>
+                    <span class="text-dark font-semibold ml-2">{{ number_format(calculate_price_with_discount($product->price, $product->discount), 2, ',', '.') }} €</span>
                 @else
                     <span class="text-dark font-semibold">{{ number_format($product->price, 2, ',', '.') }} € / unit</span>
                 @endif
@@ -51,7 +60,7 @@
                     <div class="flex justify-between items-center mt-2 gap-4">
                         <!-- Add to Cart Button and Input Quantity -->
                         <livewire:add-to-cart :productId="$product->id" />
-                        
+
                         <!-- Wishlist Icon -->
                         <livewire:wishlist-button :productId="$product->id" />
                     </div>

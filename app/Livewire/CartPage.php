@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Product;
 
 class CartPage extends Component
 {
@@ -12,7 +13,7 @@ class CartPage extends Component
     public $cart;
     public $subtotal = 0;
     public $discount = 0;
-    public $shipping = 5.99;
+    public $shipping = 0;
     public $grandTotal = 0;
 
     public function mount()
@@ -24,17 +25,46 @@ class CartPage extends Component
     public function loadCart()
     {
         $this->cart = session()->get('cart', []);
+
+        foreach ($this->cart as $id => &$item) {
+            $product = Product::find($item['id']);
+
+            if ($product) {
+                $item['stock'] = $product->stock;
+            } else {
+                $item['stock'] = 0;
+            }
+        }
     }
 
     public function calculateTotals()
     {
         $this->subtotal = 0;
         $this->discount = 0;
+        $this->shipping = 0;
+        $this->grandTotal = 0;
+
+        if (empty($this->cart)) {
+            return;
+        }
 
         foreach ($this->cart as $item) {
-            $this->subtotal += $item['price'] * $item['quantity'];        }
+            $originalPrice = $item['price'];
 
-        $this->grandTotal = $this->subtotal - $this->discount + $this->shipping;
+            $discountedPrice = calculate_discounted_price(
+                $item['price'],
+                $item['discount'] ?? 0,
+                $item['quantity'],
+                $item['discount_min_qty'] ?? PHP_INT_MAX
+            );
+
+            $this->discount += ($originalPrice - $discountedPrice) * $item['quantity'];
+            $this->subtotal += $discountedPrice * $item['quantity'];
+        }
+
+        $this->shipping = calculateShippingCost($this->subtotal);
+
+        $this->grandTotal = $this->subtotal + $this->shipping;
     }
 
     public function increment($itemId)
@@ -70,12 +100,7 @@ class CartPage extends Component
     {
         session()->put('cart', $this->cart);
         $this->calculateTotals();
-        $this->dispatch('cartUpdated');
-
-        if(count($this->cart) == 0):
-            return redirect() -> route('products.index');
-        endif;
-
+        $this->dispatch('headerCartUpdated');
     }
 
     public function render()

@@ -6,3 +6,7 @@
     @livewire('cart-page')
 @endsection
 
+@push('styles')
+    @vite('resources/css/pages/cart/cart.css')
+@endpush
+
