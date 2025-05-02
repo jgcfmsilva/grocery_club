@@ -17,9 +17,7 @@ class CartController extends Controller
            return redirect() -> route('products.index');
         else:
             // shows the view
-            return view('pages.cart.index', [
-                'cart' => $cart
-            ]);
+            return view('pages.cart.index');
         endif;
     }
 }

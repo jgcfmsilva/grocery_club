@@ -6,6 +6,9 @@ use Livewire\Component;
 
 class CartPage extends Component
 {
+
+    protected $listeners = ['cartUpdated' => 'loadCart'];
+
     public $cart;
     public $subtotal = 0;
     public $discount = 0;
@@ -67,6 +70,7 @@ class CartPage extends Component
     {
         session()->put('cart', $this->cart);
         $this->calculateTotals();
+        $this->dispatch('cartUpdated');
 
         if(count($this->cart) == 0):
             return redirect() -> route('products.index');
