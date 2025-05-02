@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ItemOrder;
+use App\Models\CardOperation;
 use App\Enums\OrderStatus;
 use App\Enums\CreditType;
 use App\Enums\TransactionType;
@@ -15,6 +17,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Order\CancelOrderRequest;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Order\CreateOrderRequest;
 
 class OrderController extends Controller
 {
@@ -31,7 +34,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::where('member_id', Auth::id())
-            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('pages.my-account.orders.index', compact('orders'));
@@ -269,5 +272,109 @@ class OrderController extends Controller
             'shipping_cost' => $shippingCost,
             'total' => $total
         ]);
+    }
+
+    public function createOrder(CreateOrderRequest $request)
+    {
+        $user = authUser();
+
+        if ($user->type !== \App\Enums\UserType::Member && $user->type !== \App\Enums\UserType::Board) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("Only members can create orders!");
+
+            return back();
+        }
+
+        $cart = session('cart', []);
+        if (empty($cart)) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("The cart is empty!");
+
+            return back();
+        }
+
+        $validated = $request->validated();
+
+        // Calcular totais e descontos
+        $totalItems = 0;
+        $items = [];
+        foreach ($cart as $cartItem) {
+            $product = Product::findOrFail($cartItem["id"]);
+            $quantity = $cartItem["quantity"];
+            $discount = $product->discount;
+
+            $unitPrice = calculate_discounted_price($product->price, $product->discount, $quantity, $product->discount_min_qty);
+            $subtotal = $quantity * $unitPrice;
+
+            $items[] = compact('product', 'quantity', 'unitPrice', 'discount', 'subtotal');
+            $totalItems += $subtotal;
+        }
+
+        // Calcular custos de envio
+        $shippingCost = calculateShippingCost($totalItems);
+
+        $total = $totalItems + $shippingCost;
+
+        // Verificar saldo
+        $card = $user->card;
+        if ($card->balance < $total) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("Insufficient funds on the virtual card.");
+
+            return back();
+        }
+
+        DB::transaction(function () use ($user, $validated, $items, $totalItems, $shippingCost, $total, $card) {
+            // Criar encomenda
+            $order = Order::create([
+                'member_id' => $user->id,
+                'status' => OrderStatus::PENDING->value,
+                'date' => now()->toDateString(),
+                'total_items' => $totalItems,
+                'shipping_cost' => $shippingCost,
+                'total' => $total,
+                'nif' => $validated["nif"],
+                'delivery_address' => $validated["delivery_address"],
+            ]);
+
+            // Guardar itens da encomenda
+            foreach ($items as $item) {
+                ItemOrder::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['product']->id,
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['unitPrice'],
+                    'discount' => $item['discount'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+            }
+
+            // Debitar cartão
+            $card->decrement('balance', $total);
+
+            // Registar operação
+            CardOperation::create([
+                'card_id' => $card->id,
+                'type' => TransactionType::Debit->value,
+                'value' => $total,
+                'date' => now()->toDateString(),
+                'debit_type' => DebitType::Order->value,
+                'order_id' => $order->id,
+            ]);
+
+            // Limpar carrinho
+            session()->forget('cart');
+
+            // Notificar utilizador
+            session()->flash('success', 'Order placed successfully. We are preparing your order.');
+        });
+
+        return redirect()->route('my-account.orders.index');
     }
 }

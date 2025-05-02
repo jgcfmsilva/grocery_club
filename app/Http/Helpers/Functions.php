@@ -3,6 +3,8 @@
 use App\Enums\UserType;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\User;
 
 # Get user id
@@ -18,13 +20,14 @@ if (!function_exists('userID')) {
 
 if (! function_exists('calculateShippingCost')) {
     function calculateShippingCost(float $total): float
-    {
-        if ($total > 100) {
-            return 0; // Portes grátis para pedidos acima de 100€
-        } elseif ($total > 50) {
-            return 5; // 5€ para pedidos entre 50€ e 100€
-        }
-        return 10; // 10€ para pedidos abaixo de 50€
+    {   
+        $shippingCost = DB::table('settings_shipping_costs')
+            ->where('min_value_threshold', '<=', $total)
+            ->where('max_value_threshold', '>', $total)
+            ->value('shipping_cost');
+
+
+        return $shippingCost ?? 0;
     }
 }
 

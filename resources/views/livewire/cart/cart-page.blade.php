@@ -1,4 +1,10 @@
 <div class="container mx-auto px-4 py-8">
+    @if (session('error'))
+        <div class="alert alert-error mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <header class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800">Cart</h1>
     </header>
@@ -57,14 +63,14 @@
                                         <div class="text-center">
                                             @if($item['discount'] > 0 && $item['quantity'] >= $item['discount_min_qty'])
                                                 <span class="text-sm text-red-500 line-through block">
-                                                    €{{ number_format($item['price'], 2) }}
+                                                    €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
                                                 <span class="font-semibold text-green-600">
-                                                    €{{ number_format($discounted, 2) }}
+                                                    €{{ number_format($discounted, 2, ',', '.') }}
                                                 </span>
                                             @else
                                                 <span class="font-semibold">
-                                                    €{{ number_format($item['price'], 2) }}
+                                                    €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
                                             @endif
                                         </div>
@@ -101,7 +107,7 @@
                                     <div class="flex items-center">
                                         <span class="md:hidden font-semibold text-gray-700 mr-2">Total:</span>
                                         <span
-                                            class="font-semibold">€{{ number_format($totalWithDiscount, 2) }}</span>
+                                            class="font-semibold">€{{ number_format($totalWithDiscount, 2, ',', '.') }}</span>
                                     </div>
                                     <button wire:click="removeItem('{{ $id }}')"
                                         class="text-red-500 hover:text-red-700">
@@ -131,26 +137,33 @@
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between">
                         <span class="text-dark">Subtotal</span>
-                        <span class="font-semibold">€{{ number_format($subtotal, 2) }}</span>
+                        <span class="font-semibold">€{{ number_format($subtotal, 2, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-dark">Discounts</span>
-                        <span class="text-green-600">-€{{ number_format($discount, 2) }}</span>
+                        <span class="text-green-600">-€{{ number_format($discount, 2, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-dark">Shipping</span>
-                        <span class="font-semibold">€{{ number_format($shipping, 2) }}</span>
+                        <span class="font-semibold">€{{ number_format($shipping, 2, ',', '.') }}</span>
                     </div>
                     <div class="border-t border-t-gray-400 pt-4 flex justify-between">
                         <span class="text-lg font-bold text-dark">Total</span>
-                        <span class="text-xl font-bold text-dark">€{{ number_format($grandTotal, 2) }}</span>
+                        <span class="text-xl font-bold text-dark">€{{ number_format($grandTotal, 2, ',', '.') }}</span>
                     </div>
                 </div>
 
-                <button
-                    class="w-full py-3 bg-green-600 rounded text-white hover:bg-green-700 transition-colors font-semibold">
-                    Purchase
-                </button>
+                
+                <form method="POST" action="{{ route('order.create') }}">
+                    @csrf
+                    <input type="text" name="nif" value="{{ old('nif', auth()->user()->nif ?? '') }}" placeholder="NIF">
+                    <input type="text" name="delivery_address" value="{{ old('delivery_address', auth()->user()->default_delivery_address ?? '') }}" required placeholder="Morada de entrega">
+                    <button
+                        type="submit"
+                        class="w-full py-3 bg-green-600 rounded text-white hover:bg-green-700 transition-colors font-semibold mt-4">
+                        Purchase
+                    </button>
+                </form>
             </div>
         </aside>
     </div>
