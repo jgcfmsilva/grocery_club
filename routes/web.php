@@ -11,5 +11,4 @@ require __DIR__.'/auth.php';
 require __DIR__.'/my-account.php';
 require __DIR__.'/products.php';
 require __DIR__.'/cart.php';
-require __DIR__.'/order.php';
 require __DIR__.'/wishlist.php';

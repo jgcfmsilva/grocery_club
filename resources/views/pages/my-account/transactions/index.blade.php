@@ -19,7 +19,7 @@
                 <tbody>
                     @foreach($operations as $op)
                         <tr class="border-b">
-                            <td class="px-4 py-3 text-sm text-dark">{{ \Carbon\Carbon::parse($op->date)->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 text-sm text-dark">{{ \Carbon\Carbon::parse($op->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="px-4 py-3 text-sm font-medium text-dark">
                                 {{ $op->type->label()}}
                             </td>
@@ -55,11 +55,6 @@
                                             class="bg-gray-700 table-order-button hover:bg-gray-800 text-xs px-4 py-2 rounded-md transition text-white">
                                                 Receipt
                                             </a>
-                                        @else
-                                            <a href="#"
-                                            class="bg-gray-500 text-white text-xs px-4 py-2 rounded-md transition cursor-not-allowed opacity-60 pointer-events-none">
-                                                Receipt
-                                            </a>
                                         @endif
                                     </div>
                                 </td>
@@ -72,6 +67,10 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <div class="mt-6">
+            {{ $operations->links() }}
         </div>
     </div>
 @endsection

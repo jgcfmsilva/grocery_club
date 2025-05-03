@@ -1,4 +1,10 @@
 <div class="container mx-auto px-4 py-8">
+    @if (session('error'))
+        <div class="alert alert-error mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <header class="mb-8">
         <h1 class="text-3xl font-bold text-gray-800">Shopping Cart</h1>
     </header>
@@ -8,25 +14,24 @@
             @if (count($cart) > 0)
                 <!-- Cart Items -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="hidden md:flex bg-gray-50 px-6 py-4 border-b">
-                        <div class="w-2/5 font-semibold text-gray-700">Product</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-center">Price</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-center">Quantity</div>
-                        <div class="w-1/5 font-semibold text-gray-700 text-right">Total</div>
+                    <div class="bg-primary text-white hidden md:flex px-6 py-4">
+                        <div class="w-2/5 font-semibold">Product</div>
+                        <div class="w-1/5 font-semibold text-center">Price</div>
+                        <div class="w-1/5 font-semibold text-center">Quantity</div>
+                        <div class="w-1/5 font-semibold text-right">Total</div>
                     </div>
 
                     <div id="cart-items">
                         @foreach ($cart as $id => $item)
-                            <div class="flex flex-col md:flex-row items-stretch p-6 border-b min-h-[120px] md:min-h-0">
-                                <div class="w-full md:w-2/5 flex items-center mb-4 md:mb-0">
-                                    <a href="{{ route('products.show', $item['id']) }}"><img
-                                            src="{{ asset('storage/products/' . $item['photo']) }}"
-                                            alt="{{ $item['name'] }}" class="w-20 h-20 object-cover rounded"></a>
-                                    <div class="ml-4 pt-4">
-                                        <a href="{{ route('products.show', $item['id']) }}">
-                                            <h4 class="font-semibold text-gray-800">{{ $item['name'] }}</h4>
-                                        </a>
-                                        <p class="category-name text-gray-600">{{ $item['category_name'] }}</p>
+                            <div class="flex flex-col md:flex-row items-stretch p-6 border-b border-b-gray-400 last:border-b-0 min-h-[120px] md:min-h-0">
+                                <div class="w-full md:w-2/5 flex items-center mb-2 md:mb-0">
+                                    <a href="{{ route('products.show', $item['id']) }}"><img src="{{ asset('storage/products/' . $item['photo']) }}" alt="{{ $item['name'] }}"
+                                        class="w-20 h-20 object-cover rounded"></a>
+                                        <div class="ml-4 pt-2">
+                                            <a href="{{ route('products.show', $item['id']) }}">
+                                                <h4 class="font-semibold text-dark">{{ $item['name'] }}</h4>
+                                            </a>
+                                            <p class="category-name text-dark opacity-70">{{ $item['category_name'] }}</p>
 
                                         @if ($item['stock'] === 0 || $item['stock'] < $item['quantity'])
                                             <p class="text-sm text-red-500 font-medium">
@@ -58,14 +63,14 @@
                                         <div class="text-center">
                                             @if ($item['discount'] > 0 && $item['quantity'] >= $item['discount_min_qty'])
                                                 <span class="text-sm text-red-500 line-through block">
-                                                    €{{ number_format($item['price'], 2) }}
+                                                    €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
                                                 <span class="font-semibold text-green-600">
-                                                    €{{ number_format($discounted, 2) }}
+                                                    €{{ number_format($discounted, 2, ',', '.') }}
                                                 </span>
                                             @else
                                                 <span class="font-semibold">
-                                                    €{{ number_format($item['price'], 2) }}
+                                                    €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
                                             @endif
                                         </div>
@@ -101,7 +106,8 @@
 
                                     <div class="flex items-center">
                                         <span class="md:hidden font-semibold text-gray-700 mr-2">Total:</span>
-                                        <span class="font-semibold">€{{ number_format($totalWithDiscount, 2) }}</span>
+                                        <span
+                                            class="font-semibold">€{{ number_format($totalWithDiscount, 2, ',', '.') }}</span>
                                     </div>
                                     <button wire:click="removeItem('{{ $id }}')"
                                         class="text-red-500 hover:text-red-700">
@@ -130,20 +136,20 @@
 
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal</span>
-                        <span class="font-semibold">€{{ number_format($subtotal, 2) }}</span>
+                        <span class="text-dark">Subtotal</span>
+                        <span class="font-semibold">€{{ number_format($subtotal, 2, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Discounts</span>
-                        <span class="text-green-600">-€{{ number_format($discount, 2) }}</span>
+                        <span class="text-dark">Discounts</span>
+                        <span class="text-green-600">-€{{ number_format($discount, 2, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Shipping</span>
-                        <span class="font-semibold">€{{ number_format($shipping, 2) }}</span>
+                        <span class="text-dark">Shipping</span>
+                        <span class="font-semibold">€{{ number_format($shipping, 2, ',', '.') }}</span>
                     </div>
-                    <div class="border-t pt-4 flex justify-between">
-                        <span class="text-lg font-bold text-gray-800">Total</span>
-                        <span class="text-xl font-bold text-gray-800">€{{ number_format($grandTotal, 2) }}</span>
+                    <div class="border-t border-t-gray-400 pt-4 flex justify-between">
+                        <span class="text-lg font-bold text-dark">Total</span>
+                        <span class="text-xl font-bold text-dark">€{{ number_format($grandTotal, 2, ',', '.') }}</span>
                     </div>
                 </div>
 

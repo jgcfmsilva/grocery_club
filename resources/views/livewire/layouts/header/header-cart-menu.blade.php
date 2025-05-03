@@ -26,8 +26,22 @@
 
                             <div class="products_meta mt-1 d-flex align-items-center">
                                 <div>
-                                    <span
-                                        class="price text-primary fw-semibold">{{ number_format(calculate_discounted_price($item['price'], $item['discount'], $item['quantity'], $item['discount_min_qty']), 2, ',', '.') }}€</span>
+                                    @php
+                                        $hasDiscount = $item['quantity'] >= $item['discount_min_qty'] && $item['discount'] > 0;
+                                        $finalPrice = calculate_discounted_price($item['price'], $item['discount'], $item['quantity'], $item['discount_min_qty']);
+                                    @endphp
+                                    @if ($hasDiscount)
+                                        <span class="price text-danger text-decoration-line-through me-2">
+                                            {{ number_format($item['price'], 2, ',', '.') }}€
+                                        </span>
+                                        <span class="price text-primary fw-semibold">
+                                            {{ number_format($finalPrice, 2, ',', '.') }}€
+                                        </span>
+                                    @else
+                                        <span class="price text-primary fw-semibold">
+                                            {{ number_format($item['price'], 2, ',', '.') }}€
+                                        </span>
+                                    @endif
                                     <span class="count fs-semibold">x {{ $item['quantity'] }}</span>
                                 </div>
                                 <button class="remove_cart_btn ms-2" wire:click="removeFromCart({{ $item['id'] }})">

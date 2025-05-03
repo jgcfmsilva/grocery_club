@@ -34,4 +34,29 @@ class Card extends Model
     {
         return $this->hasMany(CardOperation::class);
     }
+
+    public function increaseBalance(float $amount): bool
+    {
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('The value to add must be positive.');
+        }
+
+        $this->balance += $amount;
+        return $this->save();
+    }
+
+    public function decreaseBalance(float $amount): bool
+    {
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('The amount to decrease must be positive.');
+        }
+
+        if ($this->balance < $amount) {
+            throw new \RuntimeException('There are not enough funds on the virtual card');
+        }
+
+        $this->balance -= $amount;
+        return $this->save();
+    }
+
 }

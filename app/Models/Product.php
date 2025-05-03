@@ -70,7 +70,7 @@ class Product extends Model
      */
     public function orderItems(): HasMany
     {
-        return $this->hasMany(ItemsOrder::class);
+        return $this->hasMany(ItemOrder::class);
     }
 
     /**

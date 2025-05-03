@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ItemOrder;
+use App\Models\CardOperation;
 use App\Enums\OrderStatus;
 use App\Enums\CreditType;
 use App\Enums\TransactionType;
@@ -15,6 +17,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Order\CancelOrderRequest;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Order\CreateOrderRequest;
 
 class OrderController extends Controller
 {
@@ -30,8 +33,10 @@ class OrderController extends Controller
     */
     public function index()
     {
+        $this->authorize('viewAny', Order::class);
+
         $orders = Order::where('member_id', Auth::id())
-            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('pages.my-account.orders.index', compact('orders'));
@@ -55,6 +60,7 @@ class OrderController extends Controller
     public function downloadReceipt(Order $order)
     {
         $this->authorize('downloadReceipt', $order);
+
         $order->load(['items.product', UserType::Member->value]);
 
         $receiptsDir = storage_path('app/private/receipts');
@@ -140,7 +146,7 @@ class OrderController extends Controller
     */
     public function reorder(Order $order)
     {
-        $this->authorize('view', $order);
+        $this->authorize('reorder', $order);
 
         $user = authUser();
 
@@ -220,6 +226,10 @@ class OrderController extends Controller
     */
     protected function generateReceipt(Order $order, bool $download = true)
     {
+        if ($order->status !== OrderStatus::COMPLETED) {
+            return;
+        }
+
         try {
             $order->load(['items.product', 'member.card']);
 
@@ -269,5 +279,123 @@ class OrderController extends Controller
             'shipping_cost' => $shippingCost,
             'total' => $total
         ]);
+    }
+
+
+    /**
+     * Create a new Order
+    */
+    public function createOrder(CreateOrderRequest $request)
+    {
+        $this->authorize('order', Order::class);
+
+        $user = authUser();
+
+        if ($user->type !== \App\Enums\UserType::Member && $user->type !== \App\Enums\UserType::Board) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("Only members can create orders!");
+
+            return back();
+        }
+
+        $cart = session('cart', []);
+        if (empty($cart)) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("The cart is empty!");
+
+            return back();
+        }
+
+        $validated = $request->validated();
+
+        $totalItems = 0;
+        $items = [];
+        foreach ($cart as $cartItem) {
+            $product = Product::findOrFail($cartItem["id"]);
+            $quantity = $cartItem["quantity"];
+            $discount = $product->discount;
+
+            $unitPrice = calculate_discounted_price($product->price, $product->discount, $quantity, $product->discount_min_qty);
+            $subtotal = $quantity * $unitPrice;
+
+            $items[] = compact('product', 'quantity', 'unitPrice', 'discount', 'subtotal');
+            $totalItems += $subtotal;
+        }
+
+        $shippingCost = calculateShippingCost($totalItems);
+
+        $total = $totalItems + $shippingCost;
+
+        $card = $user->card;
+        if ($card->balance < $total) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("Insufficient funds on the virtual card.");
+
+            return back();
+        }
+
+        $newOrder = null;
+        try {
+            $newOrder = DB::transaction(function () use ($user, $validated, $items, $totalItems, $shippingCost, $total, $card) {
+                $order = Order::create([
+                    'member_id' => $user->id,
+                    'status' => OrderStatus::PENDING->value,
+                    'date' => now()->toDateString(),
+                    'total_items' => $totalItems,
+                    'shipping_cost' => $shippingCost,
+                    'total' => $total,
+                    'nif' => $validated["nif"],
+                    'delivery_address' => $validated["delivery_address"],
+                ]);
+
+                foreach ($items as $item) {
+                    ItemOrder::create([
+                        'order_id' => $order->id,
+                        'product_id' => $item['product']->id,
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unitPrice'],
+                        'discount' => $item['discount'] ?? 0,
+                        'subtotal' => $item['subtotal'],
+                    ]);
+                }
+
+                $card->decreaseBalance($total);
+
+                CardOperation::create([
+                    'card_id' => $card->id,
+                    'type' => TransactionType::Debit->value,
+                    'value' => $total,
+                    'date' => now()->toDateString(),
+                    'debit_type' => DebitType::Order->value,
+                    'order_id' => $order->id,
+                ]);
+
+                session()->forget('cart');    
+                
+                return $order->id;
+            });
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->success("Order placed successfully. We are preparing your order.");
+                
+            return redirect()->route('my-account.orders.show', $newOrder);
+        } catch (\Exception $e) {
+            report($e);
+            
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error('There was an error creating the order. Please try again.');
+
+            return back();
+        }
     }
 }

@@ -26,26 +26,58 @@
                 <div class="card shadow-sm rounded-3">
                     <div class="card-body p-0">
                         <div class="list-group rounded-3 list-group-flush">
-                            <a href="{{ route('my-account.index') }}"
-                            class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account') ? 'active' : '' }}">
-                                <i class="bi bi-person-fill me-2"></i> Personal Data
-                            </a>
-                            <a href="{{ route('my-account.orders.index') }}"
-                            class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/orders') ? 'active' : '' }}">
-                                <i class="bi bi-box-seam me-2"></i> My Orders
-                            </a>
+                            {{-- Dados Pessoais - Todos com conta (pending, member, board) --}}
+                            @if(authUser()->isMemberOrBoard() || authUser()->isPendingMember())
+                                <a href="{{ route('my-account.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account') ? 'active' : '' }}">
+                                    <i class="bi bi-person-fill me-2"></i> Personal Data
+                                </a>
+                            @endif
+
+                            {{-- Adesão - Todos com conta (pending, member, board) --}}
+                            
+                            @if(authUser()->isMemberOrBoard() || authUser()->isPendingMember())
+                                <a href="{{ route('my-account.membership.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/membership') ? 'active' : '' }}">
+                                    <i class="bi bi-gem me-2"></i> Membership
+                                </a>
+                            @endif
+                            {{-- Encomendas - Apenas membros ativos ou da direção --}}
+
+                            @if(authUser()->isMemberOrBoard())
+                                <a href="{{ route('my-account.orders.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/orders') ? 'active' : '' }}">
+                                    <i class="bi bi-box-seam me-2"></i> My Orders
+                                </a>
+                            @endif
+
+                            {{-- Cartão Virtual - Todos com conta (para pagar adesão) --}}
+
                             <a href="{{ route('my-account.virtual-card.index') }}"
                             class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/virtual-card') ? 'active' : '' }}">
                                 <i class="bi bi-credit-card-2-front me-2"></i> Virtual Card
                             </a>
-                            <a href="{{ route('my-account.transactions.index') }}"
-                            class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/transactions') ? 'active' : '' }}">
-                                <i class="bi bi-currency-exchange me-2"></i> Transactions
-                            </a>
-                            <a href="{{ route('my-account.statistics.index') }}"
-                            class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/statistics') ? 'active' : '' }}">
-                                <i class="bi bi-graph-up me-2"></i> Statistics
-                            </a>
+
+                            {{-- Transações - Apenas membros ativos ou board --}}
+
+                            @if(auth()->user()->isMemberOrBoard())
+                                <a href="{{ route('my-account.transactions.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/transactions') ? 'active' : '' }}">
+                                    <i class="bi bi-currency-exchange me-2"></i> Transactions
+                                </a>
+                            @endif
+
+                            {{-- Estatísticas - Apenas membros ativos ou board --}}
+
+                            @if(authUser()->isMemberOrBoard())
+                                <a href="{{ route('my-account.statistics.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/statistics') ? 'active' : '' }}">
+                                    <i class="bi bi-graph-up me-2"></i> Statistics
+                                </a>
+                            @endif
+
+                            {{-- Alterar Password - Todos com conta --}}
+
                             <a href="{{ route('my-account.change-password.index') }}"
                             class="list-group-item list-group-item-action d-flex align-items-center bg-white {{ request()->is('my-account/change-password') ? 'active' : '' }}">
                                 <i class="bi bi-shield-lock me-2"></i> Change Password

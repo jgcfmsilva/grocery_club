@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ItemsOrder extends Model
+class ItemOrder extends Model
 {
     use HasFactory;
 
@@ -16,6 +16,7 @@ class ItemsOrder extends Model
      * @var string
      */
     protected $table = 'items_orders';
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

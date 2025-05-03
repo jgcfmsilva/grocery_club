@@ -11,7 +11,7 @@
         </div>
     @else
         <div class="overflow-x-auto rounded-lg shadow-md orders-div">
-            <table class="min-w-full text-sm text-left text-gray-700">
+            <table class="min-w-full text-sm text-center text-gray-700">
                 <thead class="bg-primary text-xs uppercase tracking-wider text-white">
                     <tr>
                         <th class="px-6 py-4 font-semibold">Order #</th>
@@ -34,15 +34,15 @@
                                 {{ $order->status->label() }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="flex flex-wrap gap-2">
-                                <a href="{{ route('my-account.orders.show', $order) }}"
+                        <td class="px-4 py-3">
+                            <div class="flex flex-wrap gap-2 justify-center">
+                                <a href="{{ route('my-account.orders.show', $order->id) }}"
                                 class="bg-blue-600 table-order-button hover:bg-blue-700 text-xs px-4 py-2 rounded-md transition">
                                     View
                                 </a>
                                 @if($order->status === \App\Enums\OrderStatus::COMPLETED)
-                                    <a href="{{ route('my-account.orders.download', $order) }}"
-                                    class="bg-gray-700 table-order-button hover:bg-gray-800 text-xs px-4 py-2 rounded-md transition">
+                                    <a href="{{ route('my-account.orders.download', $order->id) }}"
+                                    class="bg-gray-700 table-order-button hover:bg-gray-800 text-xs px-4 py-2 rounded-md transition text-white">
                                         Receipt
                                     </a>
                                 @endif

@@ -13,9 +13,9 @@ class TransactionController extends Controller
         $cardId = authUser()->card->id;
 
         $operations = CardOperation::with('order')
-        ->where('card_id', $cardId)
-        ->orderByDesc('created_at')
-        ->get();
+            ->where('card_id', $cardId)
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         return view('pages.my-account.transactions.index', compact('operations'));
     }
