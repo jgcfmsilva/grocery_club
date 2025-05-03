@@ -11,8 +11,6 @@
 
 @theme { 
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --background-image-logo-light: url('../img/politecnico_h.svg'); 
-    --background-image-logo-dark: url('../img/politecnico_h_white.svg'); 
 
     --container-padding-x: 0.75rem;
     --container-padding-y: 0;

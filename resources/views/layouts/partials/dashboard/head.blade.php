@@ -7,14 +7,8 @@
 <!--title-->
 <title>@yield('title')</title>
 
-<!--build:css-->
-@include('layouts.include.css')
-
 @stack('styles')
+@include('layouts.include.dashboard.css')
 
-<!-- Styles / Scripts -->
-@vite('resources/css/app.css')
-@vite('resources/js/app.js')
-
-@include('layouts.include.scripts')
 @stack('scripts')
+@include('layouts.include.dashboard.scripts')

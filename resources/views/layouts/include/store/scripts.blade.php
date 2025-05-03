@@ -7,3 +7,4 @@
 <script src="{{ asset('assets/common/js/select2.js') }}"></script>
 
 <script src="{{ asset('assets/js/app.js') }}"></script>
+@vite('resources/js/app.js')

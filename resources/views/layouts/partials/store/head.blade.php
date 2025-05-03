@@ -7,5 +7,9 @@
 <!--title-->
 <title>@yield('title')</title>
 
+<!--build:css-->
 @stack('styles')
+@include('layouts.include.store.css')
+
 @stack('scripts')
+@include('layouts.include.store.scripts')

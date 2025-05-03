@@ -8,3 +8,4 @@
 <link rel="stylesheet" href="{{ asset('assets/common/css/custom.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/common/css/custom.css') }}">
 @vite('resources/css/partials/header.css')
+@vite('resources/css/app.css')

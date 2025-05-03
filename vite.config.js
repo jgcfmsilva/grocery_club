@@ -16,6 +16,7 @@ export default defineConfig({
                 "resources/css/pages/my-account/virtual-card.css",
                 "resources/css/pages/my-account/transactions.css",
                 "resources/css/pages/cart/cart.css",
+                "resources/css/pages/dashboard/dashboard.css",
 
                 // JS
                 "resources/js/app.js",
@@ -27,6 +28,7 @@ export default defineConfig({
                 "resources/js/pages/home.js",
                 "resources/js/pages/my-account/virtual-card.js",
                 "resources/js/pages/my-account/transactions.js",
+                "resources/js/pages/dashboard/dashboard.js",
             ],
             refresh: [`resources/views/**/*`],
         }),
