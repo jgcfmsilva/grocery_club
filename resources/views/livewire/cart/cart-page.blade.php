@@ -6,12 +6,13 @@
     @endif
 
     <header class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Cart</h1>
+        <h1 class="text-3xl font-bold text-gray-800">Shopping Cart</h1>
     </header>
 
     <div class="flex flex-col lg:flex-row gap-8">
         <main class="lg:w-2/3">
             @if (count($cart) > 0)
+                <!-- Cart Items -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="bg-primary text-white hidden md:flex px-6 py-4">
                         <div class="w-2/5 font-semibold">Product</div>
@@ -20,7 +21,6 @@
                         <div class="w-1/5 font-semibold text-right">Total</div>
                     </div>
 
-                    <!-- Lista de itens -->
                     <div id="cart-items">
                         @foreach ($cart as $id => $item)
                             <div class="flex flex-col md:flex-row items-stretch p-6 border-b border-b-gray-400 last:border-b-0 min-h-[120px] md:min-h-0">
@@ -33,18 +33,18 @@
                                             </a>
                                             <p class="category-name text-dark opacity-70">{{ $item['category_name'] }}</p>
 
-                                            @if ($item['stock'] === 0 || $item['stock'] < $item['quantity'])
-                                                <p class="text-sm text-red-500 font-medium">
-                                                    Quantity exceeds stock - delivery may be delayed
-                                                </p>
-                                            @endif
+                                        @if ($item['stock'] === 0 || $item['stock'] < $item['quantity'])
+                                            <p class="text-sm text-red-500 font-medium">
+                                                Quantity exceeds stock - delivery may be delayed
+                                            </p>
+                                        @endif
 
-                                            @if ($item['stock'] > 0 && $item['stock'] >= $item['quantity'])
-                                                <p class="text-sm text-green-500 font-medium mb-0.5">
-                                                    In Stock
-                                                </p>
-                                            @endif
-                                        </div>
+                                        @if ($item['stock'] > 0 && $item['stock'] >= $item['quantity'])
+                                            <p class="text-sm text-green-500 font-medium mb-0.5">
+                                                In Stock
+                                            </p>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="w-full md:w-1/5 flex items-center justify-center py-4">
@@ -56,12 +56,12 @@
                                                 $item['price'],
                                                 $item['discount'] ?? 0,
                                                 $item['quantity'],
-                                                $item['discount_min_qty'] ?? PHP_INT_MAX
+                                                $item['discount_min_qty'] ?? PHP_INT_MAX,
                                             );
                                         @endphp
 
                                         <div class="text-center">
-                                            @if($item['discount'] > 0 && $item['quantity'] >= $item['discount_min_qty'])
+                                            @if ($item['discount'] > 0 && $item['quantity'] >= $item['discount_min_qty'])
                                                 <span class="text-sm text-red-500 line-through block">
                                                     €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
@@ -99,7 +99,7 @@
                                             $item['price'],
                                             $item['discount'] ?? 0,
                                             $item['quantity'],
-                                            $item['discount_min_qty'] ?? PHP_INT_MAX
+                                            $item['discount_min_qty'] ?? PHP_INT_MAX,
                                         );
                                         $totalWithDiscount = $discounted * $item['quantity'];
                                     @endphp
@@ -153,18 +153,50 @@
                     </div>
                 </div>
 
-                
-                <form method="POST" action="{{ route('order.create') }}">
-                    @csrf
-                    <input type="text" name="nif" value="{{ old('nif', auth()->user()->nif ?? '') }}" placeholder="NIF">
-                    <input type="text" name="delivery_address" value="{{ old('delivery_address', auth()->user()->default_delivery_address ?? '') }}" required placeholder="Morada de entrega">
-                    <button
-                        type="submit"
-                        class="w-full py-3 bg-primary rounded text-white hover:!bg-orange-500 transition-colors font-semibold mt-4">
-                        Purchase
-                    </button>
-                </form>
+                @if(auth()->check())
+                    <div class="mb-6 border-t pt-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Billing Information</h3>
+                        <form id="checkout-form">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="tax-id" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+                                    <input type="text" id="tax-id" name="tax_id" value="{{ old('nif', $nif ?? '') }}"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        placeholder="123456789" required pattern="[0-9]{9}"
+                                        title="Please enter a valid 9-digit tax ID">
+                                </div>
+                                <div>
+                                    <label for="shipping-address"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
+                                    <input type="text" id="shipping-address" name="shipping_address" value="{{ old('shipping_address', $default_delivery_address ?? '') }}"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        placeholder="123 Main Street" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+
+                <button id="purchase-btn"
+                    class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                    Complete Purchase
+                </button>
             </div>
         </aside>
     </div>
 </div>
+
+<script>
+    document.getElementById('purchase-btn').addEventListener('click', function() {
+        const form = document.getElementById('checkout-form');
+        if (form.checkValidity()) {
+            // Add your checkout processing logic here
+            alert('Order placed successfully!');
+            // Example: Send data to server
+            // const formData = new FormData(form);
+            // fetch('/checkout', { method: 'POST', body: formData })...
+        } else {
+            form.reportValidity();
+        }
+    });
+</script>
