@@ -55,11 +55,6 @@
                                             class="bg-gray-700 table-order-button hover:bg-gray-800 text-xs px-4 py-2 rounded-md transition text-white">
                                                 Receipt
                                             </a>
-                                        @else
-                                            <a href="#"
-                                            class="bg-gray-500 text-white text-xs px-4 py-2 rounded-md transition cursor-not-allowed opacity-60 pointer-events-none">
-                                                Receipt
-                                            </a>
                                         @endif
                                     </div>
                                 </td>
