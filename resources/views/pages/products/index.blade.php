@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
+@section('title', 'Procucts - ' . config('vars.app_name'))
+
 @section('content')
     <div class="container">
-        <h2 class="mb-4">Produtos</h2>
+        <h2 class="mb-4">Products</h2>
 
         {{-- Filtro por categoria --}}
         <form method="GET" action="{{ route('products.index') }}" class="mb-4">
             <select name="category_id" onchange="this.form.submit()" class="form-select">
-                <option value="">Todas as categorias</option>
+                <option value="">All categories</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}

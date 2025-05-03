@@ -1,5 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
+@section('title', 'My Account - Order #' . $order->id)
+
 @section('account-content')
     <div class="flex justify-between items-center mb-6">
         <h4 class="text-2xl font-semibold text-gray-700">Order #{{ $order->id }}</h4>
@@ -9,7 +11,7 @@
         </a>
     </div>
 
-    @include('layouts.partials.alerts')
+    @include('layouts.partials.alerts.alerts')
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div class="card">

@@ -1,5 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
+@section('title', 'My Account - Membership')
+
 @section('account-content')
     <h4 class="text-3xl font-bold text-gray-800 mb-4">Membership</h4>
 

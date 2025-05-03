@@ -3,7 +3,7 @@
 @section('title', 'Welcome to ' . config('vars.app_name'))
 
 @section('content')
-    @include('layouts.partials.alerts')
+    @include('layouts.partials.alerts.alerts')
 
     <div class="relative w-full h-72 sm:h-96 mb-10">
         <img src="{{ asset('assets/img/banners/home-banner-1.jpg') }}" alt="Banner" class="w-full h-full object-cover rounded-xl">
