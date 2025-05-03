@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class CartPage extends Component
 {
@@ -16,8 +17,21 @@ class CartPage extends Component
     public $shipping = 0;
     public $grandTotal = 0;
 
+    // user info
+    public $nif;
+    public $default_delivery_address;
+
     public function mount()
     {
+        // gets the user info
+        $user = Auth::user();
+
+        if($user != null) {
+            $this -> nif = $user->nif;
+            $this -> default_delivery_address = $user->default_delivery_address;
+
+        }
+
         $this->loadCart();
         $this->calculateTotals();
     }
