@@ -17,7 +17,26 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
-        return $user->id === $order->member_id || $user->type === UserType::Board;
+        return (
+            ($user->id === $order->member_id && $user->isMember()) || 
+            ($user->type === UserType::Board)
+        );
+    }
+
+    /**
+     * Determine whether the user can view any orders.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->isMemberOrBoard();
+    }
+
+    /**
+     * Determine whether the user can create a new order.
+     */
+    public function order(User $user): bool
+    {
+        return $user->isMemberOrBoard();
     }
 
     /**
@@ -25,8 +44,10 @@ class OrderPolicy
      */
     public function cancel(User $user, Order $order): bool
     {
-        return $user->id === $order->member_id &&
-               $order->status === OrderStatus::PENDING;
+        return (
+            ($user->id === $order->member_id && $order->status === OrderStatus::PENDING) ||
+            ($user->isBoard() && $order->status === OrderStatus::PENDING)
+        );
     }
 
     /**
@@ -34,8 +55,7 @@ class OrderPolicy
      */
     public function downloadReceipt(User $user, Order $order): bool
     {
-        return $user->id === $order->member_id &&
-               $order->status === OrderStatus::COMPLETED;
+        return $user->id === $order->member_id && $order->status === OrderStatus::COMPLETED;
     }
 
     /**
@@ -44,13 +64,5 @@ class OrderPolicy
     public function reorder(User $user, Order $order): bool
     {
         return $user->id === $order->member_id;
-    }
-
-    /**
-     * Determine whether the user can view any orders.
-     */
-    public function viewAny(User $user): bool
-    {
-        return in_array($user->type, [UserType::Member, UserType::Board]);
     }
 }

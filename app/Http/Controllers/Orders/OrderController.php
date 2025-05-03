@@ -33,6 +33,8 @@ class OrderController extends Controller
     */
     public function index()
     {
+        $this->authorize('viewAny', Order::class);
+
         $orders = Order::where('member_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -58,6 +60,7 @@ class OrderController extends Controller
     public function downloadReceipt(Order $order)
     {
         $this->authorize('downloadReceipt', $order);
+
         $order->load(['items.product', UserType::Member->value]);
 
         $receiptsDir = storage_path('app/private/receipts');
@@ -143,7 +146,7 @@ class OrderController extends Controller
     */
     public function reorder(Order $order)
     {
-        $this->authorize('view', $order);
+        $this->authorize('reorder', $order);
 
         $user = authUser();
 
@@ -223,6 +226,10 @@ class OrderController extends Controller
     */
     protected function generateReceipt(Order $order, bool $download = true)
     {
+        if ($order->status !== OrderStatus::COMPLETED) {
+            return;
+        }
+
         try {
             $order->load(['items.product', 'member.card']);
 
@@ -274,8 +281,14 @@ class OrderController extends Controller
         ]);
     }
 
+
+    /**
+     * Create a new Order
+    */
     public function createOrder(CreateOrderRequest $request)
     {
+        $this->authorize('order', Order::class);
+
         $user = authUser();
 
         if ($user->type !== \App\Enums\UserType::Member && $user->type !== \App\Enums\UserType::Board) {
@@ -299,7 +312,6 @@ class OrderController extends Controller
 
         $validated = $request->validated();
 
-        // Calcular totais e descontos
         $totalItems = 0;
         $items = [];
         foreach ($cart as $cartItem) {
@@ -314,12 +326,10 @@ class OrderController extends Controller
             $totalItems += $subtotal;
         }
 
-        // Calcular custos de envio
         $shippingCost = calculateShippingCost($totalItems);
 
         $total = $totalItems + $shippingCost;
 
-        // Verificar saldo
         $card = $user->card;
         if ($card->balance < $total) {
             flash()
@@ -330,51 +340,62 @@ class OrderController extends Controller
             return back();
         }
 
-        DB::transaction(function () use ($user, $validated, $items, $totalItems, $shippingCost, $total, $card) {
-            // Criar encomenda
-            $order = Order::create([
-                'member_id' => $user->id,
-                'status' => OrderStatus::PENDING->value,
-                'date' => now()->toDateString(),
-                'total_items' => $totalItems,
-                'shipping_cost' => $shippingCost,
-                'total' => $total,
-                'nif' => $validated["nif"],
-                'delivery_address' => $validated["delivery_address"],
-            ]);
-
-            // Guardar itens da encomenda
-            foreach ($items as $item) {
-                ItemOrder::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product']->id,
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['unitPrice'],
-                    'discount' => $item['discount'],
-                    'subtotal' => $item['subtotal'],
+        $newOrder = null;
+        try {
+            $newOrder = DB::transaction(function () use ($user, $validated, $items, $totalItems, $shippingCost, $total, $card) {
+                $order = Order::create([
+                    'member_id' => $user->id,
+                    'status' => OrderStatus::PENDING->value,
+                    'date' => now()->toDateString(),
+                    'total_items' => $totalItems,
+                    'shipping_cost' => $shippingCost,
+                    'total' => $total,
+                    'nif' => $validated["nif"],
+                    'delivery_address' => $validated["delivery_address"],
                 ]);
-            }
 
-            // Debitar cartão
-            $card->decrement('balance', $total);
+                foreach ($items as $item) {
+                    ItemOrder::create([
+                        'order_id' => $order->id,
+                        'product_id' => $item['product']->id,
+                        'quantity' => $item['quantity'],
+                        'unit_price' => $item['unitPrice'],
+                        'discount' => $item['discount'] ?? 0,
+                        'subtotal' => $item['subtotal'],
+                    ]);
+                }
 
-            // Registar operação
-            CardOperation::create([
-                'card_id' => $card->id,
-                'type' => TransactionType::Debit->value,
-                'value' => $total,
-                'date' => now()->toDateString(),
-                'debit_type' => DebitType::Order->value,
-                'order_id' => $order->id,
-            ]);
+                $card->decreaseBalance($total);
 
-            // Limpar carrinho
-            session()->forget('cart');
+                CardOperation::create([
+                    'card_id' => $card->id,
+                    'type' => TransactionType::Debit->value,
+                    'value' => $total,
+                    'date' => now()->toDateString(),
+                    'debit_type' => DebitType::Order->value,
+                    'order_id' => $order->id,
+                ]);
 
-            // Notificar utilizador
-            session()->flash('success', 'Order placed successfully. We are preparing your order.');
-        });
+                session()->forget('cart');    
+                
+                return $order->id;
+            });
 
-        return redirect()->route('my-account.orders.index');
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->success("Order placed successfully. We are preparing your order.");
+                
+            return redirect()->route('my-account.orders.show', $newOrder);
+        } catch (\Exception $e) {
+            report($e);
+            
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error('There was an error creating the order. Please try again.');
+
+            return back();
+        }
     }
 }

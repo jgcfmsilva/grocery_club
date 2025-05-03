@@ -69,4 +69,35 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Order::class);
     }
+
+    public function isPendingMember() {
+        return $this->type === UserType::PendingMember;
+    }
+    
+    public function isMember() {
+        return $this->type === UserType::Member;
+    }
+    
+    public function isBoard() {
+        return $this->type === UserType::Board;
+    }
+    
+    public function isEmployee() {
+        return $this->type === UserType::Employee;
+    }
+    
+    public function isMemberOrBoard() {
+        return in_array($this->type, [UserType::Member, UserType::Board]);
+    }
+
+    public function changeType(UserType $newType): bool
+    {
+        if ($this->type === $newType) {
+            return false;
+        }
+
+        $this->type = $newType;
+        return $this->save();
+    }
+
 }

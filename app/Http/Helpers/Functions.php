@@ -62,19 +62,43 @@ if (! function_exists('calculate_price_with_discount')) {
     }
 }
 
-# Is customer
+# Is employee
+if (!function_exists('isPendingMember')) {
+    function isPendingMember()
+    {
+        return authUser()->isPendingMember();
+    }
+}
+
+# Is active member
+if (!function_exists('isMember')) {
+    function isMember()
+    {
+        return authUser()->isMember();
+    }
+}
+
+# Is employee
 if (!function_exists('isEmployee')) {
     function isEmployee()
     {
-        return Auth::user()->user_type === UserType::Employee;
+        return authUser()->isEmployee();
     }
 }
 
 # Is admin
-if (!function_exists('isAdmin')) {
-    function isAdmin()
+if (!function_exists('isBoard')) {
+    function isBoard()
     {
-        return Auth::user()->user_type === UserType::Board;
+        return authUser()->isBoard();
+    }
+}
+
+# Is board or active member
+if (!function_exists('isActiveMember')) {
+    function isActiveMember()
+    {
+        return authUser()->isActiveMember();
     }
 }
 

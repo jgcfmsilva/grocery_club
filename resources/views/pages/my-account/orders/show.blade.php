@@ -17,7 +17,7 @@
                 <h5>Order Details</h5>
             </div>
             <div class="card-body table-order-show-card bg-white border-sm">
-                <p><strong>Date:</strong> {{ $order->date->format('d/m/Y H:i') }}</p>
+                <p><strong>Date:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                 <p><strong>Status:</strong>
                     <span class="badge {{ $order->status->badgeClass() }}">
                         {{ $order->status->label() }}

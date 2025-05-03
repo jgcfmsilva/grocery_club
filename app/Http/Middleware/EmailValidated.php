@@ -16,7 +16,7 @@ class EmailValidated
     public function handle(Request $request, Closure $next): Response
     {
         if (!session()->pull('email_validated')) {
-            return redirect()->route('home')->with('error', 'Não tens acesso a esta página.');
+            return redirect()->route('home')->with('error', 'You have to verify your email before accessing this page.');
         }
 
         return $next($request);

@@ -49,7 +49,7 @@ class RegisterUserController extends Controller
             'default_payment_type' => $request->default_payment_type,
             'default_payment_reference' => $request->default_payment_reference,
             'photo' => $photoPath,
-            'type' => UserType::Member->value,
+            'type' => UserType::PendingMember->value,
         ]);
 
         do {

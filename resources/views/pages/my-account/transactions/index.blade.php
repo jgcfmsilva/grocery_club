@@ -19,7 +19,7 @@
                 <tbody>
                     @foreach($operations as $op)
                         <tr class="border-b">
-                            <td class="px-4 py-3 text-sm text-dark">{{ \Carbon\Carbon::parse($op->date)->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 text-sm text-dark">{{ \Carbon\Carbon::parse($op->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="px-4 py-3 text-sm font-medium text-dark">
                                 {{ $op->type->label()}}
                             </td>
@@ -72,6 +72,10 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <div class="mt-6">
+            {{ $operations->links() }}
         </div>
     </div>
 @endsection

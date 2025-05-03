@@ -160,7 +160,7 @@
                     <input type="text" name="delivery_address" value="{{ old('delivery_address', auth()->user()->default_delivery_address ?? '') }}" required placeholder="Morada de entrega">
                     <button
                         type="submit"
-                        class="w-full py-3 bg-green-600 rounded text-white hover:bg-green-700 transition-colors font-semibold mt-4">
+                        class="w-full py-3 bg-primary rounded text-white hover:!bg-orange-500 transition-colors font-semibold mt-4">
                         Purchase
                     </button>
                 </form>
