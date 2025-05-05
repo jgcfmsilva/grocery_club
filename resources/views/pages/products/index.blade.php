@@ -9,7 +9,7 @@
             <select name="category_id" onchange="this.form.submit()" class="form-select">
                 <option value="">Todas as categorias</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                    <option value="{{ $category->id }}" {{ request('category_id') === $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach

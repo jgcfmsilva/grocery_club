@@ -1,7 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
 @section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h4>
+    <h3 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h3>
 
     @include('layouts.partials.alerts')
 

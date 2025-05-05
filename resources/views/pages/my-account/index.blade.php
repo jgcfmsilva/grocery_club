@@ -1,7 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
 @section('account-content')
-    <h4 class="text-2xl font-semibold text-gray-700 mb-6">Personal Data</h4>
+    <h3 class="text-2xl font-semibold text-gray-700 mb-6">Personal Data</h3>
 
     @if ($errors->any())
         <div class="alert alert-danger">
