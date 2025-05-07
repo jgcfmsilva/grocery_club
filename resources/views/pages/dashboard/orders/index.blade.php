@@ -111,6 +111,12 @@
                                     <i class="fas fa-eye"></i>
                                     <span>View</span>
                                 </a>
+                                @if($order->isPending())
+                                    <a href="{{ route('dashboard.orders.confirm', $order->id) }}" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded shadow text-sm cursor-pointer flex items-center space-x-1">
+                                        <i class="fas fa-check"></i>
+                                        <span>Complete</span>
+                                    </a>
+                                @endif
                                 <form action="{{ route('dashboard.orders.destroy', $order->id) }}" method="POST" class="inline delete-item-form">
                                     @csrf
                                     @method('DELETE')

@@ -22,6 +22,8 @@ Route::middleware(['auth','role:board'])->group(function () {
             Route::get('/{order}', [OrderController::class, 'show'])->name('show');
             Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
             Route::get('/{order}/invoice', [OrderController::class, 'invoice'])->name('invoice');
+            Route::get('/{order}/confirm', [OrderController::class, 'confirm'])->name('confirm');
+            Route::post('/{order}/complete', [OrderController::class, 'complete'])->name('complete');
         });
 
         Route::prefix('memberships')->name('memberships.')->group(function () {
