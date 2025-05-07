@@ -1,21 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById('user-avatar-btn').addEventListener('click', function() {
-        const dropdown = document.getElementById('user-dropdown');
-        dropdown.classList.toggle('hidden'); // Alterna a visibilidade
-        dropdown.classList.toggle('opacity-0'); // Alterna a opacidade
-        dropdown.classList.toggle('scale-95'); // Alterna a escala
-        dropdown.classList.toggle('opacity-100'); // Alterna a opacidade
-        dropdown.classList.toggle('scale-100'); // Alterna a escala
+    const avatarBtn = document.getElementById('user-avatar-btn');
+    const dropdown = document.getElementById('user-dropdown');
+
+    avatarBtn.addEventListener('mouseenter', () => {
+        dropdown.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+        dropdown.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
     });
 
-    // Fechar o dropdown se o usuário clicar fora
-    window.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('user-dropdown');
-        const avatarButton = document.getElementById('user-avatar-btn');
-        if (!avatarButton.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.add('hidden');
-            dropdown.classList.remove('opacity-100', 'scale-100');
-            dropdown.classList.add('opacity-0', 'scale-95');
-        }
+    avatarBtn.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (!dropdown.matches(':hover')) {
+                dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            }
+        }, 100);
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+        dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+        dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
     });
 });

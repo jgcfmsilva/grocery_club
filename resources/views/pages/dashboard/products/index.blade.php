@@ -35,9 +35,9 @@
             <div class="col-span-1">
                 <label for="price_range" class="block font-semibold text-white">Price Range</label>
                 <div class="flex space-x-4 mt-2">
-                    <input type="number" name="price_min" id="price_min" placeholder="Min" value="{{ request('price_min') }}"
+                    <input type="number" name="price_min" id="price_min" min="0" placeholder="Min" value="{{ request('price_min') }}"
                         class="block w-full h-12 text-white border-2 border-gray-300 px-3 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <input type="number" name="price_max" id="price_max" placeholder="Max" value="{{ request('price_max') }}"
+                    <input type="number" name="price_max" id="price_max" min="0" placeholder="Max" value="{{ request('price_max') }}"
                         class="block w-full h-12 text-white border-2 border-gray-300 px-3 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>

@@ -6,18 +6,20 @@
     <div class="relative flex items-center space-x-4">
         <!-- User Avatar and Dropdown Button -->
         <div class="relative">
-            <button id="user-avatar-btn" class="p-1 rounded-full hover:bg-gray-300 transition duration-200 ease-in-out focus:outline-none cursor-pointer">
-                <!-- User Avatar -->
-                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="User Image" class="w-11 h-11 rounded-full ring-2 ring-blue-500">
+            <button id="user-avatar-btn" class="p-1 rounded-full transition duration-200 ease-in-out focus:outline-none cursor-pointer">
+                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="User Image" class="w-11 h-11 rounded-full ring-2 ring-blue-500 hover:ring-white">
             </button>
-
-            <!-- Dropdown Menu -->
-            <div id="user-dropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transition-all duration-300 ease-in-out hidden z-50">
-                <ul class="pt-2">
-                    <li><a href="{{ route('home') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-300 transition duration-200">Mudar para a loja</a></li>
+        
+            <div id="user-dropdown" class="absolute right-0 mt-3 w-60 bg-gray-800 rounded-lg shadow-lg opacity-0 scale-95 transition-all duration-300 ease-in-out z-50 pointer-events-none">
+                <ul class="py-2 px-4">
                     <li>
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-gray-800 hover:bg-gray-300 transition duration-200">
-                            Logout
+                        <a href="{{ route('home') }}" class="block px-4 py-2 text-white hover:bg-gray-800 hover:text-blue-400 transition duration-200 rounded-md">
+                            <span class="me-2"><i class="fa-solid fa-shop"></i></span>Mudar para a loja
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-white hover:bg-gray-800 hover:text-blue-400 transition duration-200 rounded-md">
+                            <span class="me-2"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>Logout
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf

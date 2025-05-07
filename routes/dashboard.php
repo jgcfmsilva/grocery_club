@@ -19,6 +19,8 @@ Route::middleware(['auth','role:board'])->group(function () {
         // Sidebar menu routes
         Route::prefix('orders')->name('orders.')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+            Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('memberships')->name('memberships.')->group(function () {

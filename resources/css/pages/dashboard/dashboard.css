@@ -1,0 +1,18 @@
+#user-dropdown ul li a,
+#sidebar-item li a
+{
+    transition: all 0.3s ease-in-out;
+    transform: translateX(0);
+}
+
+#user-dropdown ul li a:hover,
+#sidebar-item li a:hover 
+{
+    transform: translateX(5px);
+}
+
+#user-dropdown ul li a:not(:hover),
+#sidebar-item li a:not(:hover)
+{
+    transform: translateX(0);
+}
