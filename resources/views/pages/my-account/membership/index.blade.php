@@ -6,7 +6,7 @@
     <h4 class="text-3xl font-bold text-gray-800 mb-4">Membership</h4>
 
     <div class="max-w-3xl mx-auto px-4 py-12">
-        @if (authUser()->isMember())
+        @if (authUser()->isMemberOrBoard())
             <div class="border-5 border-gray-300 rounded-xl p-8 text-center shadow-lg">
                 <h2 class="text-2xl font-bold mb-4 text-dark">🎉 You're an active member!</h2>
                 <p class="mb-2 font-semibold text-dark">As a member, you now have access to the following benefits:</p>
