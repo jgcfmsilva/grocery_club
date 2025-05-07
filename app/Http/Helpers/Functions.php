@@ -20,7 +20,7 @@ if (!function_exists('userID')) {
 
 if (! function_exists('calculateShippingCost')) {
     function calculateShippingCost(float $total): float
-    {   
+    {
         $shippingCost = DB::table('settings_shipping_costs')
             ->where('min_value_threshold', '<=', $total)
             ->where('max_value_threshold', '>', $total)
@@ -59,6 +59,19 @@ if (! function_exists('calculate_price_with_discount')) {
         }
 
         return $price;
+    }
+}
+
+// Calculate percentage of discount
+if (! function_exists('calculate_percentage_discount')) {
+    function calculate_percentage_discount($originalPrice, $discountedPrice)
+    {
+        if ($originalPrice > 0 && $discountedPrice < $originalPrice) {
+            $discount = $originalPrice - $discountedPrice;
+            return ($discount / $originalPrice) * 100;
+        }
+
+        return 0;
     }
 }
 

@@ -58,5 +58,8 @@ Route::middleware(['auth','role:pending_member,member,board'])->group(function (
 
         // Change Password
         Route::get('/change-password', [ChangePasswordController::class, 'index'])->name('change-password.index');
+
+        // Change Password
+        Route::post('/change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');
     });
 });

@@ -1,16 +1,29 @@
 <div class="col-md-3 mb-4">
     <div class="card h-100 shadow-lg flex flex-col">
-        @if ($product->photo)
-            <a href="{{ route('products.show', $product->id) }}">
-                <img src="{{ asset('storage/products/' . $product->photo) }}"
-                class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
-            </a>
-        @else
-            <a href="{{ route('products.show', $product->id) }}">
-                <img src="{{ asset('storage/products/product_no_image.png') }}"
-                class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
-            </a>
-        @endif
+        <div class="relative">
+            @if($product->discount && $product->discount > 0 && $product->discount_min_qty && $product->discount_min_qty > 0)
+                @php
+                    $discountedPricePerUnit = calculate_price_with_discount($product->price, $product->discount);
+                    $percent = round(calculate_percentage_discount($product->price, $discountedPricePerUnit));
+                @endphp
+                @if($percent > 0)
+                    <span class="badge bg-secondary position-absolute top-0 start-0 m-2 fs-6 shadow z-2">
+                        -{{ $percent }}%
+                    </span>
+                @endif
+            @endif
+            @if ($product->photo)
+                <a href="{{ route('products.show', $product->id) }}">
+                    <img src="{{ asset('storage/products/' . $product->photo) }}"
+                    class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+                </a>
+            @else
+                <a href="{{ route('products.show', $product->id) }}">
+                    <img src="{{ asset('storage/products/product_no_image.png') }}"
+                    class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+                </a>
+            @endif
+        </div>
         <div class="card-body flex flex-col justify-between flex-grow">
             <!-- Product Name and Category -->
             <a href="{{ route('products.show', $product->id) }}">
@@ -22,6 +35,7 @@
             <!-- Price and Discount -->
             @if ($product->discount)
                 <small class="text-sm text-green-700">
+                    <i class="bi bi-tags-fill me-1"></i>
                     Buy {{$product->discount_min_qty}}
                     @if ($product->discount_min_qty == 1)
                         unit
