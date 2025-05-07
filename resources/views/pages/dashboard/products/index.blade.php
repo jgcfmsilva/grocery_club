@@ -13,7 +13,7 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg mb-6">
+    <div class="bg-gray-800 p-5 rounded-xl shadow-lg mb-6">
         <form method="GET" action="{{ route('dashboard.products.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="col-span-1">
                 <label for="name" class="block font-semibold text-white">Name</label>
@@ -172,7 +172,7 @@
             </table>
         @endif
     </div>
-    {{ $products->links() }}
+    {{ $products->appends(request()->except('page'))->links() }}
 
     @include('components.modal.index', [
         'title' => 'Delete Product',
