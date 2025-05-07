@@ -186,17 +186,3 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('purchase-btn').addEventListener('click', function() {
-        const form = document.getElementById('checkout-form');
-        if (form.checkValidity()) {
-            // Add your checkout processing logic here
-            alert('Order placed successfully!');
-            // Example: Send data to server
-            // const formData = new FormData(form);
-            // fetch('/checkout', { method: 'POST', body: formData })...
-        } else {
-            form.reportValidity();
-        }
-    });
-</script>

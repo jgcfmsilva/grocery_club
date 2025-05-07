@@ -8,7 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 
 class ProductController extends Controller
-{   
+{
     /**
     * Show view of all products
     */
@@ -32,7 +32,7 @@ class ProductController extends Controller
     */
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        return view('pages.products.product-page', compact('product'));
     }
 
     /**
