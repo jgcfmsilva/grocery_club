@@ -1,1 +1,0 @@
-@extends('layouts.pages.my-account.layout')

@@ -2,7 +2,7 @@
 
 @section('account-content')
     <div class="flex justify-between items-center mb-6">
-        <h4 class="text-2xl font-semibold text-gray-700">Order #{{ $order->id }}</h4>
+        <h3 class="text-2xl font-semibold text-gray-700">Order #{{ $order->id }}</h3>
         <a href="{{ route('my-account.orders.index') }}" class="btn btn-secondary"
                 style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                 <i class="bi bi-arrow-left me-1"></i> Back to Orders

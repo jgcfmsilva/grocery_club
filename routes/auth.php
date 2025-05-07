@@ -29,7 +29,7 @@ Route::middleware('guest')->group(function () {
 
 // Com sessão iniciada mas sem email validado
 Route::middleware('auth')->group(function () {
-    
+
     // Terminar Sessão
     Route::post('/logout', [LoginUserController::class, 'logout']) -> name('logout');
     Route::get('/logout', [LoginUserController::class, 'logout']) -> name('logout');

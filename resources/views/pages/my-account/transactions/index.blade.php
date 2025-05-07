@@ -1,7 +1,7 @@
 @extends('layouts.pages.my-account.layout')
 
 @section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-4">Transactions</h4>
+    <h3 class="text-3xl font-bold text-gray-800 mb-4">Transactions</h3>
 
     <div class="container mx-auto p-2">
         <div class="overflow-x-auto bg-white shadow-lg rounded-lg transactions-div">
@@ -41,7 +41,7 @@
                                     <span class="text-dark opacity-60 font-medium text-center">No reference associated</span>
                                 @endif
                             </td>
-                            
+
                             @if($op->order_id)
                                 <td class="px-4 py-3">
                                     <div class="flex flex-wrap gap-2 justify-center">
@@ -49,7 +49,7 @@
                                         class="bg-blue-600 table-order-button hover:bg-blue-700 text-xs px-4 py-2 rounded-md transition text-white">
                                             View
                                         </a>
-                                        
+
                                         @if($op->order->status === \App\Enums\OrderStatus::COMPLETED)
                                             <a href="{{ route('my-account.orders.download', $op->order_id) }}"
                                             class="bg-gray-700 table-order-button hover:bg-gray-800 text-xs px-4 py-2 rounded-md transition text-white">
