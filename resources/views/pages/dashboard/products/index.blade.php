@@ -122,7 +122,7 @@
                         </td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $product->name }}</td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $product->category->name }}</td>
-                        <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $product->price }}€</td>
+                        <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ number_format($product->price, 2, ',', '') }}€</td>
                         <td class="border border-gray-300 px-6 py-4 text-md">
                             @if($product->stock <= $product->stock_lower_limit)
                                 <span class="text-red-600 font-bold">{{ $product->stock }} <span class="text-sm">(Low stock)</span></span>
@@ -134,14 +134,14 @@
                         </td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">
                             @if($product->hasDiscount())
-                                {{ $product->discount }} € (Min Qty: {{ $product->discount_min_qty }})
+                                {{ number_format($product->discount, 2, ',', '') }} € (Min Qty: {{ $product->discount_min_qty }})
                             @else
                                 <span class="text-gray-500 text-sm">No Discount</span>
                             @endif
                         </td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">
                             @if($product->hasDiscount())
-                                {{ $product->getPriceWithDiscount() }} €
+                                {{ number_format($product->getPriceWithDiscount(), 2, ',', '') }} €
                             @else
                                 <span class="text-gray-500 text-sm">N/A</span>
                             @endif

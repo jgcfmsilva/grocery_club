@@ -21,6 +21,7 @@ Route::middleware(['auth','role:board'])->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::get('/{order}', [OrderController::class, 'show'])->name('show');
             Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
+            Route::get('/{order}/invoice', [OrderController::class, 'invoice'])->name('invoice');
         });
 
         Route::prefix('memberships')->name('memberships.')->group(function () {
@@ -61,5 +62,5 @@ Route::middleware(['auth','role:board'])->group(function () {
             Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
             Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
         });
-    });    
+    });
 });

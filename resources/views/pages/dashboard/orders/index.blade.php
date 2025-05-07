@@ -98,9 +98,11 @@
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">
                             {{ optional($order->member)->name ?? '-' }}
                         </td>
-                        <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $order->date->format('Y-m-d') }}</td>
+                        <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $order->created_at->format('d/m/Y') }}</td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">
-                            {{ method_exists($order->status, 'label') ? $order->status->label() : ucfirst($order->status) }}
+                            <span class="px-3 py-1 rounded-full {{ $order->status->badgeClass() }}">
+                                {{ method_exists($order->status, 'label') ? $order->status->label() : ucfirst($order->status) }}
+                            </span>
                         </td>
                         <td class="border border-gray-300 px-6 py-4 text-md text-gray-800">{{ $order->total }}€</td>
                         <td class="border border-gray-300 px-6 py-4">

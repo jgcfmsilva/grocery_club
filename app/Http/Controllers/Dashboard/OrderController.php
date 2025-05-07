@@ -65,4 +65,21 @@ class OrderController extends Controller
             return redirect()->route('dashboard.orders.index');
         }
     }
+
+    public function invoice(Order $order)
+    {
+        if (!$order->isCompleted()) {
+            abort(403, 'Invoice is only available for completed orders.');
+        }
+
+        $filePath = storage_path("app/private/receipts/{$order->pdf_receipt}");
+
+        if (!file_exists($filePath)) {
+            return redirect()->back()->with('error', 'Invoice not found.');
+        }
+
+        return response()->file($filePath, [
+            'Content-Disposition' => 'inline; filename="' . $order->pdf_receipt . '"'
+        ]);
+    }
 }

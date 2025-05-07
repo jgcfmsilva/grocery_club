@@ -98,7 +98,7 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            
+
             $order->update([
                 'status' => OrderStatus::CANCELED,
                 'cancel_reason' => $cancelReason
@@ -109,7 +109,7 @@ class OrderController extends Controller
             if ($card) {
                 $card->balance += $order->total;
                 $card->save();
-        
+
                 $card->operations()->create([
                     'type' => TransactionType::Credit,
                     'value' => $order->total,
@@ -209,14 +209,14 @@ class OrderController extends Controller
             return redirect()->route('my-account.orders.show', $newOrder);
         } catch (\Exception $e) {
             DB::rollBack();
-    
+
             report($e);
-    
+
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->error('There was an error creating the new order. Please try again.');
-    
+
             return redirect()->route('my-account.orders.show', $order);
         }
     }
@@ -376,8 +376,8 @@ class OrderController extends Controller
                     'order_id' => $order->id,
                 ]);
 
-                session()->forget('cart');    
-                
+                session()->forget('cart');
+
                 return $order->id;
             });
 
@@ -385,11 +385,11 @@ class OrderController extends Controller
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->success("Order placed successfully. We are preparing your order.");
-                
+
             return redirect()->route('my-account.orders.show', $newOrder);
         } catch (\Exception $e) {
             report($e);
-            
+
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)

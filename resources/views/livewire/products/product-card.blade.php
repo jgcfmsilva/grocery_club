@@ -12,10 +12,10 @@
                     </span>
                 @endif
             @endif
-            
+
             <a href="{{ route('products.show', $product->id) }}">
                 <img src="{{ $product->image_url }}"
-                class="w-full h-48 object-cover object-center rounded-t-xl" alt="{{ $product->name }}">
+                class="w-full h-48 object-cover object-center rounded-t-md" alt="{{ $product->name }}">
             </a>
         </div>
         <div class="card-body flex flex-col justify-between flex-grow">

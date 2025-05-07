@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto">
     <div class="flex items-center mb-6">
-        <a href="{{ route('dashboard.categories.index') }}" class="bg-green-600 hover:bg-green-600 text-white font-normal px-4 py-2 rounded shadow flex items-center space-x-2">
+        <a href="{{ url()->previous() }}" class="bg-green-600 hover:bg-green-600 text-white font-normal px-4 py-2 rounded shadow flex items-center space-x-2">
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>

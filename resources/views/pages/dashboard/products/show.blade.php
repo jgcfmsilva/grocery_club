@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mx-auto">
     <div class="flex items-center mb-6">
-        <a href="{{ route('dashboard.products.index') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm flex items-center space-x-1">
+        <a href="{{ url()->previous() }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm flex items-center space-x-1">
             <i class="fas fa-arrow-left"></i>
             <span>Back</span>
         </a>
@@ -23,34 +23,34 @@
                     <hr class="my-2">
                 </div>
                 <p class="mb-2"><strong>Category:</strong> {{ $product->category->name }}</p>
-                <p class="mb-2"><strong>Price:</strong> {{ $product->price }}€</p>
-                <p class="mb-2"><strong>Stock:</strong> 
+                <p class="mb-2"><strong>Price:</strong> {{ number_format($product->price, 2, ',', '') }}€</p>
+                <p class="mb-2"><strong>Stock:</strong>
                     @if($product->stock <= $product->stock_lower_limit)
-                        <span class="text-red-600 font-bold">{{ $product->stock }} <span class="text-sm">(Low stock)</span></span>
+                        <span class="text-red-600 font-bold">{{ number_format($product->stock, 0, ',', '') }} <span class="text-sm">(Low stock)</span></span>
                     @elseif($product->stock >= $product->stock_upper_limit)
-                        <span class="text-green-600 font-bold">{{ $product->stock }} <span class="text-sm">(High stock)</span></span>
+                        <span class="text-green-600 font-bold">{{ number_format($product->stock, 0, ',', '') }} <span class="text-sm">(High stock)</span></span>
                     @else
-                        <span class="text-gray-800">{{ $product->stock }}</span>
+                        <span class="text-gray-800">{{ number_format($product->stock, 0, ',', '') }}</span>
                     @endif
                 </p>
-                <p class="mb-2"><strong>Stock Lower Limit:</strong> {{ $product->stock_lower_limit }}</p>
-                <p class="mb-2"><strong>Stock Upper Limit:</strong> {{ $product->stock_upper_limit }}</p>
-                <p class="mb-2"><strong>Discount:</strong> 
+                <p class="mb-2"><strong>Stock Lower Limit:</strong> {{ number_format($product->stock_lower_limit, 0, ',', '') }}</p>
+                <p class="mb-2"><strong>Stock Upper Limit:</strong> {{ number_format($product->stock_upper_limit, 0, ',', '') }}</p>
+                <p class="mb-2"><strong>Discount:</strong>
                     @if($product->hasDiscount())
-                        {{ $product->discount }}€ (Min Qty: {{ $product->discount_min_qty }})
+                        {{ number_format($product->discount, 2, ',', '') }}€ (Min Qty: {{ $product->discount_min_qty }})
                     @else
                         <span class="text-gray-500">No Discount</span>
                     @endif
                 </p>
-                <p class="mb-2"><strong>Discounted Price:</strong> 
+                <p class="mb-2"><strong>Discounted Price:</strong>
                     @if($product->hasDiscount())
-                        {{ $product->getPriceWithDiscount() }}€
+                        {{ number_format($product->getPriceWithDiscount(), 2, ',', '') }}€
                     @else
                         <span class="text-gray-500">N/A</span>
                     @endif
                 </p>
                 <p class="mb-2"><strong>Description:</strong> {{ $product->description }}</p>
-                <p class="mb-2"><strong>Custom Data:</strong> 
+                <p class="mb-2"><strong>Custom Data:</strong>
                     @if(!empty($product->custom))
                         <pre class="bg-gray-100 p-2 rounded">{{ json_encode($product->custom, JSON_PRETTY_PRINT) }}</pre>
                     @else

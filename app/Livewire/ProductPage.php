@@ -5,8 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
-
-
+use App\Http\Requests\Cart\AddToCartRequest; // Import the Form Request class
 
 class ProductPage extends Component
 {
@@ -23,34 +22,32 @@ class ProductPage extends Component
         endif;
     }
 
-    public function addToCart(){
-        $this->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
+    public function addToCart(AddToCartRequest $request)
+    {
+        $validated = $request->validated();
 
-
-        if ($this ->product->stock < $this->quantity) {
+        if ($this->product->stock < $validated['quantity']) {
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
-                ->warning("Only {$this ->product->stock} x {$this -> product->name} available in stock. You can still place the order.");
+                ->warning("Only {$this->product->stock} x {$this->product->name} available in stock. You can still place the order.");
         }
 
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$this-> product -> id])) {
-            $cart[$this-> product -> id]['quantity'] += $this->quantity;
+        if (isset($cart[$this->product->id])) {
+            $cart[$this->product->id]['quantity'] += $validated['quantity'];
         } else {
-            $cart[$this-> product -> id] = [
-                'id' => $this->product ->id,
-                'name' => $this->product ->name,
-                'price' => $this->product ->price,
-                'discount_min_qty' => $this->product ->discount_min_qty,
-                'discount' => $this->product ->discount,
-                'quantity' => $this->quantity,
-                'photo' => $this->product ->photo,
-                'category_name' => $this->product ->category?->name ?? 'Uncategorized',
-                'stock' => $this->product ->stock,
+            $cart[$this->product->id] = [
+                'id' => $this->product->id,
+                'name' => $this->product->name,
+                'price' => $this->product->price,
+                'discount_min_qty' => $this->product->discount_min_qty,
+                'discount' => $this->product->discount,
+                'quantity' => $validated['quantity'],
+                'photo' => $this->product->photo,
+                'category_name' => $this->product->category?->name ?? 'Uncategorized',
+                'stock' => $this->product->stock,
             ];
         }
 
@@ -58,9 +55,9 @@ class ProductPage extends Component
         $this->dispatch('pageProductCartUpdated');
 
         flash()
-        ->option('position', 'bottom-right')
-        ->option('timeout', 3000)
-        ->success("{$this->quantity} x {$this->product ->name} added to cart!");
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->success("{$validated['quantity']} x {$this->product->name} added to cart!");
     }
 
     public function editWishList(){
