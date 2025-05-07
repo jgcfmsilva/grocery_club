@@ -4,6 +4,8 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -56,5 +58,19 @@ class RegisterUserRequest extends FormRequest
         ], function ($input) {
             return $input->default_payment_type === 'MB WAY';
         });
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }

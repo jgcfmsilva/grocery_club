@@ -291,7 +291,7 @@ class OrderController extends Controller
 
         $user = authUser();
 
-        if ($user->type !== \App\Enums\UserType::Member && $user->type !== \App\Enums\UserType::Board) {
+        if ($user->type !== UserType::Member && $user->type !== UserType::Board) {
             flash()
             ->option('position', 'bottom-right')
             ->option('timeout', 3000)
@@ -393,7 +393,7 @@ class OrderController extends Controller
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
-                ->error('There was an error creating the order. Please try again.');
+                ->error('There was an error creating the order: ' . $e->getMessage());
 
             return back();
         }

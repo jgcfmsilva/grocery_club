@@ -147,56 +147,44 @@
                         <span class="text-dark">Shipping</span>
                         <span class="font-semibold">€{{ number_format($shipping, 2, ',', '.') }}</span>
                     </div>
-                    <div class="border-t border-t-gray-400 pt-4 flex justify-between">
+                    <div class="pt-4 flex justify-between">
                         <span class="text-lg font-bold text-dark">Total</span>
                         <span class="text-xl font-bold text-dark">€{{ number_format($grandTotal, 2, ',', '.') }}</span>
                     </div>
                 </div>
 
                 @if(auth()->check())
-                    <div class="mb-6 border-t pt-4">
+                    <div class="border-t pt-4">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Billing Information</h3>
-                        <form id="checkout-form">
+                        <form method="POST" action="{{ route('order.create') }}">
+                            @csrf
                             <div class="space-y-4">
                                 <div>
-                                    <label for="tax-id" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
-                                    <input type="text" id="tax-id" name="tax_id" value="{{ old('nif', $nif ?? '') }}"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    <label for="nif" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+                                    <input type="text" id="nif" name="nif" value="{{ old('nif', $nif ?? '') }}"
+                                        class="w-full px-3 py-2 border-1 border-gray-400 rounded-md"
                                         placeholder="123456789" required pattern="[0-9]{9}"
                                         title="Please enter a valid 9-digit tax ID">
                                 </div>
                                 <div>
-                                    <label for="shipping-address"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Shipping Address</label>
-                                    <input type="text" id="shipping-address" name="shipping_address" value="{{ old('shipping_address', $default_delivery_address ?? '') }}"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    <label for="delivery_address"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
+                                    <input type="text" id="delivery_address" name="delivery_address" value="{{ old('delivery_address', $default_delivery_address ?? '') }}"
+                                        class="w-full px-3 py-2 border-1 border-gray-400 rounded-md"
                                         placeholder="123 Main Street" required>
+                                </div>
+                                <div>
+                                    <button
+                                        type="submit"
+                                        class="w-full py-3 bg-primary rounded text-white hover:!bg-orange-500 transition-colors font-semibold mt-4">
+                                        Complete Purchase
+                                    </button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 @endif
-
-                <button id="purchase-btn"
-                    class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold">
-                    Complete Purchase
-                </button>
             </div>
         </aside>
     </div>
 </div>
-
-<script>
-    document.getElementById('purchase-btn').addEventListener('click', function() {
-        const form = document.getElementById('checkout-form');
-        if (form.checkValidity()) {
-            // Add your checkout processing logic here
-            alert('Order placed successfully!');
-            // Example: Send data to server
-            // const formData = new FormData(form);
-            // fetch('/checkout', { method: 'POST', body: formData })...
-        } else {
-            form.reportValidity();
-        }
-    });
-</script>

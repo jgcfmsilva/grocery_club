@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginUserRequest extends FormRequest
 {
@@ -25,5 +27,19 @@ class LoginUserRequest extends FormRequest
             'email' => 'required|string|email|max:255',
             'password' => 'required|string',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }
