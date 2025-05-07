@@ -7,18 +7,18 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginUserController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
-// Sem sessão iniciada
+// No active session
 Route::middleware('guest')->group(function () {
 
-    // Criar Conta
+    // Create Account
     Route::get('/register', [RegisterUserController::class, 'show'])->name('register');
     Route::post('/register', [RegisterUserController::class, 'register'])->name('register');
 
-    // Iniciar Sessão
+    // Login
     Route::get('/login', [LoginUserController::class, 'show']) -> name('login');
     Route::post('/login', [LoginUserController::class, 'login'])->name('login.submit');
 
-    // Esqueceu-se da password
+    // Forgot Password
     Route::post('/forgot-password', [ForgotPasswordController::class, 'show'])->name('forgot-password.post');
     Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('forgot-password.show');
     Route::post('/sendEmailVerification', [ForgotPasswordController::class, 'sendEmailVerification'])->name('forgot-password.send-email');
@@ -27,14 +27,14 @@ Route::middleware('guest')->group(function () {
 
 });
 
-// Com sessão iniciada mas sem email validado
+// Logged in but email not verified
 Route::middleware('auth')->group(function () {
     
-    // Terminar Sessão
+    // Logout
     Route::post('/logout', [LoginUserController::class, 'logout']) -> name('logout');
     Route::get('/logout', [LoginUserController::class, 'logout']) -> name('logout');
 
-    // Validação de email
+    // Email Verification
     Route::prefix('email')->group(function () {
         Route::get('verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
 

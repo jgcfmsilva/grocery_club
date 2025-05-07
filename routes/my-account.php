@@ -11,10 +11,10 @@ use App\Http\Controllers\User\ChangePasswordController;
 
 Route::middleware(['auth','role:pending_member,member,board'])->group(function () {
 
-    // Rotas para o My Account
+    // Routes for My Account
     Route::prefix('my-account')->name('my-account.')->group(function () {
 
-        // Dados Pessoais
+        // Personal Data
         Route::get('/', [AccountController::class, 'show'])->name('index');
         Route::put('/update', [AccountController::class, 'update'])->name('personal-data.update');
 
@@ -24,39 +24,39 @@ Route::middleware(['auth','role:pending_member,member,board'])->group(function (
             Route::post('/pay', [MembershipController::class, 'pay'])->name('pay');
         });
 
-        // Encomendas
+        // Orders
         Route::prefix('orders')->middleware(['role:member,board'])->name('orders.')->group(function () {
-            // Lista de pedidos
+            // List of orders
             Route::get('/', [OrderController::class, 'index'])->name('index');
 
-            // Detalhes do pedido
+            // Order details
             Route::get('/{order}', [OrderController::class, 'show'])->name('show');
 
-            // Download do recibo
+            // Download receipt
             Route::get('/{order}/download', [OrderController::class, 'downloadReceipt'])->name('download');
 
-            // Cancelar pedido
+            // Cancel order
             Route::post('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
 
-            // Encomendar pedido anterior
+            // Reorder previous order
             Route::post('/{order}/reorder', [OrderController::class, 'reorder'])->name('reorder');
         });
 
-        // Cartão Virtual
+        // Virtual Card
         Route::prefix('virtual-card')->name('virtual-card.')->group(function () {
             Route::get('/', [CardController::class, 'index'])->name('index');
             Route::post('/topup', [CardController::class, 'topUpCard'])->name('topup');
         });
 
         Route::middleware(['role:member,board'])->group(function () {
-            // Transações
+            // Transactions
             Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
-            // Estatísticas
+            // Statistics
             Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
         });
 
-        // Alterar Password
+        // Change Password
         Route::get('/change-password', [ChangePasswordController::class, 'index'])->name('change-password.index');
     });
 });

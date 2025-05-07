@@ -4,7 +4,7 @@ use App\Http\Controllers\Cart\CartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Orders\OrderController;
 
-// Carrinho
+// Cart
 Route::get('/cart', [CartController::class, 'show'])->name('cart');
 
 Route::middleware(['auth', 'verified', 'role:member,board'])->group(function () {
