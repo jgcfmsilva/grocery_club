@@ -15,7 +15,7 @@ class ResetPasswordController extends Controller
     // shows the view
     public function show(Request $request, $token)
     {
-        return view('auth.reset-password', [
+        return view('pages.auth.reset-password', [
             'token' => $token,
             'email' => $request->email
         ]);

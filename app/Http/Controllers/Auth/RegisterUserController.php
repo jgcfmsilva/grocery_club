@@ -26,7 +26,7 @@ class RegisterUserController extends Controller
      */
     public function show()
     {
-        return view('auth.register');
+        return view('pages.auth.register');
     }
 
     /**

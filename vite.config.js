@@ -28,7 +28,10 @@ export default defineConfig({
                 "resources/js/pages/home.js",
                 "resources/js/pages/my-account/virtual-card.js",
                 "resources/js/pages/my-account/transactions.js",
+                "resources/js/pages/my-account/change-password.js",
                 "resources/js/pages/dashboard/dashboard.js",
+                "resources/js/components/modal.js"
+                
             ],
             refresh: [`resources/views/**/*`],
         }),

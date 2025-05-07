@@ -14,7 +14,7 @@ class LoginUserController extends Controller
     public function show()
     {
         if(!auth::check()) {
-            return view('auth.login');
+            return view('pages.auth.login');
         } else {
             return redirect("my-account");
         }

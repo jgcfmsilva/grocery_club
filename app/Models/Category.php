@@ -72,7 +72,7 @@ class Category extends Model
     public function getImageUrlAttribute(): ?string
     {
         if (!$this->image) {
-            return null;
+            return asset('storage/categories/category_no_image.png');
         }
         
         return asset('storage/categories/' . $this->image);

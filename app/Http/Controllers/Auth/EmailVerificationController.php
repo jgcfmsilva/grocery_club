@@ -22,12 +22,12 @@ class EmailVerificationController extends Controller
             return redirect()->route('home')->with('info', 'The email is already validated!');
         }
 
-        return view('auth.email-confirmation');
+        return view('pages.auth.email-confirmation');
     }
 
     public function finish()
     {
-        return view('auth.email-validated');
+        return view('pages.auth.email-validated');
     }
 
     /**

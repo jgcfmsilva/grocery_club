@@ -27,11 +27,8 @@
                 @foreach($categories as $category)
                     <div class="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transform transition duration-300 overflow-hidden">
                         <a href="{{ route('products.category', $category->id) }}" class="block">
-                            @if($category->image)
-                                <img src="{{ asset('storage/categories/' . $category->image) }}" alt="{{ $category->name }}" class="w-full h-48 object-cover">
-                            @else
-                                <img src="{{ asset('storage/categories/category_no_image.png') }}" alt="{{ $category->name }}" class="w-full h-48 object-cover">
-                            @endif
+                            <img src="{{ $category->image_url }}" alt="{{ $category->name }}" class="w-full h-48 object-cover">
+                            
                             <div class="p-5">
                                 <h3 class="text-xl font-semibold text-gray-800">{{ $category->name }}</h3>
                             </div>

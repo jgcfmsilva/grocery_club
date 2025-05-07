@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt" class="h-full">
     <head>
         @include('layouts.partials.dashboard.head')
         @livewireStyles
     </head>
-    <body class="bg-gray-100 text-gray-900">
-        <div class="flex h-screen">
+    <body class="bg-gray-100 text-gray-900 h-full overflow-hidden">
+        <div class="flex h-full">
             <!-- Sidebar -->
             @include('layouts.partials.dashboard.sidebar')
 
             <!-- Main -->
-            <div class="flex-1 flex flex-col">
+            <div class="flex-1 flex flex-col overflow-auto">
                 <!-- Top Bar -->
                 @include('layouts.partials.dashboard.topbar')
     
@@ -24,7 +24,6 @@
                     &copy; {{ date('Y') }} Grocery Club. All rights reserved.
                 </footer>
             </div>
-            
         </div>
         
         @livewireScripts

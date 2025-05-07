@@ -93,6 +93,17 @@ class Product extends Model
     }
 
     /**
+     * Calculate the price with discount
+     */
+    public function getPriceWithDiscount(): float
+    {
+        if ($this->hasDiscount()) {
+            return $this->price - $this->discount;
+        }
+        return $this->price;
+    }
+
+    /**
      * Check if the product is out of stock.
      */
     public function isOutOfStock(): bool
@@ -158,12 +169,12 @@ class Product extends Model
     }
 
     /**
-     * Get the photo URL for the product.
+     * Get the image URL for the product.
      */
-    public function getPhotoUrlAttribute(): ?string
+    public function getImageUrlAttribute(): ?string
     {
         if (!$this->photo) {
-            return null;
+            return asset('storage/products/product_no_image.png');
         }
         
         return asset('storage/products/' . $this->photo);

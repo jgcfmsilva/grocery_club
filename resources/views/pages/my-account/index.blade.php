@@ -101,7 +101,7 @@
 
                 <label for="photo" class="inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-white bg-secondary px-4 py-2 rounded-lg shadow-sm transition">
                     <span>Select Image</span>
-                    <input type="file" name="photo" id="photo" accept="image/*" class="hidden" />
+                    <input type="file" name="photo" id="photo" accept=".jpeg, .jpg, .png" class="hidden" />
                 </label>
             </div>
 
