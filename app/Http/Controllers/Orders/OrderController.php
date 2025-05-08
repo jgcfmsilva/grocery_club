@@ -81,7 +81,7 @@ class OrderController extends Controller
             }
         }
 
-        return $this->generateReceipt($order);
+        return $order->generateReceipt();
     }
 
     /**
@@ -218,48 +218,6 @@ class OrderController extends Controller
                 ->error('There was an error creating the new order. Please try again.');
 
             return redirect()->route('my-account.orders.show', $order);
-        }
-    }
-
-    /**
-     * Generate a PDF receipt for the order.
-    */
-    protected function generateReceipt(Order $order, bool $download = true)
-    {
-        if ($order->status !== OrderStatus::COMPLETED) {
-            return;
-        }
-
-        try {
-            $order->load(['items.product', 'member.card']);
-
-            $pdf = Pdf::loadView('pdf.receipt', [
-                'order' => $order,
-                'items' => $order->items
-            ])->setOptions([
-                'defaultFont' => 'DejaVu Sans',
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-            ]);
-
-            $filename = "receipt_{$order->id}_" . time() . '.pdf';
-            $filePath = storage_path("app/private/receipts/{$filename}");
-
-            $pdf->save($filePath);
-
-            $order->update(['pdf_receipt' => $filename]);
-
-            return $download ? $pdf->download($filename) : $filePath;
-
-        } catch (\Exception $e) {
-            Log::error("Failed to generate receipt for order {$order->id}: " . $e->getMessage());
-
-            if ($download) {
-                return redirect()->back()
-                    ->with('error', 'Failed to generate receipt. Please try again later.');
-            }
-
-            throw $e;
         }
     }
 
