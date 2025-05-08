@@ -62,6 +62,23 @@ if (! function_exists('calculate_price_with_discount')) {
     }
 }
 
+// Calculate total discount for an order
+if (! function_exists('calculate_order_total_discount')) {
+    function calculate_order_total_discount($order)
+    {
+        // $order can be a model or array with 'items'
+        $items = is_object($order) && isset($order->items) ? $order->items : (is_array($order) && isset($order['items']) ? $order['items'] : []);
+        $total = 0;
+        foreach ($items as $item) {
+            // $item can be array or object
+            $discount = is_object($item) ? ($item->discount ?? 0) : ($item['discount'] ?? 0);
+            $qty = is_object($item) ? ($item->quantity ?? 0) : ($item['quantity'] ?? 0);
+            $total += $discount * $qty;
+        }
+        return $total;
+    }
+}
+
 // Calculate percentage of discount
 if (! function_exists('calculate_percentage_discount')) {
     function calculate_percentage_discount($originalPrice, $discountedPrice)

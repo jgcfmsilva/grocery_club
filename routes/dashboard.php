@@ -24,6 +24,7 @@ Route::middleware(['auth','role:board'])->group(function () {
             Route::get('/{order}/invoice', [OrderController::class, 'invoice'])->name('invoice');
             Route::get('/{order}/confirm', [OrderController::class, 'confirm'])->name('confirm');
             Route::post('/{order}/complete', [OrderController::class, 'complete'])->name('complete');
+            Route::post('/{order}/cancel', [OrderController::class, 'cancel'])->name('cancel');
         });
 
         Route::prefix('memberships')->name('memberships.')->group(function () {

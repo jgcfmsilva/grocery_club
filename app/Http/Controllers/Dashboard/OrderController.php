@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\CreditType;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
 use App\Enums\OrderStatus;
+use App\Enums\TransactionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Order\CancelOrderRequest;
 
 class OrderController extends Controller
 {
@@ -72,6 +75,10 @@ class OrderController extends Controller
             abort(403, 'Invoice is only available for completed orders.');
         }
 
+        if (!$order->pdf_receipt) {
+            return redirect()->back()->with('error', 'Invoice not found.');
+        }
+
         $filePath = storage_path("app/private/receipts/{$order->pdf_receipt}");
 
         if (!file_exists($filePath)) {
@@ -82,7 +89,7 @@ class OrderController extends Controller
             'Content-Disposition' => 'inline; filename="' . $order->pdf_receipt . '"'
         ]);
     }
-    
+
     public function confirm(Order $order)
     {
         $order->load('items.product', 'member');
@@ -124,13 +131,71 @@ class OrderController extends Controller
             $order->status = OrderStatus::COMPLETED;
             $order->save();
 
+            $order->generateReceipt();
+
             DB::commit();
+
             flash()->success('Order completed successfully.');
             return redirect()->route('dashboard.orders.show', $order->id);
         } catch (\Exception $e) {
             DB::rollBack();
             flash()->error('An error occurred while completing the order.');
             return redirect()->route('dashboard.orders.confirm', $order->id);
+        }
+    }
+
+    public function cancel(CancelOrderRequest $request, Order $order)
+    {
+        $validated = $request->validated();
+
+        if (!$order->isPending()) {
+            flash()->error('Only pending orders can be canceled.');
+            return redirect()->route('dashboard.orders.index');
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $order->update([
+                'status' => OrderStatus::CANCELED,
+                'cancel_reason' => $validated['reason']
+            ]);
+
+            $card = $order->member->card;
+
+            if ($card) {
+                $card->balance += $order->total;
+                $card->save();
+
+                $card->operations()->create([
+                    'type' => TransactionType::Credit,
+                    'value' => $order->total,
+                    'date' => now()->toDateString(),
+                    'credit_type' => CreditType::OrderCancellation->value,
+                    'order_id' => $order->id,
+                ]);
+            }
+
+            DB::commit();
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->success("Order has been canceled successfully. The customer refund will be processed shortly.");
+
+            return redirect()->route('dashboard.orders.index');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            report($e);
+
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error("There was an error canceling the order. Please try again.");
+
+            return redirect()->route('dashboard.orders.index');
         }
     }
 }

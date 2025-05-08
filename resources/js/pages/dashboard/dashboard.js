@@ -20,4 +20,29 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
         dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
     });
+
+    const cancelButtons = document.querySelectorAll('.cancel-item-btn');
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const orderId = button.getAttribute('data-order-id');
+            const modal = document.getElementById('cancelModal-' + orderId);
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        });
+    });
+
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const orderId = button.getAttribute('data-order-id');
+            const modal = document.getElementById('cancelModal-' + orderId);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
 });

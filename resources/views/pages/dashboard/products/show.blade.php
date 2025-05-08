@@ -10,8 +10,14 @@
             <span>Back</span>
         </a>
         <h1 class="text-3xl font-bold ml-4">{{ $product->name }}</h1>
+        <div class="ml-auto">
+            <a href="{{ route('dashboard.products.edit', $product->id) }}"
+               class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow text-sm flex items-center space-x-1">
+                <i class="fas fa-edit"></i>
+                <span>Edit</span>
+            </a>
+        </div>
     </div>
-
     <div class="bg-white p-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex justify-center">
@@ -50,13 +56,6 @@
                     @endif
                 </p>
                 <p class="mb-2"><strong>Description:</strong> {{ $product->description }}</p>
-                <p class="mb-2"><strong>Custom Data:</strong>
-                    @if(!empty($product->custom))
-                        <pre class="bg-gray-100 p-2 rounded">{{ json_encode($product->custom, JSON_PRETTY_PRINT) }}</pre>
-                    @else
-                        <span class="text-gray-500">None</span>
-                    @endif
-                </p>
                 <p class="mb-2"><strong>Created At:</strong> {{ $product->created_at->format('d/m/Y H:i') }}</p>
                 <p class="mb-2"><strong>Updated At:</strong> {{ $product->updated_at->format('d/m/Y H:i') }}</p>
             </div>

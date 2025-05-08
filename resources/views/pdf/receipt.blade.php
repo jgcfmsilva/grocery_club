@@ -51,7 +51,7 @@
     <div class="header">
         <h1>Grocery Club</h1>
         <h2>Order Receipt #{{ $order->id }}</h2>
-        <p>Date: {{ $order->date->format('d/m/Y H:i') }}</p>
+        <p>Date: {{ $order->created_at->format('d/m/Y H:i') }}</p>
     </div>
 
     <div>
@@ -76,25 +76,29 @@
             @foreach($items as $item)
             <tr>
                 <td>{{ $item->product->name }}</td>
-                <td>€{{ number_format($item->unit_price, 2) }}</td>
+                <td>{{ number_format($item->unit_price, 2) }}€</td>
                 <td>{{ $item->quantity }}</td>
-                <td>€{{ number_format($item->discount, 2) }}</td>
-                <td>€{{ number_format($item->subtotal, 2) }}</td>
+                <td>{{ number_format($item->discount, 2) }}€</td>
+                <td>{{ number_format($item->subtotal, 2) }}€</td>
             </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="4" class="total">Items Total:</td>
-                <td class="total">€{{ number_format($order->total_items, 2) }}</td>
+                <td class="total">{{ number_format($order->total_items, 2) }}€</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="total">Discounts:</td>
+                <td class="total">{{ number_format($order->calculate_order_total_discount(), 2) }}€</td>
             </tr>
             <tr>
                 <td colspan="4" class="total">Shipping:</td>
-                <td class="total">€{{ number_format($order->shipping_cost, 2) }}</td>
+                <td class="total">{{ number_format($order->shipping_cost, 2) }}€</td>
             </tr>
             <tr>
                 <td colspan="4" class="total">Order Total:</td>
-                <td class="total">€{{ number_format($order->total, 2) }}</td>
+                <td class="total">{{ number_format($order->total, 2) }}€</td>
             </tr>
         </tfoot>
     </table>

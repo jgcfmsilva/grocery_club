@@ -116,15 +116,33 @@
                                         <i class="fas fa-check"></i>
                                         <span>Complete</span>
                                     </a>
-                                @endif
-                                <form action="{{ route('dashboard.orders.destroy', $order->id) }}" method="POST" class="inline delete-item-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded shadow text-sm cursor-pointer flex items-center space-x-1 delete-item-btn">
-                                        <i class="fas fa-trash text-sm"></i>
-                                        <span>Delete</span>
+
+                                    <!-- Cancel Button triggers modal -->
+                                    <button type="button"
+                                        class="cancel-item-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded shadow text-sm cursor-pointer flex items-center space-x-1"
+                                        data-order-id="{{ $order->id }}">
+                                        <i class="fas fa-ban"></i>
+                                        <span>Cancel</span>
                                     </button>
-                                </form>
+
+                                    <!-- Modal for cancellation -->
+                                    <div id="cancelModal-{{ $order->id }}" class="fixed inset-0 bg-opacity-20 backdrop-blur-sm flex items-center justify-center hidden z-50">
+                                        <div class="bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6">
+                                            <h3 class="text-xl font-bold mb-2 text-white">Cancel Order #{{ $order->id }}</h3>
+                                            <p class="mb-4 text-gray-300">Please provide a reason for cancellation:</p>
+                                            <form id="cancelForm-{{ $order->id }}" method="POST" action="{{ route('dashboard.orders.cancel', $order->id) }}">
+                                                @csrf
+                                                <textarea name="reason" rows="3" required class="w-full border border-gray-300 rounded p-2 mb-4 text-gray-300" placeholder="Reason for cancellation"></textarea>
+                                                <div class="flex justify-end gap-2">
+                                                    <button type="button" class="close-modal bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded cursor-pointer" data-order-id="{{ $order->id }}">Close</button>
+                                                    <button type="submit" class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer">
+                                                        Confirm Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </td>
                     </tr>
