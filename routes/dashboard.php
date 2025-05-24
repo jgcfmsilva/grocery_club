@@ -37,6 +37,9 @@ Route::middleware(['auth','role:board'])->group(function () {
 
         Route::prefix('virtual-cards')->name('virtual-cards.')->group(function () {
             Route::get('/', [VirtualCardController::class, 'index'])->name('index');
+            Route::get('/virtual-cards/create', [VirtualCardController::class, 'create'])->name('create');
+            Route::get('/{card}', [VirtualCardController::class, 'show'])->name('show');
+            Route::get('/{card}/edit', [VirtualCardController::class, 'edit'])->name('edit');
         });
 
         Route::prefix('inventory')->name('inventory.')->group(function () {
