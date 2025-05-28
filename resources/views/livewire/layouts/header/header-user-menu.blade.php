@@ -14,7 +14,11 @@
     <div class="user-menu-wrapper absolute left-0 mt-2 z-10 w-full">
         <ul class="user-menu">
             @auth
+<<<<<<< Updated upstream
                 @if (auth()->user()->type === \App\Enums\UserType::Member || auth()->user()->type === \App\Enums\UserType::Board || auth()->user()->type === \App\Enums\UserType::Employee)
+=======
+                @if (auth()->user()->type === \App\Enums\UserType::PendingMember || auth()->user()->type === \App\Enums\UserType::Member || auth()->user()->type === \App\Enums\UserType::Employee)
+>>>>>>> Stashed changes
                     <li><a href="{{ route('my-account.index') }}" class="text-dark"><span class="me-2"><i
                                     class="fa-solid fa-user"></i></span>My Account</a></li>
                 @endif

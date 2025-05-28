@@ -150,10 +150,37 @@ class OrderController extends Controller
 
         $user = authUser();
 
+        // Calcular o total da nova order antes de criar
+        $totalItems = 0;
+        foreach ($order->items as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $unitPrice = $product->price;
+                $discount = 0;
+                if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
+                    $discount = $product->discount;
+                }
+                $subtotal = ($unitPrice - $discount) * $item->quantity;
+                $totalItems += $subtotal;
+            }
+        }
+        $shippingCost = calculateShippingCost($totalItems);
+        $total = $totalItems + $shippingCost;
+
+        $card = $user->card;
+        if ($card && $card->balance < $total) {
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error('Insufficient funds on the virtual card to reorder.');
+            return redirect()->route('my-account.orders.show', $order);
+        }
+
         DB::beginTransaction();
 
         try {
-            $newOrder = $user->orders()->create([
+            $newOrder = Order::create([
+                'member_id' => $user->id,
                 'status' => OrderStatus::PENDING,
                 'date' => now(),
                 'total_items' => 0,
@@ -163,30 +190,15 @@ class OrderController extends Controller
                 'nif' => $order->nif
             ]);
 
-            $card = $user->card;
-
-            if ($card) {
-                $card->operations()->create([
-                    'type' => TransactionType::Debit,
-                    'value' => $order->total,
-                    'date' => now()->toDateString(),
-                    'credit_type' => DebitType::Order,
-                    'order_id' => $newOrder->id,
-                ]);
-            }
-
             foreach ($order->items as $item) {
                 $product = Product::find($item->product_id);
 
                 if ($product) {
                     $unitPrice = $product->price;
                     $discount = 0;
-
-
                     if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
                         $discount = $product->discount;
                     }
-
                     $newOrder->items()->create([
                         'product_id' => $product->id,
                         'quantity' => $item->quantity,
@@ -198,6 +210,14 @@ class OrderController extends Controller
             }
 
             $this->updateOrderTotals($newOrder);
+
+            $card->decreaseBalance($total, [
+                'type' => TransactionType::Debit->value,
+                'value' => $total,
+                'date' => now()->toDateString(),
+                'debit_type' => DebitType::Order->value,
+                'order_id' => $newOrder->id,
+            ]);
 
             DB::commit();
 
@@ -211,12 +231,20 @@ class OrderController extends Controller
             DB::rollBack();
 
             report($e);
+<<<<<<< Updated upstream
 
+=======
+            
+>>>>>>> Stashed changes
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->error('There was an error creating the new order. Please try again.');
+<<<<<<< Updated upstream
 
+=======
+            
+>>>>>>> Stashed changes
             return redirect()->route('my-account.orders.show', $order);
         }
     }
@@ -229,7 +257,7 @@ class OrderController extends Controller
         $order->load('items');
 
         $totalItems = $order->items->sum('subtotal');
-        $shippingCost = $this->calculateShippingCost($totalItems);
+        $shippingCost = calculateShippingCost($totalItems);
         $total = $totalItems + $shippingCost;
 
         $order->update([
@@ -323,10 +351,7 @@ class OrderController extends Controller
                     ]);
                 }
 
-                $card->decreaseBalance($total);
-
-                CardOperation::create([
-                    'card_id' => $card->id,
+                $card->decreaseBalance($total, [
                     'type' => TransactionType::Debit->value,
                     'value' => $total,
                     'date' => now()->toDateString(),

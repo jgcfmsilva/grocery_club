@@ -62,7 +62,14 @@ class RegisterUserController extends Controller
             'balance' => 0,
         ]);
 
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Exception $e) {
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error("Conta criada com sucesso, mas não foi possível enviar o email de verificação.\nErro: " . $e->getMessage());
+        }
 
         Auth::login($user);
 

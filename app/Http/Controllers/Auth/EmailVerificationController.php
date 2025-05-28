@@ -71,6 +71,11 @@ class EmailVerificationController extends Controller
 
         $user->sendEmailVerificationNotification();
 
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->success("A new verification email has been sent to your email address. Please check your inbox.");
+
         return back()->with('resent', true);
     }
 }

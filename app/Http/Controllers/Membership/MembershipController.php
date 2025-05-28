@@ -53,17 +53,14 @@ class MembershipController extends Controller
 
         try {
             DB::transaction(function () use ($membershipFee, $card, $user) {
-                $card->decreaseBalance($membershipFee);
-
-                $user->changeType(UserType::Member);
-
-                CardOperation::create([
-                    'card_id' => $card->id,
+                $card->decreaseBalance($membershipFee, [
                     'type' => TransactionType::Debit->value,
                     'value' => $membershipFee,
                     'date' => now()->toDateString(),
                     'debit_type' => DebitType::MembershipFee->value,
                 ]);
+
+                $user->changeType(UserType::Member);
 
                 flash()
                     ->option('position', 'bottom-right')

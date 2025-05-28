@@ -10,6 +10,21 @@
                 @include('layouts.partials.store.header')
             @endif
 
+            {{-- Aviso de email não verificado --}}
+            @auth
+                @if (!auth()->user()->hasVerifiedEmail())
+                    <div class="container mt-3">
+                        <div class="alert alert-warning text-center mb-0" role="alert">
+                            Your email has not been confirmed yet.
+                            <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                                @csrf
+                                <button type="submit" class="text-dark font-bold underline p-0 align-baseline">Resend confirmation email</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+            @endauth
+
             <main class="container mx-auto mt-6 flex-1 z-1">
                 @yield('content')
             </main>

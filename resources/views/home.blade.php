@@ -39,8 +39,8 @@
         </div>
     @else
         <div class="text-center text-gray-500 mt-20">
-            <p class="text-lg">Nenhuma categoria disponível no momento 😕</p>
-            <p class="text-sm mt-2">Volte em breve para ver as novidades!</p>
+            <p class="text-lg">No categories available at the moment 😕</p>
+            <p class="text-sm mt-2">Check back soon for updates!</p>
         </div>
     @endif
 @endsection
