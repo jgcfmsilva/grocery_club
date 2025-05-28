@@ -123,7 +123,7 @@ class Order extends Model
 
     public function generateReceipt()
     {
-        if ($this->status !== \App\Enums\OrderStatus::COMPLETED) {
+        if ($this->status !== OrderStatus::COMPLETED) {
             return;
         }
 

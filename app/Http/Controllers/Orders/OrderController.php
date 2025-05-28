@@ -209,7 +209,7 @@ class OrderController extends Controller
                 }
             }
 
-            $this->updateOrderTotals($newOrder);
+            updateOrderTotals($newOrder);
 
             $card->decreaseBalance($total, [
                 'type' => TransactionType::Debit->value,
@@ -231,42 +231,15 @@ class OrderController extends Controller
             DB::rollBack();
 
             report($e);
-<<<<<<< Updated upstream
 
-=======
-            
->>>>>>> Stashed changes
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->error('There was an error creating the new order. Please try again.');
-<<<<<<< Updated upstream
 
-=======
-            
->>>>>>> Stashed changes
             return redirect()->route('my-account.orders.show', $order);
         }
     }
-
-    /**
-     * Update order totals based on items and shipping costs.
-    */
-    protected function updateOrderTotals(Order $order)
-    {
-        $order->load('items');
-
-        $totalItems = $order->items->sum('subtotal');
-        $shippingCost = calculateShippingCost($totalItems);
-        $total = $totalItems + $shippingCost;
-
-        $order->update([
-            'total_items' => $totalItems,
-            'shipping_cost' => $shippingCost,
-            'total' => $total
-        ]);
-    }
-
 
     /**
      * Create a new Order

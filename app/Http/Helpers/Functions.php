@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\UserType;
+use App\Models\Order;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -168,5 +169,22 @@ if (!function_exists('csrfToken')) {
             return $session->token();
         }
         throw new RuntimeException('Session store not set.');
+    }
+}
+
+if (!function_exists('updateOrderTotals')) {
+    function updateOrderTotals(Order $order)
+    {
+        $order->load('items');
+
+        $totalItems = $order->items->sum('subtotal');
+        $shippingCost = calculateShippingCost($totalItems);
+        $total = $totalItems + $shippingCost;
+
+        $order->update([
+            'total_items' => $totalItems,
+            'shipping_cost' => $shippingCost,
+            'total' => $total
+        ]);
     }
 }
