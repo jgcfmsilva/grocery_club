@@ -32,7 +32,13 @@ class ProductController extends Controller
     */
     public function show(Product $product)
     {
-        return view('pages.products.product-page', compact('product'));
+        $recommendedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->take(7)
+            ->get();
+
+        return view('pages.products.product-page', compact('product', 'recommendedProducts'));
     }
 
     /**

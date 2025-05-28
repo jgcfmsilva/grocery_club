@@ -250,13 +250,22 @@ class OrderController extends Controller
 
         $user = authUser();
 
-        if ($user->type !== UserType::Member && $user->type !== UserType::Board) {
+        if (!$user) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("You must be logged in to create an order!");
+
+            return redirect()->route('login');
+        }
+
+        if ($user->type == UserType::PendingMember) {
             flash()
             ->option('position', 'bottom-right')
             ->option('timeout', 3000)
             ->error("Only members can create orders!");
 
-            return back();
+            return redirect()->route('my-account.membership.index');
         }
 
         $cart = session('cart', []);
