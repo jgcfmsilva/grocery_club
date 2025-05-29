@@ -246,8 +246,6 @@ class OrderController extends Controller
     */
     public function createOrder(CreateOrderRequest $request)
     {
-        $this->authorize('order', Order::class);
-
         $user = authUser();
 
         if (!$user) {
@@ -267,6 +265,8 @@ class OrderController extends Controller
 
             return redirect()->route('my-account.membership.index');
         }
+        
+        $this->authorize('order', Order::class);
 
         $cart = session('cart', []);
         if (empty($cart)) {

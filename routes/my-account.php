@@ -9,22 +9,26 @@ use App\Http\Controllers\User\TransactionController;
 use App\Http\Controllers\User\StatisticsController;
 use App\Http\Controllers\User\ChangePasswordController;
 
-Route::middleware(['auth','role:pending_member,member,board'])->group(function () {
+Route::middleware(['auth','role:pending_member,member,board,employee'])->group(function () {
 
     // Routes for My Account
     Route::prefix('my-account')->name('my-account.')->group(function () {
 
-        // Personal Data
+        // Personal Data - todos podem ver
         Route::get('/', [AccountController::class, 'show'])->name('index');
-        Route::put('/update', [AccountController::class, 'update'])->name('personal-data.update');
 
-        // Membership
-        Route::prefix('membership')->name('membership.')->group(function () {
+        // Apenas board e member podem atualizar dados pessoais
+        Route::put('/update', [AccountController::class, 'update'])
+            ->middleware('role:pending_member,member,board')
+            ->name('personal-data.update');
+
+        // Membership - apenas pending_member, member, board
+        Route::prefix('membership')->name('membership.')->middleware('role:pending_member,member,board')->group(function () {
             Route::get('/', [MembershipController::class, 'index'])->name('index');
             Route::post('/pay', [MembershipController::class, 'pay'])->name('pay');
         });
 
-        // Orders
+        // Orders - apenas member, board
         Route::prefix('orders')->middleware(['role:member,board'])->name('orders.')->group(function () {
             // List of orders
             Route::get('/', [OrderController::class, 'index'])->name('index');
@@ -42,12 +46,13 @@ Route::middleware(['auth','role:pending_member,member,board'])->group(function (
             Route::post('/{order}/reorder', [OrderController::class, 'reorder'])->name('reorder');
         });
 
-        // Virtual Card
-        Route::prefix('virtual-card')->name('virtual-card.')->group(function () {
+        // Virtual Card - apenas pending_member, member, board
+        Route::prefix('virtual-card')->middleware('role:pending_member,member,board')->name('virtual-card.')->group(function () {
             Route::get('/', [CardController::class, 'index'])->name('index');
             Route::post('/topup', [CardController::class, 'topUpCard'])->name('topup');
         });
 
+        // Transactions e Statistics - apenas member, board
         Route::middleware(['role:member,board'])->group(function () {
             // Transactions
             Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
@@ -56,10 +61,8 @@ Route::middleware(['auth','role:pending_member,member,board'])->group(function (
             Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
         });
 
-        // Change Password
+        // Change Password - todos podem aceder
         Route::get('/change-password', [ChangePasswordController::class, 'index'])->name('change-password.index');
-
-        // Change Password
         Route::post('/change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');
     });
 });

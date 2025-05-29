@@ -27,7 +27,7 @@
                     <div class="card-body p-0">
                         <div class="list-group rounded-3 list-group-flush">
                             {{-- Dados Pessoais - Todos com conta (pending, member, board) --}}
-                            @if(authUser()->isMemberOrBoard() || authUser()->isPendingMember())
+                            @if(authUser()->isMemberOrBoard() || authUser()->isPendingMember() || authUser()->isEmployee())
                                 <a href="{{ route('my-account.index') }}"
                                 class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('my-account') ? 'active' : 'bg-white' }}">
                                     <i class="bi bi-person-fill me-2"></i> Personal Data
@@ -53,11 +53,14 @@
 
                             {{-- Cartão Virtual - Todos com conta (para pagar adesão) --}}
 
-                            <a href="{{ route('my-account.virtual-card.index') }}"
-                            class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('my-account/virtual-card') ? 'active' : 'bg-white' }}">
-                                <i class="bi bi-credit-card-2-front me-2"></i> Virtual Card
-                            </a>
+                            @if(auth()->user()->isMemberOrBoard())
+                                <a href="{{ route('my-account.virtual-card.index') }}"
+                                class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('my-account/virtual-card') ? 'active' : 'bg-white' }}">
+                                    <i class="bi bi-credit-card-2-front me-2"></i> Virtual Card
+                                </a>
+                            @endif
 
+                            {{-- Cartão Virtual - Apenas membros ativos ou board --}}
                             {{-- Transações - Apenas membros ativos ou board --}}
 
                             @if(auth()->user()->isMemberOrBoard())

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\StockAdjustment;
 
 class Product extends Model
 {
@@ -71,6 +72,14 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(ItemOrder::class);
+    }
+
+    /**
+     * Get the stock adjustments for the product.
+     */
+    public function stockAdjustments()
+    {
+        return $this->hasMany(StockAdjustment::class);
     }
 
     /**

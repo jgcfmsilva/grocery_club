@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         $user = authUser();
 
-        if (!$user->isBoard()) {
+        if (!$user->isBoard() && !$user->isEmployee()) {
             abort(403, 'Unauthorized access!');
         }
 

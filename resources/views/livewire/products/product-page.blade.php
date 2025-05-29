@@ -16,10 +16,12 @@
         <div class="bg-white rounded-lg shadow-lg p-6 relative max-h-[600px] max-w-[600px] w-full mx-auto overflow-y-auto">
             <!-- Wishlist Heart Icon -->
             @if (Auth::check())
-                <button type="button" wire:click="editWishList"
-                    class="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 focus:outline-none {{ $inWishList ? 'text-red-500 hover:text-red-400' : 'text-gray-500 hover:text-red-500' }} mt-15">
-                    <i class="{{ $inWishList ? 'fas' : 'far' }} fa-heart fa-lg"></i>
-                </button>
+                @if (!isEmployee())
+                    <button type="button" wire:click="editWishList"
+                        class="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 focus:outline-none {{ $inWishList ? 'text-red-500 hover:text-red-400' : 'text-gray-500 hover:text-red-500' }} mt-15">
+                        <i class="{{ $inWishList ? 'fas' : 'far' }} fa-heart fa-lg"></i>
+                    </button>
+                @endif
             @else
                 <button wire:click="redirectToLogin" type="button"
                     class="mt-15 absolute top-4 right-4 p-2 text-gray-500 hover:text-red-500 focus:outline-none">
@@ -74,16 +76,18 @@
             </div>
 
             <!-- Add to Cart Form -->
-            <form wire:submit.prevent="addToCart" class="flex gap-4 w-full items-center mt-12">
-                <input type="number" wire:model="quantity" min="1"
-                    class="w-20 p-2 border-1 border-gray-400 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out select-none"
-                    placeholder="Qt.">
+            @if (!isEmployee())
+                <form wire:submit.prevent="addToCart" class="flex gap-4 w-full items-center mt-12">
+                    <input type="number" wire:model="quantity" min="1"
+                        class="w-20 p-2 border-1 border-gray-400 rounded-lg text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out select-none"
+                        placeholder="Qt.">
 
-                <button type="submit"
-                    class="btn btn-primary w-full py-2 px-3 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out">
-                    Add to Cart
-                </button>
-            </form>
+                    <button type="submit"
+                        class="btn btn-primary w-full py-2 px-3 text-white font-semibold rounded-lg shadow-lg transform hover:scale-105 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 ease-in-out">
+                        Add to Cart
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 </div>

@@ -37,7 +37,6 @@
                                 {{ config('vars.email') }}
                             </a>
                         </li>
-
                         <li>
                             <a href="javascript:void(0)"
                                 class="inline-flex items-center text-white font-normal p-0 hover:underline tt-theme-toggle">
@@ -128,12 +127,13 @@
                                 </div>
                             </div>
 
-                            <!--  checks if the user is logged in -->
-                            @if (Auth::check())
+                            @if (Auth::check() && !isEmployee())
                                 <livewire:header-wishlist />
                             @endif
 
-                            <livewire:header-cart-menu />
+                            @if (!isEmployee())
+                                <livewire:header-cart-menu />
+                            @endif
 
                             <livewire:header-user-menu />
 

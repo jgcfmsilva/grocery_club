@@ -1,4 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Inicializa Select2
+    $('.searchable-select').select2({
+        placeholder: "-- Select a product --",
+        allowClear: true,
+        width: '100%' // garante que o Select2 use 100% da largura
+    }).on('select2:open', function () {
+        // Aplica classes Tailwind ao dropdown quando aberto
+        $('.select2-results__option').addClass('text-sm px-2 py-1 hover:bg-gray-100');
+    });
+
+    $('.searchable-select').on('select2:open', function () {
+        $('.select2-container--default .select2-selection--single')
+            .addClass('border rounded px-3 py-2 w-full border-gray-800 focus:ring focus:ring-blue-200');
+    });
+
+    // Dropdown de avatar
     const avatarBtn = document.getElementById('user-avatar-btn');
     const dropdown = document.getElementById('user-dropdown');
 
@@ -21,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
     });
 
+    // Modais de cancelamento
     const cancelButtons = document.querySelectorAll('.cancel-item-btn');
     const closeModalButtons = document.querySelectorAll('.close-modal');
 

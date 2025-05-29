@@ -69,8 +69,20 @@
                             <a href="{{ route('dashboard.products.show', $item->product->id) }}" class="text-blue-400 hover:text-blue-500 hover:text-blue-600">
                                 {{ $item->product->name }}
                             </a>
+                            <span class="ml-2 text-xs text-gray-400">(Stock: {{ $item->product->stock }})</span>
                         </td>
-                        <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">{{ $item->quantity }}</td>
+                        <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">
+                            {{ $item->quantity }}
+                            @if($item->product->stock >= $item->quantity)
+                                <span class="ml-2 text-green-400" title="Sufficient stock">
+                                    <i class="fas fa-check-circle"></i>
+                                </span>
+                            @else
+                                <span class="ml-2 text-red-400" title="Insufficient stock">
+                                    <i class="fas fa-times-circle"></i>
+                                </span>
+                            @endif
+                        </td>
                         <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">{{ number_format($item->unit_price, 2, ',', '') }}€</td>
                         <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">{{ number_format($item->discount, 2, ',', '') }}€</td>
                         <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">{{ number_format($item->subtotal, 2, ',', '') }}€</td>

@@ -62,17 +62,19 @@
             <p class="text-gray-500 text-sm truncate">{{ $product->description }}</p>
 
             <!-- Quantity Selector & Add to Cart -->
-            @if ($product->stock > 0 || $product->stock <= 0)
-                <div class="flex flex-col gap-4 mt-4">
-                    <!-- Button and Wishlist Icon -->
-                    <div class="flex justify-between items-center mt-2 gap-4">
-                        <!-- Add to Cart Button and Input Quantity -->
-                        <livewire:add-to-cart :productId="$product->id" />
+            @if (!isEmployee())
+                @if ($product->stock > 0 || $product->stock <= 0)
+                    <div class="flex flex-col gap-4 mt-4">
+                        <!-- Button and Wishlist Icon -->
+                        <div class="flex justify-between items-center mt-2 gap-4">
+                            <!-- Add to Cart Button and Input Quantity -->
+                            <livewire:add-to-cart :productId="$product->id" />
 
-                        <!-- Wishlist Icon -->
-                        <livewire:wishlist-button :productId="$product->id" />
+                            <!-- Wishlist Icon -->
+                            <livewire:wishlist-button :productId="$product->id" />
+                        </div>
                     </div>
-                </div>
+                @endif
             @endif
         </div>
     </div>

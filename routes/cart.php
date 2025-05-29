@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Orders\OrderController;
 
 // Cart
-Route::get('/cart', [CartController::class, 'show'])->name('cart');
-
-Route::middleware(['auth', 'verified', 'role:member,board'])->group(function () {
+Route::middleware(['auth', 'verified', 'not_employee'])->group(function () {
+    Route::get('/cart', [CartController::class, 'show'])->name('cart');
     Route::post('/cart/purchase', [OrderController::class, 'createOrder'])->name('order.create');
 });

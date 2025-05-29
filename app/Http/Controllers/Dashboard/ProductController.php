@@ -127,6 +127,8 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return view('pages.dashboard.products.show', compact('product'));
+        $adjustments = $product->stockAdjustments()->with('registeredBy')->orderByDesc('created_at')->paginate(10);
+
+        return view('pages.dashboard.products.show', compact('product', 'adjustments'));
     }
 }

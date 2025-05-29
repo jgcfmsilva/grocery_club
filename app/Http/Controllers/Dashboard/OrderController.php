@@ -19,8 +19,13 @@ class OrderController extends Controller
     {
         $query = Order::with('member');
 
-        if (request()->filled('status')) {
-            $query->where('status', request('status'));
+        // Se for employee, só mostra pending
+        if (isEmployee()) {
+            $query->where('status', \App\Enums\OrderStatus::PENDING->value);
+        } else {
+            if (request()->filled('status')) {
+                $query->where('status', request('status'));
+            }
         }
 
         if (request()->filled('date')) {
