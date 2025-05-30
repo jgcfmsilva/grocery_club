@@ -14,7 +14,6 @@ class ProductController extends Controller
     {
         $query = Product::with('category');
 
-        // Apply filters
         if (request()->filled('name')) {
             $query->where('name', 'like', '%' . request('name') . '%');
         }
@@ -31,7 +30,6 @@ class ProductController extends Controller
             $query->where('price', '<=', request('price_max'));
         }
 
-        // Apply sorting
         if (request()->has('sort') && request()->has('direction')) {
             $sortableColumns = ['name', 'category', 'price', 'stock'];
             $sort = request('sort');
@@ -55,7 +53,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::all();   
         return view('pages.dashboard.products.create', compact('categories'));
     }
 

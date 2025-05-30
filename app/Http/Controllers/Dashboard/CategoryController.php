@@ -15,12 +15,10 @@ class CategoryController extends Controller
     {
         $query = Category::query();
 
-        // Filter by name
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        // Sorting
         $sort = $request->get('sort', 'name');
         $direction = $request->get('direction', 'asc');
         $query->orderBy($sort, $direction);

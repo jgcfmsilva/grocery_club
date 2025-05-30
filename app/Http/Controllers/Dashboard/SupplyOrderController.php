@@ -10,21 +10,17 @@ use App\Models\SupplyOrderItem;
 use App\Models\StockAdjustment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Dashboard\SupplyOrder\CreateSupplyOrderRequest;
+use App\Http\Requests\Dashboard\SupplyOrder\AdjustStockRequest;
+use App\Http\Requests\Dashboard\SupplyOrder\UpdateSupplyOrderRequest;
 
 class SupplyOrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $supplyOrders = SupplyOrder::with('product')->orderBy('created_at', 'desc')->paginate(20);
         return view('pages.dashboard.inventory.supply-orders.index', compact('supplyOrders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
         $products = Product::with('category')->orderBy('name')->get();
@@ -48,9 +44,6 @@ class SupplyOrderController extends Controller
         return view('pages.dashboard.inventory.supply-orders.create', compact('products', 'autoProducts', 'auto'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(CreateSupplyOrderRequest $request)
     {
         $validated = $request->validated();
@@ -76,18 +69,12 @@ class SupplyOrderController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(SupplyOrder $supplyOrder)
     {
         $supplyOrder->load('product');
         return view('pages.dashboard.inventory.supply-orders.show', compact('supplyOrder'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(SupplyOrder $supplyOrder)
     {
         $supplyOrder->load('product');
@@ -95,14 +82,9 @@ class SupplyOrderController extends Controller
         return view('pages.dashboard.inventory.supply-orders.edit', compact('supplyOrder', 'products'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, SupplyOrder $supplyOrder)
+    public function update(UpdateSupplyOrderRequest $request, SupplyOrder $supplyOrder)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:completed,canceled,requested',
-        ]);
+        $validated = $request->validated();
 
         $supplyOrder->status = $validated['status'];
         $supplyOrder->save();
@@ -110,18 +92,12 @@ class SupplyOrderController extends Controller
         return redirect()->route('dashboard.inventory.supply-orders.index')->with('success', 'Supply order updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(SupplyOrder $supplyOrder)
     {
         $supplyOrder->delete();
         return redirect()->route('dashboard.inventory.supply-orders.index')->with('success', 'Supply order deleted.');
     }
 
-    /**
-     * Complete the specified supply order and update stock.
-     */
     public function complete(SupplyOrder $supplyOrder)
     {
         DB::beginTransaction();
@@ -134,7 +110,6 @@ class SupplyOrderController extends Controller
             $supplyOrder->status = 'completed';
             $supplyOrder->save();
 
-            // Cria o stock adjustment apenas ao completar
             StockAdjustment::create([
                 'product_id' => $product->id,
                 'registered_by_user_id' => auth()->id(),
@@ -155,15 +130,9 @@ class SupplyOrderController extends Controller
         }
     }
 
-    /**
-     * Adjust the stock of a product manually.
-     */
-    public function adjustStock(Request $request, Product $product)
+    public function adjustStock(AdjustStockRequest $request, Product $product)
     {
-        $validated = $request->validate([
-            'new_stock' => 'required|integer|min:0',
-            'reason' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $oldStock = $product->stock;
         $product->stock = $validated['new_stock'];

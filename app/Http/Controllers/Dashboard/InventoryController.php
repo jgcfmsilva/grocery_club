@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\StockAdjustment;
+use App\Http\Requests\Dashboard\Inventory\AdjustStockRequest;
 
 class InventoryController extends Controller
 {
@@ -23,7 +24,6 @@ class InventoryController extends Controller
             });
         }
 
-        // Stock filter logic
         if ($request->filled('stock_filter')) {
             if ($request->stock_filter === 'out') {
                 $query->where('stock', '<=', 0);
@@ -37,7 +37,6 @@ class InventoryController extends Controller
         $sort = $request->get('sort', 'id');
         $direction = $request->get('direction', 'desc');
 
-        // Custom sorting logic
         if ($sort === 'category') {
             $query->join('categories', 'products.category_id', '=', 'categories.id')
                   ->orderBy('categories.name', $direction)
@@ -59,12 +58,9 @@ class InventoryController extends Controller
         return view('pages.dashboard.inventory.index', compact('products'));
     }
 
-    public function adjustStock(Request $request, Product $product)
+    public function adjustStock(AdjustStockRequest $request, Product $product)
     {
-        $validated = $request->validate([
-            'new_stock' => 'required|integer|min:0',
-            'reason' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
         $oldStock = $product->stock;
         $product->stock = $validated['new_stock'];

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Auth\LoginUserRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class LoginUserController extends Controller
@@ -26,6 +27,14 @@ class LoginUserController extends Controller
     {
         if (!Auth::check()) {
             $credentials = $request->only('email', 'password');
+
+            $user = User::where('email', $credentials['email'])->first();
+
+            if ($user && $user->blocked) {
+                return back()->withErrors([
+                    'email' => 'Your account is blocked. Please contact support.',
+                ])->onlyInput('email');
+            }
 
             if (Auth::attempt($credentials, $request->filled('remember'))) {
                 $request->session()->regenerate();

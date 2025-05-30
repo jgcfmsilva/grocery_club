@@ -22,7 +22,6 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        // Update membership fee
         if ($request->has('membership_fee')) {
             DB::table('settings')->update([
                 'membership_fee' => $request->input('membership_fee'),
@@ -30,7 +29,6 @@ class SettingController extends Controller
             ]);
         }
 
-        // Update shipping cost (from modal)
         if ($request->route('id')) {
             DB::table('settings_shipping_costs')
                 ->where('id', $request->route('id'))

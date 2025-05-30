@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Enums\UserType;
 use Illuminate\Http\Request;
+use App\Http\Requests\Dashboard\User\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -72,7 +73,6 @@ class UserController extends Controller
                     ");
                 }
             } elseif ($sort === 'type') {
-                // Ordenação personalizada por nome do tipo
                 $query->orderByRaw("
                     CASE type
                         WHEN ? THEN 'Board'
@@ -99,13 +99,13 @@ class UserController extends Controller
 
     public function promote(User $user)
     {
-        $user->changeType(\App\Enums\UserType::Board);
+        $user->changeType(UserType::Board);
         return back()->with('success', 'User promoted to board.');
     }
 
     public function demote(User $user)
     {
-        $user->changeType(\App\Enums\UserType::Member);
+        $user->changeType(UserType::Member);
         return back()->with('success', 'User demoted from board.');
     }
 
@@ -131,13 +131,26 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        // ...existing code for edit page...
+       
         return view('pages.dashboard.users.edit', compact('user'));
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $validated = $request->validated();
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->type = $validated['type'];
+        $user->blocked = $validated['blocked'];
+        $user->save();
+
+        return redirect()->route('dashboard.users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user)
     {
-        $user->forceDelete();
+        $user->delete();
         return back()->with('success', 'User permanently deleted.');
     }
 }

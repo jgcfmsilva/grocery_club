@@ -29,13 +29,11 @@ class VirtualCardController extends Controller
 
     public function create()
     {
-        // Você pode passar membros ou outros dados necessários para o formulário
         return view('pages.dashboard.virtual-cards.create');
     }
 
     public function show(Card $card)
     {
-        // Carrega o relacionamento user e operações, se necessário
         $card->load('user', 'operations');
        
         return view('pages.dashboard.virtual-cards.show', compact('card'));
@@ -43,7 +41,6 @@ class VirtualCardController extends Controller
 
     public function edit(Card $card)
     {
-        // Carrega o relacionamento user, se necessário
         $card->load('user');
 
         return view('pages.dashboard.virtual-cards.edit', compact('card'));

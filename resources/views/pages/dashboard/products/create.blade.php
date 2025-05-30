@@ -23,7 +23,7 @@
             </div>
             <div>
                 <label for="category_id" class="block text-sm font-medium">Category</label>
-                <select name="category_id" id="category_id" class="border border-gray-300 rounded px-4 py-2 w-full" required>
+                <select name="category_id" id="category_id" class="border border-gray-300 rounded px-4 py-2 w-full cursor-pointer" required>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                     @endforeach
