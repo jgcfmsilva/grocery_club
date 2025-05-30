@@ -12,6 +12,8 @@ use App\Enums\TransactionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Order\CancelOrderRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderCompletedMail;
 
 class OrderController extends Controller
 {
@@ -117,7 +119,7 @@ class OrderController extends Controller
 
     public function complete(Order $order)
     {
-        $order->load('items.product');
+        $order->load('items.product', 'member');
         DB::beginTransaction();
         try {
             foreach ($order->items as $item) {
@@ -137,6 +139,16 @@ class OrderController extends Controller
             $order->save();
 
             $order->generateReceipt();
+
+            try {
+                $user = $order->member;
+                if ($user && $user->email && $order->pdf_receipt) {
+                    Mail::to($user->email)
+                        ->send(new OrderCompletedMail($order));
+                }
+            } catch (\Exception $e) {
+                \Log::error('Failed to send completed order email: ' . $e->getMessage());
+            }
 
             DB::commit();
 

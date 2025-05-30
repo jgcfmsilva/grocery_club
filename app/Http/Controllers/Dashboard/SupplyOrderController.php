@@ -9,6 +9,7 @@ use App\Models\SupplyOrder;
 use App\Models\SupplyOrderItem;
 use App\Models\StockAdjustment;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Dashboard\SupplyOrder\CreateSupplyOrderRequest;
 
 class SupplyOrderController extends Controller
 {
@@ -28,18 +29,18 @@ class SupplyOrderController extends Controller
     {
         $products = Product::with('category')->orderBy('name')->get();
 
-        // Se for automático, sugerir produtos abaixo do limite superior
         $auto = $request->get('auto');
         $autoProducts = [];
         if ($auto) {
             $autoProducts = $products->filter(function($product) {
-                return $product->stock < $product->stock_upper_limit;
+                return $product->stock < $product->stock_lower_limit;
             })->map(function($product) {
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'current_stock' => $product->stock,
-                    'to_order' => $product->stock_upper_limit - $product->stock,
+                    'stock_upper_limit' => $product->stock_upper_limit,
+                    'to_order' => max(0, $product->stock_upper_limit - $product->stock),
                 ];
             });
         }
@@ -50,13 +51,9 @@ class SupplyOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateSupplyOrderRequest $request)
     {
-        $validated = $request->validate([
-            'products' => 'required|array',
-            'products.*.id' => 'required|exists:products,id',
-            'products.*.quantity' => 'required|integer|min:1',
-        ]);
+        $validated = $request->validated();
 
         DB::beginTransaction();
         try {
@@ -74,6 +71,7 @@ class SupplyOrderController extends Controller
             return redirect()->route('dashboard.inventory.supply-orders.index')->with('success', 'Supply order(s) created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
+            flash()->error('Error creating supply order: ' . $e->getMessage());
             return back()->with('error', 'Error creating supply order: ' . $e->getMessage());
         }
     }

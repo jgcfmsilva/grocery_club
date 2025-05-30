@@ -53,7 +53,7 @@
 
                             {{-- Cartão Virtual - Todos com conta (para pagar adesão) --}}
 
-                            @if(auth()->user()->isMemberOrBoard())
+                            @if(auth()->user()->isMemberOrBoard() || auth()->user()->isPendingMember())
                                 <a href="{{ route('my-account.virtual-card.index') }}"
                                 class="list-group-item list-group-item-action d-flex align-items-center {{ request()->is('my-account/virtual-card') ? 'active' : 'bg-white' }}">
                                     <i class="bi bi-credit-card-2-front me-2"></i> Virtual Card

@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="container mx-auto">
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <h1 class="text-3xl font-bold">Products</h1>
-        <a href="{{ route('dashboard.products.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded shadow flex items-center space-x-2">
+        <a href="{{ route('dashboard.products.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded shadow flex items-center space-x-2 w-full md:w-auto justify-center">
             <i class="fas fa-plus"></i>
             <span>Add Product</span>
         </a>
@@ -41,13 +41,13 @@
                         class="block w-full h-12 text-white border-2 border-gray-300 px-3 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
-            <div class="col-span-1 flex items-end space-x-2">
+            <div class="col-span-1 flex flex-col sm:flex-row md:flex-col lg:flex-row items-end gap-2">
                 <button type="submit"
-                        class="w-full bg-indigo-600 tracking-wider hover:bg-indigo-700 text-white px-8 py-3 rounded-xl shadow-md font-semibold cursor-pointer">
+                        class="w-full sm:w-auto bg-indigo-600 tracking-wider hover:bg-indigo-700 text-white px-8 py-3 rounded-xl shadow-md font-semibold cursor-pointer">
                     Filter
                 </button>
                 <a href="{{ route('dashboard.products.index') }}"
-                   class="w-full bg-red-500 tracking-wider hover:bg-red-600 text-white px-8 py-3 rounded-xl shadow-md font-semibold text-center">
+                   class="w-full sm:w-auto bg-red-500 tracking-wider hover:bg-red-600 text-white px-8 py-3 rounded-xl shadow-md font-semibold text-center">
                     Reset
                 </a>
             </div>

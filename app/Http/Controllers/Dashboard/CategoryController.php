@@ -11,10 +11,23 @@ use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::paginate(10); // Paginate with 10 items per page
-        return view('pages.dashboard.categories.index', compact('categories'));
+        $query = Category::query();
+
+        // Filter by name
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'name');
+        $direction = $request->get('direction', 'asc');
+        $query->orderBy($sort, $direction);
+
+        $categories = $query->paginate(10)->appends($request->all());
+
+        return view('pages.dashboard.categories.index', compact('categories', 'sort', 'direction'));
     }
 
     public function create()

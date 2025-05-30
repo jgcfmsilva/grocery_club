@@ -85,6 +85,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isEmployee() {
         return $this->type === UserType::Employee;
     }
+
+    public function isBlocked() {
+        return (bool) $this->blocked;
+    }
     
     public function isMemberOrBoard() {
         return in_array($this->type, [UserType::Member, UserType::Board]);

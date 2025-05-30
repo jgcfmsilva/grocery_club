@@ -4,12 +4,27 @@
 
 @section('content')
 <div class="container mx-auto">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Categories</h1>
-        <a href="{{ route('dashboard.categories.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded shadow flex items-center space-x-2">
-            <i class="fas fa-plus"></i>
-            <span>Add Category</span>
-        </a>
+    <h1 class="text-3xl font-bold mb-6">Categories</h1>
+
+    <!-- Filters -->
+    <div class="bg-gray-800 p-5 rounded-xl shadow-lg mb-6">
+        <form method="GET" action="{{ route('dashboard.categories.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="col-span-2">
+                <label for="name" class="block font-semibold text-white">Name</label>
+                <input type="text" name="name" id="name" value="{{ request('name') }}"
+                    class="mt-2 block w-full h-12 text-white px-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div class="flex flex-col md:flex-row items-end space-y-2 md:space-y-0 md:space-x-2 col-span-2">
+                <button type="submit"
+                        class="w-full bg-indigo-600 tracking-wider hover:bg-indigo-700 text-white px-8 py-3 rounded-xl shadow-md font-semibold cursor-pointer">
+                    Filter
+                </button>
+                <a href="{{ route('dashboard.categories.index') }}"
+                   class="w-full bg-red-500 tracking-wider hover:bg-red-600 text-white px-8 py-3 rounded-xl shadow-md font-semibold text-center">
+                    Reset
+                </a>
+            </div>
+        </form>
     </div>
 
     <!-- Categories Table -->
@@ -18,7 +33,20 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="border border-gray-300 px-6 py-3 text-left text-lg font-bold text-gray-700">Image</th>
-                    <th class="border border-gray-300 px-6 py-3 text-left text-lg font-bold text-gray-700">Name</th>
+                    <th class="border border-gray-300 px-6 py-3 text-left text-lg font-bold text-gray-700">
+                        <div class="flex items-center">
+                            Name
+                            @php
+                                $newDir = ($sort === 'name' && $direction === 'asc') ? 'desc' : 'asc';
+                                $arrow = $sort === 'name'
+                                    ? ($direction === 'asc' ? '▲' : '▼')
+                                    : '▲▼';
+                                $params = array_merge(request()->all(), ['sort' => 'name', 'direction' => $newDir]);
+                                $url = route('dashboard.categories.index', $params);
+                            @endphp
+                            <a href="{{ $url }}" class="ml-2 text-gray-700 hover:underline text-base">{{ $arrow }}</a>
+                        </div>
+                    </th>
                     <th class="border border-gray-300 px-6 py-3 text-left text-lg font-bold text-gray-700">Actions</th>
                 </tr>
             </thead>

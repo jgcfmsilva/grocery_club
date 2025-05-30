@@ -61,6 +61,13 @@ Route::middleware(['auth','role:board'])->group(function () {
 
         Route::prefix('users')->name('users.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::post('/{user}/promote', [UserController::class, 'promote'])->name('promote');
+            Route::post('/{user}/demote', [UserController::class, 'demote'])->name('demote');
+            Route::post('/{user}/block', [UserController::class, 'block'])->name('block');
+            Route::post('/{user}/unblock', [UserController::class, 'unblock'])->name('unblock');
+            Route::post('/{user}/cancel-membership', [UserController::class, 'cancelMembership'])->name('cancel-membership');
+            Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+            Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
         });
 
         Route::prefix('memberships')->name('memberships.')->group(function () {
@@ -84,6 +91,8 @@ Route::middleware(['auth','role:board'])->group(function () {
 
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/', [SettingController::class, 'index'])->name('index');
+            Route::post('/update', [SettingController::class, 'update'])->name('update');
+            Route::put('/update/shipping-cost/{id}', [SettingController::class, 'update'])->name('update.shipping-cost');
         });
 
         Route::prefix('categories')->name('categories.')->group(function () {

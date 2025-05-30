@@ -21,7 +21,9 @@
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4">⛔ You're not a member yet</h2>
                 <p class="text-dark mb-6">
                     To activate your account and enjoy full features, please pay the
-                    <span class="font-semibold text-dark">{{ \App\Utils\Constants::MEMBERSHIP_FEE }}€</span> membership fee.
+                    <span class="font-semibold text-dark">
+                        {{ number_format($membershipFee, 2, ',', '') }}€
+                    </span> membership fee.
                 </p>
                 <p class="mb-2 font-semibold text-dark text-left">Without membership, you won't be able to:</p>
                 <ul class="text-left list-disc list-inside space-y-1 text-red-500 font-medium mb-10">

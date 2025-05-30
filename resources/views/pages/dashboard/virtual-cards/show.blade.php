@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="mt-8">
-            <h2 class="text-lg font-semibold mb-4">Last Transactions</h2>
+            <h2 class="text-lg font-semibold mb-4">All Transactions</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm text-center">
                     <thead class="bg-primary text-xs uppercase tracking-wider text-white border-b-2 border-gray-800">

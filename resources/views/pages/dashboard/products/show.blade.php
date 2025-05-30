@@ -11,7 +11,8 @@
         </a>
         <h1 class="text-3xl font-bold ml-4">{{ $product->name }}</h1>
         <div class="ml-auto">
-            @if(!isEmployee())
+            @php $user = authUser(); @endphp
+            @if($user && !$user->isEmployee())
             <a href="{{ route('dashboard.products.edit', $product->id) }}"
                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow text-sm flex items-center space-x-1">
                 <i class="fas fa-edit"></i>
@@ -73,8 +74,8 @@
             @if($adjustments->isEmpty())
                 <div class="text-gray-500">No stock adjustments found for this product.</div>
             @else
-                <div class="overflow-x-auto">
-                    <table class="min-w-full text-sm text-center bg-white shadow border-1 border-gray-400">
+                <div class="overflow-x-auto rounded-t-lg">
+                    <table class="min-w-full text-sm text-center bg-white shadow border-2 border-gray-800">
                         <thead class="bg-gray-800">
                             <tr>
                                 <th class="px-4 py-3 font-semibold text-white tracking-wider">Date</th>

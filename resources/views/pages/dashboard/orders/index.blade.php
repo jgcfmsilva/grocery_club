@@ -11,6 +11,7 @@
     <!-- Filters -->
     <div class="bg-gray-800 p-5 rounded-xl shadow-lg mb-6">
         <form method="GET" action="{{ route('dashboard.orders.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            @if(!isEmployee())
             <div class="col-span-1">
                 <label for="status" class="block font-semibold text-white">Status</label>
                 <select name="status" id="status"
@@ -23,6 +24,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
             <div class="col-span-1">
                 <label for="date" class="block font-semibold text-white">Date</label>
                 <input type="date" name="date" id="date" value="{{ request('date') }}"

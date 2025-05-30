@@ -62,4 +62,96 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    let productIndex = 1;
+    const productsList = document.getElementById('manual-products-list');
+    const addBtn = document.getElementById('add-product-row');
+
+    function getSelectedProductIds() {
+        return Array.from(productsList.querySelectorAll('.product-select'))
+            .map(sel => sel.value)
+            .filter(val => val);
+    }
+
+    function updateSelectOptions() {
+        const selectedIds = getSelectedProductIds();
+        productsList.querySelectorAll('.manual-product-row').forEach(function(row) {
+            const select = row.querySelector('.product-select');
+            const currentValue = select.value;
+            Array.from(select.options).forEach(function(opt) {
+                if (opt.value === "" || opt.value === currentValue) {
+                    opt.disabled = false;
+                } else {
+                    opt.disabled = selectedIds.includes(opt.value);
+                }
+            });
+        });
+    }
+
+    function updateBadges() {
+        document.querySelectorAll('.manual-product-row').forEach(function(row) {
+            const select = row.querySelector('.product-select');
+            const badgeSpans = row.querySelectorAll('.product-badge');
+            badgeSpans.forEach(function(span) {
+                span.classList.add('hidden');
+            });
+            if (select.value) {
+                const badge = row.querySelector('.product-badge[data-product="' + select.value + '"]');
+                if (badge) {
+                    badge.classList.remove('hidden');
+                }
+            }
+        });
+    }
+
+    addBtn.addEventListener('click', function () {
+        const firstRow = productsList.querySelector('.manual-product-row');
+        const row = firstRow.cloneNode(true);
+
+        // Update names and clear values
+        row.querySelectorAll('select, input').forEach(function (el) {
+            if (el.name && el.name.includes('[0]')) {
+                el.name = el.name.replace('[0]', '[' + productIndex + ']');
+            }
+            if (el.classList.contains('product-select')) {
+                el.selectedIndex = 0;
+            }
+            if (el.type === 'number') {
+                el.value = '';
+            }
+        });
+
+        row.querySelectorAll('.product-badge').forEach(function(span) {
+            span.classList.add('hidden');
+        });
+
+        row.querySelector('.remove-product-row').classList.remove('hidden');
+
+        productsList.appendChild(row);
+        productIndex++;
+        updateSelectOptions();
+        updateBadges();
+    });
+
+    productsList.addEventListener('click', function (e) {
+        const btn = e.target.closest('.remove-product-row');
+        if (btn) {
+            const rows = productsList.querySelectorAll('.manual-product-row');
+            if (rows.length > 1) {
+                btn.closest('.manual-product-row').remove();
+                updateSelectOptions();
+                updateBadges();
+            }
+        }
+    });
+
+    productsList.addEventListener('change', function (e) {
+        if (e.target.classList.contains('product-select')) {
+            updateSelectOptions();
+            updateBadges();
+        }
+    });
+
+    updateSelectOptions();
+    updateBadges();
 });

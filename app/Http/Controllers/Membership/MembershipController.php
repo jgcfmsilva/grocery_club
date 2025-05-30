@@ -20,7 +20,9 @@ class MembershipController extends Controller
 
         $this->authorize('view', $user);
 
-        return view('pages.my-account.membership.index');
+        $membershipFee = DB::table('settings')->value('membership_fee') ?? 0;
+
+        return view('pages.my-account.membership.index', compact('membershipFee'));
     }
 
     public function pay()
@@ -29,7 +31,7 @@ class MembershipController extends Controller
 
         $this->authorize('payMembership', $user);
 
-        $membershipFee = Constants::MEMBERSHIP_FEE;
+        $membershipFee = DB::table('settings')->value('membership_fee') ?? 0;
 
         $card = $user->card;
 

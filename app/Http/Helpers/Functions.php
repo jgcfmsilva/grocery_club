@@ -97,7 +97,8 @@ if (! function_exists('calculate_percentage_discount')) {
 if (!function_exists('isPendingMember')) {
     function isPendingMember()
     {
-        return authUser()->isPendingMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isPendingMember') ? $user->isPendingMember() : false;
     }
 }
 
@@ -105,7 +106,8 @@ if (!function_exists('isPendingMember')) {
 if (!function_exists('isMember')) {
     function isMember()
     {
-        return authUser()->isMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isMember') ? $user->isMember() : false;
     }
 }
 
@@ -113,7 +115,8 @@ if (!function_exists('isMember')) {
 if (!function_exists('isEmployee')) {
     function isEmployee()
     {
-        return authUser()->isEmployee();
+        $user = authUser();
+        return $user && method_exists($user, 'isEmployee') ? $user->isEmployee() : false;
     }
 }
 
@@ -121,7 +124,8 @@ if (!function_exists('isEmployee')) {
 if (!function_exists('isBoard')) {
     function isBoard()
     {
-        return authUser()->isBoard();
+        $user = authUser();
+        return $user && method_exists($user, 'isBoard') ? $user->isBoard() : false;
     }
 }
 
@@ -129,7 +133,8 @@ if (!function_exists('isBoard')) {
 if (!function_exists('isActiveMember')) {
     function isActiveMember()
     {
-        return authUser()->isActiveMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isActiveMember') ? $user->isActiveMember() : false;
     }
 }
 
