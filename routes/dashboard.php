@@ -92,7 +92,9 @@ Route::middleware(['auth','role:board,employee'])->group(function () {
             Route::prefix('settings')->name('settings.')->group(function () {
                 Route::get('/', [SettingController::class, 'index'])->name('index');
                 Route::post('/update', [SettingController::class, 'update'])->name('update');
-                Route::put('/update/shipping-cost/{id}', [SettingController::class, 'update'])->name('update.shipping-cost');
+                Route::put('/update/shipping-cost/{id}', [SettingController::class, 'update'])->name('shipping-cost.update');
+                Route::post('/add/shipping-cost', [SettingController::class, 'addShippingCost'])->name('shipping-cost.add');
+                Route::delete('/shipping-cost/{id}', [SettingController::class, 'deleteShippingCost'])->name('shipping-cost.delete');
             });
         });
 

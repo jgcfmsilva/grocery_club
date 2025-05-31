@@ -31,6 +31,14 @@ class MembershipController extends Controller
 
         $this->authorize('payMembership', $user);
 
+        if (empty($user->email_verified_at)) {
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error("You must confirm your email before paying the membership.");
+            return back();
+        }
+
         $membershipFee = DB::table('settings')->value('membership_fee') ?? 0;
 
         $card = $user->card;

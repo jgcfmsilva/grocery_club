@@ -24,7 +24,7 @@
                 <h5 class="card-title text-xl font-semibold text-gray-800">{{ $product->name }}</h5>
             </a>
 
-            <p class="text-gray-500 text-sm">{{ $product->category->name }}</p>
+            <p class="text-dark text-sm">{{ $product->category->name }}</p>
 
             <!-- Price and Discount -->
             @if ($product->discount)
@@ -59,7 +59,7 @@
             </p>
 
             <!-- Product Description -->
-            <p class="text-gray-500 text-sm truncate">{{ $product->description }}</p>
+            <p class="text-dark text-sm truncate">{{ $product->description }}</p>
 
             <!-- Quantity Selector & Add to Cart -->
             @if (!isEmployee())

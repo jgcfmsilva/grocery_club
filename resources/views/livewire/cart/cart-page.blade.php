@@ -69,7 +69,7 @@
                                                     €{{ number_format($discounted, 2, ',', '.') }}
                                                 </span>
                                             @else
-                                                <span class="font-semibold">
+                                                <span class="font-semibold text-dark">
                                                     €{{ number_format($item['price'], 2, ',', '.') }}
                                                 </span>
                                             @endif
@@ -78,15 +78,15 @@
                                 </div>
 
                                 <div class="w-full md:w-1/5 flex items-center justify-center py-4">
-                                    <div class="flex items-center border rounded-lg h-10">
+                                    <div class="flex items-center border-1 border-gray-400 rounded-lg h-10">
                                         <button wire:click="decrement('{{ $id }}')"
-                                            class="quantity-btn decrease px-3 py-1 text-gray-600 hover:bg-gray-100 h-full flex items-center">
+                                            class="quantity-btn decrease px-3 py-1 text-dark hover:bg-gray-400 h-full flex items-center">
                                             <i class="fas fa-minus"></i>
                                         </button>
                                         <input type="text" value="{{ $item['quantity'] }}"
-                                            class="w-12 text-center border-0 focus:ring-0 h-full" readonly>
+                                            class="w-12 text-center border-0 focus:ring-0 h-full text-dark" readonly>
                                         <button wire:click="increment('{{ $id }}')"
-                                            class="quantity-btn increase px-3 py-1 text-gray-600 hover:bg-gray-100 h-full flex items-center">
+                                            class="quantity-btn increase px-3 py-1 text-dark hover:bg-gray-400 h-full flex items-center">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -107,7 +107,7 @@
                                     <div class="flex items-center">
                                         <span class="md:hidden font-semibold text-gray-700 mr-2">Total:</span>
                                         <span
-                                            class="font-semibold">€{{ number_format($totalWithDiscount, 2, ',', '.') }}</span>
+                                            class="font-semibold text-dark">€{{ number_format($totalWithDiscount, 2, ',', '.') }}</span>
                                     </div>
                                     <button wire:click="removeItem('{{ $id }}')"
                                         class="text-red-500 hover:text-red-700">
@@ -121,7 +121,7 @@
             @else
                 <div class="text-center py-12 text-gray-600">
                     <h2 class="text-xl font-semibold mb-2">Your cart is empty</h2>
-                    <p class="mb-4">Browse our store and add some products!</p>
+                    <p class="mb-4 text-dark">Browse our store and add some products!</p>
                     <a href="{{ route('home') }}" class="text-green-600 hover:text-green-800 font-medium underline">
                         Go to Store
                     </a>
@@ -137,7 +137,7 @@
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between">
                         <span class="text-dark">Subtotal</span>
-                        <span class="font-semibold">€{{ number_format($subtotal, 2, ',', '.') }}</span>
+                        <span class="font-semibold text-dark">€{{ number_format($subtotal, 2, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-dark">Discounts</span>
@@ -145,7 +145,7 @@
                     </div>
                     <div class="flex justify-between">
                         <span class="text-dark">Shipping</span>
-                        <span class="font-semibold">€{{ number_format($shipping, 2, ',', '.') }}</span>
+                        <span class="font-semibold text-dark">€{{ number_format($shipping, 2, ',', '.') }}</span>
                     </div>
                     <div class="pt-4 flex justify-between">
                         <span class="text-lg font-bold text-dark">Total</span>
@@ -159,7 +159,7 @@
                         @csrf
                         <div class="space-y-4">
                             <div>
-                                <label for="nif" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+                                <label for="nif" class="block text-sm font-medium text-dark mb-1">Tax ID</label>
                                 <input type="text" id="nif" name="nif" value="{{ old('nif', $nif ?? '') }}"
                                     class="w-full px-3 py-2 border-1 border-gray-400 rounded-md"
                                     placeholder="123456789" required pattern="[0-9]{9}"
@@ -167,7 +167,7 @@
                             </div>
                             <div>
                                 <label for="delivery_address"
-                                    class="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
+                                    class="block text-sm font-medium text-dark mb-1">Delivery Address</label>
                                 <input type="text" id="delivery_address" name="delivery_address" value="{{ old('delivery_address', $default_delivery_address ?? '') }}"
                                     class="w-full px-3 py-2 border-1 border-gray-400 rounded-md"
                                     placeholder="123 Main Street" required>

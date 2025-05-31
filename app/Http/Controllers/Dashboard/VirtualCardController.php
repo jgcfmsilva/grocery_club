@@ -10,8 +10,9 @@ class VirtualCardController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Card::with('user');
+        $query = Card::with(['user', 'operations']);
 
+        // Filtro por card_number ou nome do usuário
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -22,14 +23,36 @@ class VirtualCardController extends Controller
             });
         }
 
-        $virtualCards = $query->orderBy('id', 'desc')->paginate(20);
-        
-        return view('pages.dashboard.virtual-cards.index', compact('virtualCards'));
-    }
+        // Ordenação dinâmica
+        $sortable = [
+            'card_number' => 'card_number',
+            'owner' => 'owner',
+            'balance' => 'balance',
+            'last_transaction' => 'last_transaction',
+        ];
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'desc');
 
-    public function create()
-    {
-        return view('pages.dashboard.virtual-cards.create');
+        if (array_key_exists($sort, $sortable)) {
+            if ($sort === 'owner') {
+                // Usa join para ordenar por nome do utilizador
+                $query->join('users', 'cards.id', '=', 'users.id')
+                      ->orderBy('users.name', $direction)
+                      ->select('cards.*');
+            } elseif ($sort === 'last_transaction') {
+                // Ordena por data da última operação usando relacionamento
+                $query->withMax('operations', 'created_at');
+                $query->orderBy('operations_max_created_at', $direction);
+            } else {
+                $query->orderBy($sortable[$sort], $direction);
+            }
+        } else {
+            $query->orderBy('id', 'desc');
+        }
+
+        $virtualCards = $query->paginate(20)->appends($request->all());
+
+        return view('pages.dashboard.virtual-cards.index', compact('virtualCards', 'sort', 'direction'));
     }
 
     public function show(Card $card)

@@ -10,7 +10,6 @@
                 @include('layouts.partials.store.header')
             @endif
 
-            {{-- Aviso de email não verificado --}}
             @auth
                 @if (!auth()->user()->hasVerifiedEmail())
                     <div class="container mt-3">

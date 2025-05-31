@@ -63,7 +63,6 @@
                 <p class="mb-2"><strong>Updated At:</strong> {{ $product->updated_at->format('d/m/Y H:i') }}</p>
             </div>
         </div>
-        {{-- Stock Adjustments --}}
         <div class="mt-10">
             <h2 class="text-lg font-bold mb-4 text-gray-800 flex items-center">
                 <i class="fas fa-history mr-2 text-gray-500"></i> Stock Adjustments

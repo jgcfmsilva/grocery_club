@@ -18,7 +18,7 @@
             @if (Auth::check())
                 @if (!isEmployee())
                     <button type="button" wire:click="editWishList"
-                        class="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 focus:outline-none {{ $inWishList ? 'text-red-500 hover:text-red-400' : 'text-gray-500 hover:text-red-500' }} mt-15">
+                        class="absolute top-4 right-4 p-2 text-red-500 hover:text-red-500 focus:outline-none {{ $inWishList ? 'text-red-500 hover:text-red-400' : 'text-gray-500 hover:text-red-500' }} mt-15">
                         <i class="{{ $inWishList ? 'fas' : 'far' }} fa-heart fa-lg"></i>
                     </button>
                 @endif
@@ -31,13 +31,13 @@
 
             <h1 class="text-3xl font-bold text-gray-800 mb-1 mt-10">{{ $product->name }}</h1>
 
-            <p class="text-gray-500 mb-4">{{ $product->category->name }}</p>
+            <p class="text-dark mb-4">{{ $product->category->name }}</p>
 
             <!-- Price Section -->
             <div class="mt-10">
                 @if ($product->discount)
                     <div class="flex items-center mb-2">
-                        <span class="text-2xl font-bold text-gray-800">
+                        <span class="text-2xl font-bold text-dark">
                             €{{ number_format(calculate_price_with_discount($product->price, $product->discount), 2) }}
                         </span>
                         <span class="ml-2 text-lg text-red-500 line-through">
@@ -54,7 +54,7 @@
                         </p>
                     @endif
                 @else
-                    <span class="text-2xl font-bold text-gray-800">
+                    <span class="text-2xl font-bold text-dark">
                         €{{ number_format($product->price, 2) }}
                     </span>
                 @endif
@@ -72,7 +72,7 @@
             <!-- Description -->
             <div class="mt-14">
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Description</h3>
-                <p class="text-gray-600 leading-relaxed">{{ $product->description }}</p>
+                <p class="text-dark leading-relaxed">{{ $product->description }}</p>
             </div>
 
             <!-- Add to Cart Form -->

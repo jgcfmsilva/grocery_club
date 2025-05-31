@@ -43,4 +43,29 @@ class SettingController extends Controller
 
         return redirect()->route('dashboard.settings.index')->with('success', 'Settings updated.');
     }
+
+    public function addShippingCost(Request $request)
+    {
+        $request->validate([
+            'min_value_threshold' => 'required|numeric|min:0',
+            'max_value_threshold' => 'required|numeric|min:0',
+            'shipping_cost' => 'required|numeric|min:0',
+        ]);
+
+        DB::table('settings_shipping_costs')->insert([
+            'min_value_threshold' => $request->input('min_value_threshold'),
+            'max_value_threshold' => $request->input('max_value_threshold'),
+            'shipping_cost' => $request->input('shipping_cost'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('dashboard.settings.index')->with('success', 'Shipping cost added.');
+    }
+
+    public function deleteShippingCost($id)
+    {
+        DB::table('settings_shipping_costs')->where('id', $id)->delete();
+        return redirect()->route('dashboard.settings.index')->with('success', 'Shipping cost deleted.');
+    }
 }

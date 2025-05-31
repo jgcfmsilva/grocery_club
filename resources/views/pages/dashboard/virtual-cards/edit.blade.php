@@ -13,7 +13,6 @@
         </div>
         <form method="POST" action="#">
             @csrf
-            {{-- Adapte o action para a rota de update se necessário --}}
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Card Number</label>
                 <input type="text" name="card_number" value="{{ $card->card_number }}" class="w-full border rounded px-3 py-2" disabled>
@@ -26,7 +25,7 @@
                 <label class="block font-semibold mb-1">Balance</label>
                 <input type="text" name="balance" value="{{ number_format($card->balance, 2, ',', '.') }}" class="w-full border rounded px-3 py-2" disabled>
             </div>
-            {{-- Adicione campos editáveis conforme necessário --}}
+
             <div class="flex justify-end">
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow">Save Changes</button>
             </div>

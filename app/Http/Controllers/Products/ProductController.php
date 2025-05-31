@@ -20,11 +20,46 @@ class ProductController extends Controller
             $query->where('category_id', $request->category_id);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        // Filtro por faixa de preço
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->input('min_price'));
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->input('max_price'));
+        }
+
+        // Ordenação flexível
+        $sort = $request->input('sort', 'name_asc');
+        switch ($sort) {
+            case 'name_desc':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
         $products = $query->whereNull('deleted_at')->paginate(12);
 
         $categories = Category::all();
 
-        return view('pages.products.index', compact('products', 'categories'));
+        return view('pages.products.index', [
+            'products' => $products,
+            'categories' => $categories,
+            'sort' => $sort,
+            'min_price' => $request->input('min_price'),
+            'max_price' => $request->input('max_price'),
+        ]);
     }
 
     /**
@@ -32,13 +67,7 @@ class ProductController extends Controller
     */
     public function show(Product $product)
     {
-        $recommendedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->inRandomOrder()
-            ->take(7)
-            ->get();
-
-        return view('pages.products.product-page', compact('product', 'recommendedProducts'));
+        return view('pages.products.product-page', compact('product'));
     }
 
     /**

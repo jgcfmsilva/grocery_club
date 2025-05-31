@@ -6,7 +6,6 @@
 <div class="w-full px-0">
     <h1 class="text-2xl font-bold mb-8">Settings</h1>
 
-    {{-- Membership Fee --}}
     <div class="bg-white rounded-xl shadow p-6 mb-10 w-full">
         <h2 class="text-lg font-semibold mb-4">Membership Fee (€)</h2>
         <form action="{{ route('dashboard.settings.update') }}" method="POST" class="flex flex-col md:flex-row gap-6 items-end">
@@ -22,10 +21,18 @@
 
     <div class="bg-white rounded-xl shadow p-6 w-full">
         <h2 class="text-lg font-semibold mb-4">Shipping Costs</h2>
+        <form action="{{ route('dashboard.settings.shipping-cost.add') }}" method="POST" class="flex flex-wrap gap-4 mb-6 items-end">
+            @csrf
+            <input type="number" min="0" step="1" name="min_value_threshold" placeholder="Min Value (€)" class="border rounded px-3 py-2" required>
+            <input type="number" min="0" step="1" name="max_value_threshold" placeholder="Max Value (€)" class="border rounded px-3 py-2" required>
+            <input type="number" min="0" step="1" name="shipping_cost" placeholder="Shipping Cost (€)" class="border rounded px-3 py-2" required>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow font-semibold cursor-pointer">
+                Add
+            </button>
+        </form>
         <table class="min-w-full text-sm text-center bg-white border border-gray-200 rounded mb-6">
             <thead class="bg-gray-200">
                 <tr>
-                    <th class="px-4 py-2">ID</th>
                     <th class="px-4 py-2">Min Value (€)</th>
                     <th class="px-4 py-2">Max Value (€)</th>
                     <th class="px-4 py-2">Shipping Cost (€)</th>
@@ -36,17 +43,23 @@
             <tbody>
                 @foreach($shippingCosts as $cost)
                 <tr>
-                    <td class="px-4 py-2">{{ $cost->id }}</td>
                     <td class="px-4 py-2">{{ number_format($cost->min_value_threshold, 2, ',', '') }}</td>
                     <td class="px-4 py-2">{{ number_format($cost->max_value_threshold, 2, ',', '') }}</td>
                     <td class="px-4 py-2">{{ number_format($cost->shipping_cost, 2, ',', '') }}</td>
                     <td class="px-4 py-2">{{ \Carbon\Carbon::parse($cost->updated_at)->format('d/m/Y H:i') }}</td>
-                    <td class="px-4 py-2">
+                    <td class="px-4 py-2 flex gap-2 justify-center">
                         <button type="button"
                             onclick="openEditShippingCost({{ $cost->id }}, '{{ $cost->min_value_threshold }}', '{{ $cost->max_value_threshold }}', '{{ $cost->shipping_cost }}')"
                             class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-semibold cursor-pointer">
                             Edit
                         </button>
+                        <form action="{{ route('dashboard.settings.shipping-cost.delete', $cost->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this shipping cost?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold cursor-pointer">
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
