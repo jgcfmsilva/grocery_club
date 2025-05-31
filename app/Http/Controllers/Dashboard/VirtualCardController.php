@@ -12,7 +12,6 @@ class VirtualCardController extends Controller
     {
         $query = Card::with(['user', 'operations']);
 
-        // Filtro por card_number ou nome do usuário
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -23,7 +22,6 @@ class VirtualCardController extends Controller
             });
         }
 
-        // Ordenação dinâmica
         $sortable = [
             'card_number' => 'card_number',
             'owner' => 'owner',
@@ -35,12 +33,10 @@ class VirtualCardController extends Controller
 
         if (array_key_exists($sort, $sortable)) {
             if ($sort === 'owner') {
-                // Usa join para ordenar por nome do utilizador
                 $query->join('users', 'cards.id', '=', 'users.id')
                       ->orderBy('users.name', $direction)
                       ->select('cards.*');
             } elseif ($sort === 'last_transaction') {
-                // Ordena por data da última operação usando relacionamento
                 $query->withMax('operations', 'created_at');
                 $query->orderBy('operations_max_created_at', $direction);
             } else {
