@@ -7,7 +7,7 @@
         <!-- User Avatar and Dropdown Button -->
         <div class="relative">
             <button id="user-avatar-btn" class="p-1 rounded-full transition duration-200 ease-in-out focus:outline-none cursor-pointer">
-                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="User Image" class="w-11 h-11 rounded-full ring-2 ring-blue-500 hover:ring-white">
+                <img src="{{ asset('storage/users/' . auth()->user()->photo) }}" alt="User Image" class="w-13 h-13 rounded-full hover:ring-2 hover:ring-white">
             </button>
         
             <div id="user-dropdown" class="absolute right-0 mt-3 w-60 bg-gray-800 rounded-lg shadow-lg opacity-0 scale-95 transition-all duration-300 ease-in-out z-50 pointer-events-none">

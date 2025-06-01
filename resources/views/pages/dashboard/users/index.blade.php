@@ -3,8 +3,13 @@
 @section('title', 'Users')
 
 @section('content')
-<div class="w-full px-0">
-    <h1 class="text-2xl font-bold mb-8">Users</h1>
+<div class="container mx-auto">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold">Users</h1>
+        <a href="{{ route('dashboard.users.create') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl shadow-md font-semibold text-md">
+            <i class="fas fa-plus mr-2"></i> Create User
+        </a>
+    </div>
 
     <!-- Filters -->
     <div class="bg-gray-800 p-5 rounded-xl shadow-lg mb-6">
@@ -78,6 +83,7 @@
                     <th class="border border-gray-300 px-4 py-3 font-bold text-gray-700">{!! sort_link_user('Email', 'email') !!}</th>
                     <th class="border border-gray-300 px-4 py-3 font-bold text-gray-700">{!! sort_link_user('Role', 'type') !!}</th>
                     <th class="border border-gray-300 px-4 py-3 font-bold text-gray-700">{!! sort_link_user('Status', 'status') !!}</th>
+                    <th class="border border-gray-300 px-4 py-3 font-bold text-gray-700">Email Verified</th>
                     <th class="border border-gray-300 px-4 py-3 font-bold text-gray-700">Actions</th>
                 </tr>
             </thead>
@@ -85,7 +91,11 @@
                 @forelse($users as $user)
                 <tr class="hover:bg-gray-50">
                     <td class="border border-gray-300 px-4 py-2">{{ $user->id }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ $user->name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <a href="{{ route('dashboard.users.show', $user->id) }}" class="text-blue-700 hover:underline">
+                            {{ $user->name }}
+                        </a>
+                    </td>
                     <td class="border border-gray-300 px-4 py-2">{{ $user->email }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         @if($user->isBoard())
@@ -108,9 +118,16 @@
                         @endif
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
+                        @if($user->email_verified_at)
+                            <span class="text-green-600 font-bold">Yes</span>
+                        @else
+                            <span class="text-red-600 font-bold">No</span>
+                        @endif
+                    </td>
+                    <td class="border border-gray-300 px-4 py-2">
                         <div class="flex flex-wrap gap-2 justify-center">
                             @if(!$user->deleted_at)
-                                @if($user->isEmployee())
+                                @if($user->isEmployee() || $user->isMember() || $user->isPendingMember())
                                     <a href="{{ route('dashboard.users.edit', $user->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs flex items-center gap-1">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
@@ -167,7 +184,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="py-8 text-gray-500 text-lg">No users found.</td>
+                    <td colspan="7" class="py-8 text-gray-500 text-lg">No users found.</td>
                 </tr>
                 @endforelse
             </tbody>

@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container mx-auto">
-    <h1 class="text-2xl font-bold mb-6">Virtual Cards</h1>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Virtual Cards</h1>
+    </div>
 
     <div class="bg-white rounded-lg shadow-lg p-6 border-2 border-gray-300">
         <div class="flex justify-between items-center mb-6">

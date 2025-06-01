@@ -1,6 +1,6 @@
 <div class="w-64 bg-gray-800 text-white">
     <div class="p-4 mb-5">
-        <a href="{{ route('home') }}" class="logo">
+        <a href="{{ route('dashboard.index') }}" class="logo">
             <img src="{{ asset('assets/img/logo-dark.png') }}" alt="Logo Escuro"
                 class="img-fluid logo-dark d-none">
         </a>

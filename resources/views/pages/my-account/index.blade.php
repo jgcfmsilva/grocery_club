@@ -28,7 +28,7 @@
             <!-- Email -->
             <div>
                 <label class="block text-sm font-medium form-input-label">Email</label>
-                <input type="email" value="{{ auth()->user()->email }}" class="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 form-input-field py-2 px-4" disabled />
+                <input type="email" value="{{ auth()->user()->email }}" class="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 form-input-field py-2 px-4" disabled/>
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -42,7 +42,7 @@
                 <label class="block text-sm font-medium form-input-label mb-2">Profile Photo</label>
                 <div class="w-20 h-20 rounded-md overflow-hidden bg-gray-100 border-2 border-gray-300 flex items-center justify-center">
                     @if(auth()->user()->photo)
-                        <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Current Photo" class="w-full h-full object-cover rounded-md" />
+                        <img src="{{ asset('storage/users/' . auth()->user()->photo) }}" alt="Current Photo" class="w-full h-full object-cover rounded-md" />
                     @else
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A8.968 8.968 0 0112 15c2.221 0 4.243.815 5.879 2.153M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -68,8 +68,8 @@
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium form-input-label">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email', auth()->user()->email) }}" required
-                        class="mt-1 block w-full rounded-md border-2 border-gray-300 bg-white focus:ring-indigo-500 focus:border-indigo-500 form-input-field py-2 px-4" />
+                    <input type="email" id="email" name="email" value="{{ auth()->user()->email }}" readonly
+                        class="mt-1 block w-full rounded-md border-2 border-gray-300 bg-gray-100 cursor-not-allowed form-input-field py-2 px-4" />
                 </div>
             </div>
 
@@ -128,7 +128,7 @@
                 <div class="flex items-center space-x-4">
                     <div class="w-20 h-20 rounded-md overflow-hidden bg-gray-100 border-2 border-gray-300 flex items-center justify-center mr-4">
                         @if(auth()->user()->photo)
-                            <img id="photoPreview" src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Current Photo" class="w-full h-full object-cover rounded-md" />
+                            <img id="photoPreview" src="{{ asset('storage/users/' . auth()->user()->photo) }}" alt="Current Photo" class="w-full h-full object-cover rounded-md" />
                         @else
                             <svg id="photoPlaceholder" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A8.968 8.968 0 0112 15c2.221 0 4.243.815 5.879 2.153M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -143,7 +143,7 @@
                     </label>
                 </div>
 
-                <p class="mt-2 text-xs form-input-label">Choose an image up to 2MB.</p>
+                <p class="mt-2 text-xs form-input-label">Choose an image up to 5MB.</p>
             </div>
 
             <div class="pt-4">

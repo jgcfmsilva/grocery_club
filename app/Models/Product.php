@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\StockAdjustment;
+use Illuminate\Support\Facades\Cache;
 
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const CACHE_KEY_ALL = 'products:all';
+    public const CACHE_KEY_PAGE_PREFIX = 'products:page:';
+    public const CACHE_KEY_CATEGORY_PAGE = 'products:category';
 
     /**
      * The attributes that are mass assignable.
@@ -187,5 +192,15 @@ class Product extends Model
         }
         
         return asset('storage/products/' . $this->photo);
+    }
+
+    /**
+     * Get all products with Redis cache.
+     */
+    public static function allProducts()
+    {
+        return Cache::store('redis')->tags(['products'])->remember('products:all', 3600, function () {
+            return self::whereNull('deleted_at')->get();
+        });
     }
 }

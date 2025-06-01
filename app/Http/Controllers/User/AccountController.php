@@ -19,6 +19,7 @@ class AccountController extends Controller
 
     public function update(UpdateAccountRequest $request)
     {
+        $validated = $request->validated();
 
         if ($request->hasFile('photo')) {
             $newPhoto = $request->file('photo');
@@ -26,10 +27,9 @@ class AccountController extends Controller
             $currentFullPath = storage_path('app/public/' . $currentPhotoPath);
 
             if (!file_exists($currentFullPath) || md5_file($newPhoto->getRealPath()) !== md5_file($currentFullPath)) {
-                if ($currentPhotoPath && Storage::disk('public')->exists($currentPhotoPath)) {
-                    Storage::disk('public')->delete($currentPhotoPath);
+                if ($currentPhotoPath && \Storage::disk('public')->exists($currentPhotoPath)) {
+                    \Storage::disk('public')->delete($currentPhotoPath);
                 }
-
                 $photoPath = $newPhoto->store('users', 'public');
             } else {
                 $photoPath = $currentPhotoPath;
@@ -40,14 +40,14 @@ class AccountController extends Controller
 
         $user = authUser();
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'gender' => $request->gender,
-            'nif' => $request->nif,
-            'default_delivery_address' => $request->default_delivery_address,
-            'default_payment_type' => $request->default_payment_type,
-            'default_payment_reference' => $request->default_payment_reference,
-            'photo' => $photoPath,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'gender' => $validated['gender'],
+            'nif' => $validated['nif'] ?? null,
+            'default_delivery_address' => $validated['default_delivery_address'] ?? null,
+            'default_payment_type' => $validated['default_payment_type'] ?? null,
+            'default_payment_reference' => $validated['default_payment_reference'] ?? null,
+            'photo' => $photoPath ? basename($photoPath) : null,
         ]);
 
         flash()
@@ -61,10 +61,5 @@ class AccountController extends Controller
     public function showChangePassword()
     {
         return view('pages.my-account.change-password');
-    }
-
-    public function updatePassword(Request $request)
-    {
-        // Vai ser implementado mais tarde
     }
 }

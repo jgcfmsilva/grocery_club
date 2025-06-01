@@ -32,7 +32,7 @@ class RegisterUserRequest extends FormRequest
             'nif' => 'nullable|digits:9',
             'default_delivery_address' => 'nullable|string|max:255',
             'default_payment_type' => 'nullable|in:Visa,PayPal,MB WAY',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|max:5120',
         ];
     }
 

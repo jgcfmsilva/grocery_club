@@ -15,7 +15,7 @@
                 @include('layouts.partials.dashboard.topbar')
 
                 <!-- Content -->
-                <main class="flex-1 p-6">
+                <main class="flex-1 px-6 pb-8">
                     @yield('content')
                 </main>
 

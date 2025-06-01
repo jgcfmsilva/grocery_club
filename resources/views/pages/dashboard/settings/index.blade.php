@@ -3,8 +3,10 @@
 @section('title', 'Settings')
 
 @section('content')
-<div class="w-full px-0">
-    <h1 class="text-2xl font-bold mb-8">Settings</h1>
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Settings</h1>
+    </div>
 
     <div class="bg-white rounded-xl shadow p-6 mb-10 w-full">
         <h2 class="text-lg font-semibold mb-4">Membership Fee (€)</h2>

@@ -64,4 +64,23 @@ class VirtualCardController extends Controller
 
         return view('pages.dashboard.virtual-cards.edit', compact('card'));
     }
+
+    public function allTransactions(Request $request)
+    {
+        $query = \App\Models\CardOperation::with(['card.user', 'order']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('payment_reference', 'like', '%' . $search . '%')
+                  ->orWhereHas('card.user', function($q2) use ($search) {
+                      $q2->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $operations = $query->orderByDesc('created_at')->paginate(30)->appends($request->all());
+
+        return view('pages.dashboard.virtual-cards.transactions', compact('operations'));
+    }
 }

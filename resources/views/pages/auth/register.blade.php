@@ -134,7 +134,7 @@
                     </label>
                 </div>
 
-                <p class="mt-2 text-xs form-input-label">Choose an image up to 2MB.</p>
+                <p class="mt-2 text-xs form-input-label">Choose an image up to 5MB.</p>
             </div>
         </div>
 

@@ -33,6 +33,8 @@ Route::middleware(['auth','role:board,employee'])->group(function () {
         Route::middleware(['role:board'])->group(function () {
             Route::prefix('users')->name('users.')->group(function () {
                 Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/create', [UserController::class, 'create'])->name('create');
+                Route::post('/', [UserController::class, 'store'])->name('store');
                 Route::post('/{user}/promote', [UserController::class, 'promote'])->name('promote');
                 Route::post('/{user}/demote', [UserController::class, 'demote'])->name('demote');
                 Route::post('/{user}/block', [UserController::class, 'block'])->name('block');
@@ -41,6 +43,7 @@ Route::middleware(['auth','role:board,employee'])->group(function () {
                 Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
                 Route::put('/{user}', [UserController::class, 'update'])->name('update');
                 Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+                Route::get('/{user}/show', [UserController::class, 'show'])->name('show');
             });
         });
 
@@ -72,6 +75,7 @@ Route::middleware(['auth','role:board,employee'])->group(function () {
                 Route::get('/virtual-cards/create', [VirtualCardController::class, 'create'])->name('create');
                 Route::get('/{card}', [VirtualCardController::class, 'show'])->name('show');
                 Route::get('/{card}/edit', [VirtualCardController::class, 'edit'])->name('edit');
+                Route::get('/transactions/all', [VirtualCardController::class, 'allTransactions'])->name('transactions');
             });
         });
 

@@ -12,8 +12,8 @@
 
             @auth
                 @if (!auth()->user()->hasVerifiedEmail())
-                    <div class="container mt-3">
-                        <div class="alert alert-warning text-center mb-0" role="alert">
+                    <div class="mt-3 mx-[15%]">
+                        <div class="bg-yellow-100 py-3 rounded-lg border-2 border-yellow-200 text-center mb-0" role="alert">
                             Your email has not been confirmed yet.
                             <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                                 @csrf

@@ -21,7 +21,7 @@ class ProductRequest extends FormRequest
             'price' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'discount_min_qty' => 'nullable|integer|min:1',
             'discount' => 'nullable|numeric|min:0|lte:price|regex:/^\d+(\.\d{1,2})?$/',
             'stock_lower_limit' => 'required|integer|min:0',

@@ -34,20 +34,23 @@ class RegisterUserController extends Controller
      */
     public function register(RegisterUserRequest $request)
     {
+        $validated = $request->validated();
+
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('users', 'public');
+            $photoPath = basename($photoPath);
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'gender' => $request->gender,
-            'nif' => $request->nif,
-            'default_delivery_address' => $request->default_delivery_address,
-            'default_payment_type' => $request->default_payment_type,
-            'default_payment_reference' => $request->default_payment_reference,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'gender' => $validated['gender'],
+            'nif' => $validated['nif'] ?? null,
+            'default_delivery_address' => $validated['default_delivery_address'] ?? null,
+            'default_payment_type' => $validated['default_payment_type'] ?? null,
+            'default_payment_reference' => $validated['default_payment_reference'] ?? null,
             'photo' => $photoPath,
             'type' => UserType::PendingMember->value,
         ]);
@@ -68,7 +71,7 @@ class RegisterUserController extends Controller
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
-                ->error("Conta criada com sucesso, mas não foi possível enviar o email de verificação.\nErro: " . $e->getMessage());
+                ->error("Account created successfully, but the verification email could not be sent.\nError: " . $e->getMessage());
         }
 
         Auth::login($user);

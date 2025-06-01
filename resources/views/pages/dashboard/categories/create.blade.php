@@ -35,7 +35,7 @@
                 </label>
             </div>
 
-            <p class="mt-2 text-xs form-input-label">Choose an image up to 2MB.</p>
+            <p class="mt-2 text-xs form-input-label">Choose an image up to 5MB.</p>
         </div>
         <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow cursor-pointer">Save</button>
     </form>
