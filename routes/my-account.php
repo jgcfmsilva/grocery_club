@@ -59,6 +59,7 @@ Route::middleware(['auth','role:pending_member,member,board,employee'])->group(f
 
             // Statistics
             Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+            Route::get('/statistics/export', [StatisticsController::class, 'export'])->name('statistics.export');
         });
 
         // Change Password - todos podem aceder
