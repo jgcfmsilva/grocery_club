@@ -54,6 +54,14 @@
         </div>
     </div>
     <div class="custom-container" id="theme-container">
+        <div class="col-xxl-10 col-xl-9 col-md-9 col-7 flex justify-end md:hidden">
+            <button id="mobile-menu-toggle" class="text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
         <div class="mt-0 lg:-mt-8 bg-white rounded-full relative lg:ps-5 lg:pe-10">
             <div class="flex flex-wrap items-center">
                 <div class="col-xxl-2 col-xl-3 col-md-3 col-5">
@@ -145,4 +153,33 @@
             </div>
         </div>
     </div>
+
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-30 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <div class="p-4">
+            <button id="mobile-menu-close" class="mb-4 text-gray-700 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <nav>
+                <ul class="space-y-4">
+                    <li><a href="{{ route('products.index') }}" class="text-gray-900 text-lg font-semibold">Products</a></li>
+                    <!-- Repita outras opções do menu -->
+                    <li><a href="tel:{{ config('vars.contact_number') }}" class="block text-gray-900">Contact: {{ config('vars.contact_number') }}</a></li>
+                    <li><a href="mailto:{{ config('vars.email') }}" class="block text-gray-900">Email: {{ config('vars.email') }}</a></li>
+                    <!-- Você pode adicionar o restante dos links do header -->
+                </ul>
+            </nav>
+        </div>
+    </div>
 </header>
+
+<script>
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.remove('-translate-x-full');
+    });
+
+    document.getElementById('mobile-menu-close').addEventListener('click', function() {
+        document.getElementById('mobile-menu').classList.add('-translate-x-full');
+    });
+</script>

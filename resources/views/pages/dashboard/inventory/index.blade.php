@@ -9,28 +9,28 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="mb-4 flex justify-between items-center">
-            <form method="GET" action="{{ route('dashboard.inventory.index') }}" class="flex gap-2">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product..." class="border rounded px-3 py-2" />
-                <select name="stock_filter" class="border rounded px-3 py-2">
+        <div class="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <form method="GET" action="{{ route('dashboard.inventory.index') }}" class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product..." class="border rounded px-3 py-2 flex-1 min-w-0" />
+                <select name="stock_filter" class="border rounded px-3 py-2 flex-1 min-w-0">
                     <option value="">All Stock</option>
                     <option value="out" {{ request('stock_filter') == 'out' ? 'selected' : '' }}>Out of Stock</option>
                     <option value="below_min" {{ request('stock_filter') == 'below_min' ? 'selected' : '' }}>Below Minimum</option>
                     <option value="high" {{ request('stock_filter') == 'high' ? 'selected' : '' }}>High Stock</option>
                 </select>
-                <button type="submit" class="bg-gray-700 text-white px-4 py-2 rounded flex items-center gap-2 cursor-pointer">
+                <button type="submit" class="bg-gray-700 text-white px-4 py-2 rounded flex items-center gap-2 cursor-pointer flex-shrink-0">
                     <i class="fas fa-search text-white"></i>
                     Search
                 </button>
             </form>
-            <div class="flex gap-2">
+            <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto justify-end">
                 @if(!isEmployee())
-                <a href="{{ route('dashboard.products.create') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm">
+                <a href="{{ route('dashboard.products.create') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm text-center">
                     Add Product
                 </a>
                 @endif
                 @if(isEmployee() || isBoard())
-                <a href="{{ route('dashboard.inventory.supply-orders.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-sm">
+                <a href="{{ route('dashboard.inventory.supply-orders.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-sm text-center">
                     Supply Orders
                 </a>
                 @endif

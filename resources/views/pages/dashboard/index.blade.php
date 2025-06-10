@@ -13,7 +13,7 @@
             <h2 class="text-xl font-semibold mb-4">Business Insights</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Transaction Records -->
-                <div class="bg-gray-50 rounded-lg p-6 shadow hover:bg-blue-50">
+                <div class="bg-blue-100 border-2 border-blue-200 rounded-lg p-6 shadow hover:bg-blue-200 transition">
                     <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
                         <i class="fas fa-exchange-alt text-blue-600"></i> Transaction Records
                     </h3>
@@ -23,16 +23,16 @@
                     <div class="text-gray-600 text-sm mb-2">
                         Total number of credit and debit operations processed by the platform, including all user payments, top-ups, and refunds.
                     </div>
-                    <div class="flex gap-2 mt-2">
-                    <a href="{{ route('dashboard.virtual-cards.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1">
-                        <i class="fas fa-credit-card"></i>
-                        Users Transactions
-                    </a>
-                    <a href="{{ route('dashboard.virtual-cards.transactions') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1">
-                        <i class="fas fa-list"></i>
-                        All Transactions
-                    </a>
-                </div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <a href="{{ route('dashboard.virtual-cards.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1">
+                            <i class="fas fa-credit-card"></i>
+                            Users Transactions
+                        </a>
+                        <a href="{{ route('dashboard.virtual-cards.transactions') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1">
+                            <i class="fas fa-list"></i>
+                            All Transactions
+                        </a>
+                    </div>
                     <div class="text-xs text-gray-500 mt-2">
                         Last transaction: 
                         @php
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <!-- Sales Performance -->
-                <div class="bg-gray-50 rounded-lg p-6 shadow hover:bg-green-50 transition">
+                <div class="bg-green-100 border-2 border-green-200 rounded-lg p-6 shadow hover:bg-green-200 transition">
                     <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
                         <i class="fas fa-chart-line text-green-600"></i> Sales Performance
                     </h3>
@@ -81,12 +81,12 @@
                     </div>
                 </div>
                 <!-- Membership Trends -->
-                <div class="bg-gray-50 rounded-lg p-6 shadow hover:bg-purple-50 transition flex flex-col">
+                <div class="bg-purple-100 border-2 border-purple-200 rounded-lg p-6 shadow hover:bg-purple-200 transition flex flex-col">
                     <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
                         <i class="fas fa-users text-purple-600"></i> Membership Trends
                     </h3>
                     <div class="flex flex-col md:flex-row gap-6 mb-2">
-                        <div>
+                        <div class="flex-1">
                             <div class="text-3xl font-bold text-purple-700 mb-1">
                                 {{ \App\Models\User::where('type', \App\Enums\UserType::Member)->count() }}
                             </div>
@@ -94,7 +94,7 @@
                                 Active members
                             </div>
                         </div>
-                        <div>
+                        <div class="flex-1">
                             @php
                                 $membershipFee = \DB::table('settings')->value('membership_fee') ?? 0;
                                 $membershipsAll = \App\Models\User::where('type', \App\Enums\UserType::Member);
@@ -113,7 +113,7 @@
                                 <li>All Time: <span class="font-semibold">{{ number_format($membershipsTotal * $membershipFee, 2, ',', '.') }}€</span></li>
                             </ul>
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <div class="font-semibold mb-1 text-sm text-purple-800">New Members</div>
                             <ul class="text-xs text-gray-700 space-y-1">
                                 <li>
@@ -143,15 +143,15 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="mt-2 flex gap-2">
-                        <a href="{{ route('dashboard.memberships.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1 w-auto min-w-[120px] justify-center">
+                    <div class="mt-2 flex flex-col sm:flex-row gap-2">
+                        <a href="{{ route('dashboard.memberships.index') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow text-xs font-semibold flex items-center gap-1 w-full sm:w-auto min-w-[120px] justify-center">
                             <i class="fas fa-id-card"></i>
                             View Memberships
                         </a>
                     </div>
                 </div>
                 <!-- Other Key Metrics -->
-                <div class="bg-gray-50 rounded-lg p-6 shadow hover:bg-orange-50 transition">
+                <div class="bg-orange-100 border-2 border-orange-200 rounded-lg p-6 shadow hover:bg-orange-200 transition">
                     <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
                         <i class="fas fa-info-circle text-orange-600"></i> Other Key Metrics
                     </h3>

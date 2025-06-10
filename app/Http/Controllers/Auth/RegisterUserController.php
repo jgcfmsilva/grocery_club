@@ -65,6 +65,8 @@ class RegisterUserController extends Controller
             'balance' => 0,
         ]);
 
+        Auth::login($user);
+
         try {
             event(new Registered($user));
         } catch (\Exception $e) {
@@ -73,8 +75,6 @@ class RegisterUserController extends Controller
                 ->option('timeout', 3000)
                 ->error("Account created successfully, but the verification email could not be sent.\nError: " . $e->getMessage());
         }
-
-        Auth::login($user);
 
         return redirect(RouteServiceProvider::MYACCOUNT);
     }

@@ -18,7 +18,6 @@ class ProductController extends Controller
         $hasFilters = $request->filled(['category_id', 'search', 'min_price', 'max_price', 'sort']);
         $sort = $request->input('sort', 'name_asc');
         
-        // Corrigido: o search deve ser considerado filtro mesmo se for o único parâmetro
         $filters = ['category_id', 'search', 'min_price', 'max_price', 'sort'];
         $hasFilters = false;
         foreach ($filters as $filter) {
@@ -39,7 +38,6 @@ class ProductController extends Controller
                     ->paginate(12);
             });
         } else {
-            // Query dinâmica sem cache
             $query = Product::with('category')->whereNull('deleted_at');
 
             if ($request->filled('category_id')) {

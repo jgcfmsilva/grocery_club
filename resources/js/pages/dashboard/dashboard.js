@@ -14,16 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
             .addClass('border rounded px-3 py-2 w-full border-gray-800 focus:ring focus:ring-blue-200');
     });
 
-    // Dropdown de avatar
+    // Dropdown desktop (hover)
     const avatarBtn = document.getElementById('user-avatar-btn');
     const dropdown = document.getElementById('user-dropdown');
 
-    avatarBtn.addEventListener('mouseenter', () => {
+    avatarBtn?.addEventListener('mouseenter', () => {
         dropdown.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
         dropdown.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
     });
 
-    avatarBtn.addEventListener('mouseleave', () => {
+    avatarBtn?.addEventListener('mouseleave', () => {
         setTimeout(() => {
             if (!dropdown.matches(':hover')) {
                 dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
@@ -32,9 +32,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 100);
     });
 
-    dropdown.addEventListener('mouseleave', () => {
+    dropdown?.addEventListener('mouseleave', () => {
         dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
         dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+    });
+
+    // Dropdown mobile (click toggle)
+    const avatarBtnMobile = document.getElementById('user-avatar-btn-mobile');
+    const dropdownMobile = document.getElementById('user-dropdown-mobile');
+
+    avatarBtnMobile?.addEventListener('click', () => {
+        const isOpen = !dropdownMobile.classList.contains('opacity-0');
+        if (isOpen) {
+            dropdownMobile.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            dropdownMobile.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+        } else {
+            dropdownMobile.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            dropdownMobile.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+        }
+    });
+
+    // Fecha o dropdown mobile ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (avatarBtnMobile && dropdownMobile) {
+            if (!avatarBtnMobile.contains(e.target) && !dropdownMobile.contains(e.target)) {
+                dropdownMobile.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                dropdownMobile.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            }
+        }
     });
 
     // Modais de cancelamento

@@ -4,13 +4,13 @@
         @include('layouts.partials.dashboard.head')
         @livewireStyles
     </head>
-    <body class="bg-gray-100 text-gray-900 h-full overflow-hidden">
-        <div class="flex h-full">
+    <body class="bg-gray-100 text-gray-900 h-full">
+        <div class="h-full lg:flex">
             <!-- Sidebar -->
             @include('layouts.partials.dashboard.sidebar')
 
             <!-- Main -->
-            <div class="flex-1 flex flex-col overflow-auto">
+            <div class="flex-1 lg:flex-1 w-full flex flex-col overflow-auto">
                 <!-- Top Bar -->
                 @include('layouts.partials.dashboard.topbar')
 

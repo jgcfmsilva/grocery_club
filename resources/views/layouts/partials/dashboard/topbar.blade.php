@@ -1,4 +1,4 @@
-<header class="bg-gray-800 shadow-lg p-2 flex items-center justify-between space-x-6 border-b border-gray-200 m-5 rounded-2xl">
+<header class="hidden lg:flex bg-gray-800 shadow-lg p-2 flex items-center justify-between space-x-6 border-b border-gray-200 m-5 rounded-2xl">
     <!-- Left Side: Dashboard Title -->
     <div class="text-xl font-semibold text-white px-5">Dashboard</div>
 

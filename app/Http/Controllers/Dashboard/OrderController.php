@@ -143,10 +143,10 @@ class OrderController extends Controller
                 $user = $order->member;
                 if ($user && $user->email && $order->pdf_receipt) {
                     Mail::to($user->email)
-                        ->send(new OrderCompletedMail($order));
+                        ->queue(new OrderCompletedMail($order));
                 }
             } catch (\Exception $e) {
-                \Log::error('Failed to send completed order email: ' . $e->getMessage());
+                \Log::error('Failed to queue completed order email: ' . $e->getMessage());
             }
 
             DB::commit();

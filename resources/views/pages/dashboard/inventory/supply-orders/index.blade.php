@@ -4,37 +4,37 @@
 
 @section('content')
 <div class="w-full px-0">
-    <div class="flex justify-between items-center mb-8 w-full">
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 w-full gap-4">
         <div class="flex items-center gap-6">
             <a href="{{ route('dashboard.inventory.index') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow text-sm flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i> Back
             </a>
             <h1 class="text-3xl font-bold">Supply Orders</h1>
         </div>
-        <a href="{{ route('dashboard.inventory.supply-orders.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-base font-semibold flex items-center gap-2">
+        <a href="{{ route('dashboard.inventory.supply-orders.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg shadow text-base font-semibold flex items-center gap-2 text-center">
             <i class="fas fa-plus"></i>
             Create Supply Order
         </a>
     </div>
-    <div class="bg-white rounded-2xl shadow-lg p-8 w-full">
+    <div class="bg-white rounded-2xl shadow-lg p-4 md:p-8 w-full">
         <div class="overflow-x-auto rounded-t-lg w-full">
             <table class="min-w-full w-full text-sm text-center text-gray-700 border-r-2 border-l-2 border-b-2 border-gray-800">
                 <thead class="bg-gray-800 text-xs uppercase tracking-wider text-white">
                     <tr>
-                        <th class="px-4 py-3 text-gr">ID</th>
-                        <th class="px-4 py-3">Status</th>
-                        <th class="px-4 py-3">Created By</th>
-                        <th class="px-4 py-3">Created At</th>
-                        <th class="px-4 py-3">Quantity</th>
-                        <th class="px-4 py-3">Product</th>
-                        <th class="px-4 py-3">Actions</th>
+                        <th class="px-2 md:px-4 py-3 text-gr">ID</th>
+                        <th class="px-2 md:px-4 py-3">Status</th>
+                        <th class="px-2 md:px-4 py-3">Created By</th>
+                        <th class="px-2 md:px-4 py-3">Created At</th>
+                        <th class="px-2 md:px-4 py-3">Quantity</th>
+                        <th class="px-2 md:px-4 py-3">Product</th>
+                        <th class="px-2 md:px-4 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($supplyOrders as $order)
                         <tr class="border-b hover:bg-gray-50 transition">
-                            <td class="px-4 py-3 font-semibold">{{ $order->id }}</td>
-                            <td class="px-4 py-3">
+                            <td class="px-2 md:px-4 py-3 font-semibold">{{ $order->id }}</td>
+                            <td class="px-2 md:px-4 py-3">
                                 <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold
                                     @if($order->status === 'completed') bg-green-100 text-green-800
                                     @elseif($order->status === 'requested') bg-yellow-100 text-yellow-800
@@ -44,10 +44,10 @@
                                     {{ ucfirst($order->status) }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3">{{ optional($order->registeredBy)->name ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                            <td class="px-4 py-3">{{ $order->quantity }}</td>
-                            <td class="px-4 py-3">
+                            <td class="px-2 md:px-4 py-3">{{ optional($order->registeredBy)->name ?? '-' }}</td>
+                            <td class="px-2 md:px-4 py-3">{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                            <td class="px-2 md:px-4 py-3">{{ $order->quantity }}</td>
+                            <td class="px-2 md:px-4 py-3">
                                 @if($order->product)
                                     <a href="{{ route('dashboard.products.show', $order->product->id) }}"
                                        class="text-blue-700 hover:underline font-semibold flex items-center gap-1 justify-center">
@@ -58,7 +58,7 @@
                                     <span class="text-gray-400">-</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 flex flex-wrap gap-2 justify-center">
+                            <td class="px-2 md:px-4 py-3 flex flex-wrap gap-2 justify-center">
                                 <a href="{{ route('dashboard.inventory.supply-orders.show', $order->id) }}"
                                    class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-xs flex items-center gap-1">
                                     <i class="fas fa-eye"></i> View

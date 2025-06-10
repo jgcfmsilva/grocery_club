@@ -16,7 +16,7 @@
         @csrf
 
         <!-- General Information -->
-        <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
                 <label for="name" class="block text-sm font-medium">Name</label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}" class="border border-gray-300 rounded px-4 py-2 w-full" required>
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Stock Information -->
-        <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
                 <label for="stock" class="block text-sm font-medium">Stock</label>
                 <input type="number" name="stock" id="stock" min="0"value="{{ old('stock') }}" class="border border-gray-300 rounded px-4 py-2 w-full" required>
@@ -52,7 +52,7 @@
         </div>
 
         <!-- Discount Information -->
-        <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
                 <label for="discount" class="block text-sm font-medium">Discount (€)</label>
                 <input type="number" name="discount" id="discount" value="{{ old('discount') }}" min="0" step="0.01" class="border border-gray-300 rounded px-4 py-2 w-full">
@@ -72,21 +72,18 @@
         <!-- Image Upload -->
         <div class="mb-8">
             <label for="photo" class="block text-sm font-medium form-input-label mb-2">Image</label>
-
-            <div class="flex items-center space-x-4">
-                <div class="w-20 h-20 rounded-md overflow-hidden bg-gray-100 border-2 border-gray-300 flex items-center justify-center mr-4">
+            <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="w-20 h-20 rounded-md overflow-hidden bg-gray-100 border-2 border-gray-300 flex items-center justify-center mr-0 sm:mr-4">
                     <img id="photoPreview" src="#" alt="Image Preview" class="w-full h-full object-cover rounded-md hidden" />
                     <div id="photoPlaceholder" class="w-full h-full flex items-center justify-center bg-gray-200">
                         <span class="text-gray-400 text-sm">Image</span>
                     </div>
                 </div>
-
                 <label for="photo" class="bg-gray-800 inline-flex items-center gap-2 cursor-pointer text-sm font-medium text-white px-4 py-2 rounded-lg shadow-sm transition">
                     <span>Select Image</span>
                     <input type="file" name="photo" id="photo" accept=".jpeg, .jpg, .png" class="hidden" onchange="previewImage(event)" />
                 </label>
             </div>
-
             <p class="mt-2 text-xs form-input-label">Choose an image up to 5MB.</p>
         </div>
 
