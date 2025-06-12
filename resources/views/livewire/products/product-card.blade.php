@@ -1,5 +1,5 @@
-<div class="col-md-3 mb-4">
-    <div class="card h-100 shadow-lg flex flex-col">
+<div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+    <div class="card h-100 shadow-lg flex flex-col w-full">
         <div class="relative">
             @if($product->discount && $product->discount > 0 && $product->discount_min_qty && $product->discount_min_qty > 0)
                 @php

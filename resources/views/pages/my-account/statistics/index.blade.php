@@ -217,7 +217,9 @@
                     <div class="w-full flex flex-col md:flex-row gap-6 mb-2">
                         <div class="flex-1 bg-white rounded-xl shadow p-4 flex items-center justify-center min-h-[180px]">
                             @if($hasCardOps)
-                                <canvas id="cardTypePieChart" height="120"></canvas>
+                                <div class="w-full h-full" style="min-width:0;">
+                                    <canvas id="cardTypePieChart" height="120" style="width:100%;max-width:100%;"></canvas>
+                                </div>
                             @else
                                 <div class="text-gray-400 text-center w-full py-8 border-2 border-gray-500 border-dashed">
                                     No virtual card transactions found.
@@ -226,7 +228,9 @@
                         </div>
                         <div class="flex-1 bg-white rounded-xl shadow p-4 flex items-center justify-center min-h-[180px]">
                             @if($hasCardOps)
-                                <canvas id="cardStatsBarChart" height="180"></canvas>
+                                <div class="w-full h-full" style="min-width:0;">
+                                    <canvas id="cardStatsBarChart" height="180" style="width:100%;max-width:100%;"></canvas>
+                                </div>
                             @else
                                 <div class="text-gray-400 text-center w-full py-8 border-2 border-gray-500 border-dashed">
                                     No virtual card transactions found.

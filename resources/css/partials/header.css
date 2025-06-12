@@ -448,10 +448,3 @@
     visibility: visible;
     top: 100%;
 }
-
-@media (max-width: 767.98px) {
-    /* Ajustes para o header topo */
-    .topbar-info {
-        display: none !important; /* Esconde a top bar em mobile */
-    }
-}

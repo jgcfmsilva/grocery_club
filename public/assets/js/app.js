@@ -146,22 +146,13 @@ jQuery(function ($) {
         if (theme === "dark") {
             $(".logo-light").addClass("d-none");
             $(".logo-dark").removeClass("d-none");
+            $('#mobile-theme-light').addClass('hidden');
+            $('#mobile-theme-dark').removeClass('hidden');
         } else {
             $(".logo-dark").addClass("d-none");
             $(".logo-light").removeClass("d-none");
-        }
-    }
-
-    function updateLogoByTheme() {
-        var theme = document
-            .querySelector(":root")
-            .getAttribute("data-bs-theme");
-        if (theme === "dark") {
-            $(".logo-light").addClass("d-none");
-            $(".logo-dark").removeClass("d-none");
-        } else {
-            $(".logo-dark").addClass("d-none");
-            $(".logo-light").removeClass("d-none");
+            $('#mobile-theme-light').removeClass('hidden');
+            $('#mobile-theme-dark').addClass('hidden');
         }
     }
 
@@ -174,14 +165,12 @@ jQuery(function ($) {
             wrapper.setAttribute("data-bs-theme", "light");
             localStorage.setItem("theme", "light");
         }
-
         updateLogoByTheme();
     };
     var toggleDarkMode = () => {
         var theme = document
             .querySelector(":root")
             .getAttribute("data-bs-theme");
-        // If the current theme is "light", we want to activate dark
         setDarkMode(theme === "light");
     };
     var initDarkMode = () => {
@@ -191,9 +180,27 @@ jQuery(function ($) {
         } else {
             setDarkMode(false);
         }
-        var toggleButton = document.querySelector(".tt-theme-toggle");
-        toggleButton && toggleButton.addEventListener("click", toggleDarkMode);
+        // Both desktop and mobile theme toggles
+        document.querySelectorAll(".tt-theme-toggle").forEach(function(toggleButton) {
+            toggleButton.addEventListener("click", toggleDarkMode);
+        });
     };
     initDarkMode();
     updateLogoByTheme();
+
+    // --- HEADER MOBILE HAMBURGER MENU JS ---
+    const openBtn = document.getElementById('mobile-hamburger-btn');
+    const closeBtn = document.getElementById('mobile-hamburger-close');
+    const menu = document.getElementById('mobile-hamburger-menu');
+    openBtn?.addEventListener('click', function() {
+        menu.classList.remove('hidden');
+    });
+    closeBtn?.addEventListener('click', function() {
+        menu.classList.add('hidden');
+    });
+    menu?.addEventListener('click', function(e) {
+        if (e.target === menu) {
+            menu.classList.add('hidden');
+        }
+    });
 });

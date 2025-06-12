@@ -73,14 +73,16 @@
                         </td>
                         <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">
                             {{ $item->quantity }}
-                            @if($item->product->stock >= $item->quantity)
-                                <span class="ml-2 text-green-400" title="Sufficient stock">
-                                    <i class="fas fa-check-circle"></i>
-                                </span>
-                            @else
-                                <span class="ml-2 text-red-400" title="Insufficient stock">
-                                    <i class="fas fa-times-circle"></i>
-                                </span>
+                            @if($order->isPending())
+                                @if($item->product->stock >= $item->quantity)
+                                    <span class="ml-2 text-green-400" title="Sufficient stock">
+                                        <i class="fas fa-check-circle"></i>
+                                    </span>
+                                @else
+                                    <span class="ml-2 text-red-400" title="Insufficient stock">
+                                        <i class="fas fa-times-circle"></i>
+                                    </span>
+                                @endif
                             @endif
                         </td>
                         <td class="border border-gray-600 px-6 py-4 text-md text-gray-300">{{ number_format($item->unit_price, 2, ',', '') }}€</td>
