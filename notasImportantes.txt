@@ -4,7 +4,13 @@
     - abrir docker
 	- terminal na pasta do projeto:
 			 -> sail up -d
-			 -> ./vendor/bin/sail artisan queue:work
+			 -> sail artisan queue:work --queue=emails
 			 -> npm run dev
+
+. testar cache: (redis)
+	- terminal na pasta do projeto:
+			 -> sail artisan tinker
+	- shell:
+			-> cache()->put('teste_redis', 'ok', 60); cache()->get('teste_redis');
 
 
