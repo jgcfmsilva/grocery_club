@@ -10,5 +10,9 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
     use Queueable;
 
-    public $queue = 'emails';
+    public function __construct(...$args)
+    {
+        parent::__construct(...$args);
+        $this->onQueue('emails');
+    }
 }
