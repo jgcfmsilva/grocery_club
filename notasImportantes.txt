@@ -1,14 +1,16 @@
-========================== windows ==========================
+=========== DEFESA ===========
 
-correr o projeto: 
-	1 -> correr powershell como admin
-	2 -> wsl
-	3 -> cd ../../../d/uni/2ano/2semestre/ainet/proj/grocery-club/
-	4 -> alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
-	5 -> sail up -d
-	6 -> npm run build
+. correr com o projeto:
+    - abrir docker
+	- terminal na pasta do projeto:
+			 -> sail up -d
+			 -> sail artisan queue:work --queue=emails
+			 -> npm run dev
 
-parar o projeto:
-	1 -> sail stop (se for o down da merda)
+. testar cache: (redis)
+	- terminal na pasta do projeto:
+			 -> sail artisan tinker
+	- shell:
+			-> cache()->put('teste_redis', 'ok', 60); cache()->get('teste_redis');
 
-========================== windows ==========================
+
