@@ -4,6 +4,8 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class RegisterUserRequest extends FormRequest
 {
@@ -30,7 +32,7 @@ class RegisterUserRequest extends FormRequest
             'nif' => 'nullable|digits:9',
             'default_delivery_address' => 'nullable|string|max:255',
             'default_payment_type' => 'nullable|in:Visa,PayPal,MB WAY',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|max:5120',
         ];
     }
 
@@ -56,5 +58,19 @@ class RegisterUserRequest extends FormRequest
         ], function ($input) {
             return $input->default_payment_type === 'MB WAY';
         });
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }

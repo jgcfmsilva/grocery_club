@@ -5,6 +5,8 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ResetPasswordRequest extends FormRequest
 {
@@ -47,5 +49,19 @@ class ResetPasswordRequest extends FormRequest
             'password.confirmed' => 'The passwords do not match.',
             'password.min' => 'The password needs to be at least 8 characters.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }

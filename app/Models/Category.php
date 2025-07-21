@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const CACHE_KEY_ALL = 'categories:all';
+
 
     /**
      * The attributes that are mass assignable.
@@ -47,7 +51,9 @@ class Category extends Model
      */
     public static function allCategories()
     {
-        return self::all();
+        return Cache::store('redis')->tags(['categories'])->remember('categories:all', 3600, function () {
+            return self::whereNull('deleted_at')->get();
+        });
     }
 
     /**
@@ -72,7 +78,7 @@ class Category extends Model
     public function getImageUrlAttribute(): ?string
     {
         if (!$this->image) {
-            return null;
+            return asset('storage/categories/category_no_image.png');
         }
         
         return asset('storage/categories/' . $this->image);

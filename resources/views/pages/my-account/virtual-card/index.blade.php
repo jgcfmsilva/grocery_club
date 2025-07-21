@@ -1,7 +1,9 @@
 @extends('layouts.pages.my-account.layout')
 
+@section('title', 'My Account - Virtual Card')
+
 @section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-4">Virtual Card</h4>
+    <h3 class="text-3xl font-bold text-gray-800 mb-4">Virtual Card</h3>
 
     <div class="container mx-auto px-4 sm:px-6 py-6">
         <div class="flex flex-col lg:flex-row gap-8 items-start">

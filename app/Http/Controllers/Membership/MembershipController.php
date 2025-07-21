@@ -20,7 +20,9 @@ class MembershipController extends Controller
 
         $this->authorize('view', $user);
 
-        return view('pages.my-account.membership.index');
+        $membershipFee = DB::table('settings')->value('membership_fee') ?? 0;
+
+        return view('pages.my-account.membership.index', compact('membershipFee'));
     }
 
     public function pay()
@@ -29,7 +31,15 @@ class MembershipController extends Controller
 
         $this->authorize('payMembership', $user);
 
-        $membershipFee = Constants::MEMBERSHIP_FEE;
+        if (empty($user->email_verified_at)) {
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error("You must confirm your email before paying the membership.");
+            return back();
+        }
+
+        $membershipFee = DB::table('settings')->value('membership_fee') ?? 0;
 
         $card = $user->card;
 
@@ -53,17 +63,14 @@ class MembershipController extends Controller
 
         try {
             DB::transaction(function () use ($membershipFee, $card, $user) {
-                $card->decreaseBalance($membershipFee);
-
-                $user->changeType(UserType::Member);
-
-                CardOperation::create([
-                    'card_id' => $card->id,
+                $card->decreaseBalance($membershipFee, [
                     'type' => TransactionType::Debit->value,
                     'value' => $membershipFee,
                     'date' => now()->toDateString(),
                     'debit_type' => DebitType::MembershipFee->value,
                 ]);
+
+                $user->changeType(UserType::Member);
 
                 flash()
                     ->option('position', 'bottom-right')

@@ -81,7 +81,7 @@ class OrderController extends Controller
             }
         }
 
-        return $this->generateReceipt($order);
+        return $order->generateReceipt();
     }
 
     /**
@@ -98,7 +98,7 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            
+
             $order->update([
                 'status' => OrderStatus::CANCELED,
                 'cancel_reason' => $cancelReason
@@ -109,7 +109,7 @@ class OrderController extends Controller
             if ($card) {
                 $card->balance += $order->total;
                 $card->save();
-        
+
                 $card->operations()->create([
                     'type' => TransactionType::Credit,
                     'value' => $order->total,
@@ -150,10 +150,37 @@ class OrderController extends Controller
 
         $user = authUser();
 
+        // Calcular o total da nova order antes de criar
+        $totalItems = 0;
+        foreach ($order->items as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $unitPrice = $product->price;
+                $discount = 0;
+                if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
+                    $discount = $product->discount;
+                }
+                $subtotal = ($unitPrice - $discount) * $item->quantity;
+                $totalItems += $subtotal;
+            }
+        }
+        $shippingCost = calculateShippingCost($totalItems);
+        $total = $totalItems + $shippingCost;
+
+        $card = $user->card;
+        if ($card && $card->balance < $total) {
+            flash()
+                ->option('position', 'bottom-right')
+                ->option('timeout', 3000)
+                ->error('Insufficient funds on the virtual card to reorder.');
+            return redirect()->route('my-account.orders.show', $order);
+        }
+
         DB::beginTransaction();
 
         try {
-            $newOrder = $user->orders()->create([
+            $newOrder = Order::create([
+                'member_id' => $user->id,
                 'status' => OrderStatus::PENDING,
                 'date' => now(),
                 'total_items' => 0,
@@ -163,30 +190,15 @@ class OrderController extends Controller
                 'nif' => $order->nif
             ]);
 
-            $card = $user->card;
-
-            if ($card) {
-                $card->operations()->create([
-                    'type' => TransactionType::Debit,
-                    'value' => $order->total,
-                    'date' => now()->toDateString(),
-                    'credit_type' => DebitType::Order,
-                    'order_id' => $newOrder->id,
-                ]);
-            }
-
             foreach ($order->items as $item) {
                 $product = Product::find($item->product_id);
 
                 if ($product) {
                     $unitPrice = $product->price;
                     $discount = 0;
-
-
                     if ($product->discount_min_qty && $item->quantity >= $product->discount_min_qty) {
                         $discount = $product->discount;
                     }
-
                     $newOrder->items()->create([
                         'product_id' => $product->id,
                         'quantity' => $item->quantity,
@@ -197,7 +209,15 @@ class OrderController extends Controller
                 }
             }
 
-            $this->updateOrderTotals($newOrder);
+            updateOrderTotals($newOrder);
+
+            $card->decreaseBalance($total, [
+                'type' => TransactionType::Debit->value,
+                'value' => $total,
+                'date' => now()->toDateString(),
+                'debit_type' => DebitType::Order->value,
+                'order_id' => $newOrder->id,
+            ]);
 
             DB::commit();
 
@@ -209,96 +229,44 @@ class OrderController extends Controller
             return redirect()->route('my-account.orders.show', $newOrder);
         } catch (\Exception $e) {
             DB::rollBack();
-    
+
             report($e);
-    
+
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->error('There was an error creating the new order. Please try again.');
-    
+
             return redirect()->route('my-account.orders.show', $order);
         }
     }
-
-    /**
-     * Generate a PDF receipt for the order.
-    */
-    protected function generateReceipt(Order $order, bool $download = true)
-    {
-        if ($order->status !== OrderStatus::COMPLETED) {
-            return;
-        }
-
-        try {
-            $order->load(['items.product', 'member.card']);
-
-            $pdf = Pdf::loadView('pdf.receipt', [
-                'order' => $order,
-                'items' => $order->items
-            ])->setOptions([
-                'defaultFont' => 'DejaVu Sans',
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true,
-            ]);
-
-            $filename = "receipt_{$order->id}_" . time() . '.pdf';
-            $filePath = storage_path("app/private/receipts/{$filename}");
-
-            $pdf->save($filePath);
-
-            $order->update(['pdf_receipt' => $filename]);
-
-            return $download ? $pdf->download($filename) : $filePath;
-
-        } catch (\Exception $e) {
-            Log::error("Failed to generate receipt for order {$order->id}: " . $e->getMessage());
-
-            if ($download) {
-                return redirect()->back()
-                    ->with('error', 'Failed to generate receipt. Please try again later.');
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Update order totals based on items and shipping costs.
-    */
-    protected function updateOrderTotals(Order $order)
-    {
-        $order->load('items');
-
-        $totalItems = $order->items->sum('subtotal');
-        $shippingCost = $this->calculateShippingCost($totalItems);
-        $total = $totalItems + $shippingCost;
-
-        $order->update([
-            'total_items' => $totalItems,
-            'shipping_cost' => $shippingCost,
-            'total' => $total
-        ]);
-    }
-
 
     /**
      * Create a new Order
     */
     public function createOrder(CreateOrderRequest $request)
     {
-        $this->authorize('order', Order::class);
-
         $user = authUser();
 
-        if ($user->type !== \App\Enums\UserType::Member && $user->type !== \App\Enums\UserType::Board) {
+        if (!$user) {
+            flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->error("You must be logged in to create an order!");
+
+            return redirect()->route('login');
+        }
+
+        if ($user->type == UserType::PendingMember) {
             flash()
             ->option('position', 'bottom-right')
             ->option('timeout', 3000)
             ->error("Only members can create orders!");
 
-            return back();
+            return redirect()->route('my-account.membership.index');
         }
+        
+        $this->authorize('order', Order::class);
 
         $cart = session('cart', []);
         if (empty($cart)) {
@@ -365,10 +333,7 @@ class OrderController extends Controller
                     ]);
                 }
 
-                $card->decreaseBalance($total);
-
-                CardOperation::create([
-                    'card_id' => $card->id,
+                $card->decreaseBalance($total, [
                     'type' => TransactionType::Debit->value,
                     'value' => $total,
                     'date' => now()->toDateString(),
@@ -376,8 +341,8 @@ class OrderController extends Controller
                     'order_id' => $order->id,
                 ]);
 
-                session()->forget('cart');    
-                
+                session()->forget('cart');
+
                 return $order->id;
             });
 
@@ -385,15 +350,15 @@ class OrderController extends Controller
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
                 ->success("Order placed successfully. We are preparing your order.");
-                
+
             return redirect()->route('my-account.orders.show', $newOrder);
         } catch (\Exception $e) {
             report($e);
-            
+
             flash()
                 ->option('position', 'bottom-right')
                 ->option('timeout', 3000)
-                ->error('There was an error creating the order. Please try again.');
+                ->error('There was an error creating the order: ' . $e->getMessage());
 
             return back();
         }

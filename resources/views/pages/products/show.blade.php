@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
+@section('title', 'Product - Product Name')
+
 @section('content')
     <div class="container">
         <h2 class="mb-4">Products</h2>
 
-        {{-- Filtro por categoria --}}
         <form method="GET" action="{{ route('products.index') }}" class="mb-4">
             <select name="category_id" onchange="this.form.submit()" class="form-select">
                 <option value="">All Categories</option>
@@ -16,7 +17,6 @@
             </select>
         </form>
 
-        {{-- Lista de produtos --}}
         <div class="row">
             @forelse($products as $product)
                 <livewire:product-card :product="$product" :key="$product->id" />
@@ -25,7 +25,6 @@
             @endforelse
         </div>
 
-        {{-- Paginação --}}
         <div class="mt-4">
             {{ $products->withQueryString()->links() }}
         </div>

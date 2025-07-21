@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ForgotPasswordRequest extends FormRequest
 {
@@ -33,5 +35,19 @@ class ForgotPasswordRequest extends FormRequest
             'email.email' => 'Enter a valid email address.',
             'email.exists' => 'This email is not registered in our system.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }

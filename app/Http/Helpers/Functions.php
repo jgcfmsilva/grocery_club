@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\UserType;
+use App\Models\Order;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ if (!function_exists('userID')) {
 
 if (! function_exists('calculateShippingCost')) {
     function calculateShippingCost(float $total): float
-    {   
+    {
         $shippingCost = DB::table('settings_shipping_costs')
             ->where('min_value_threshold', '<=', $total)
             ->where('max_value_threshold', '>', $total)
@@ -62,11 +63,42 @@ if (! function_exists('calculate_price_with_discount')) {
     }
 }
 
+// Calculate total discount for an order
+if (! function_exists('calculate_order_total_discount')) {
+    function calculate_order_total_discount($order)
+    {
+        // $order can be a model or array with 'items'
+        $items = is_object($order) && isset($order->items) ? $order->items : (is_array($order) && isset($order['items']) ? $order['items'] : []);
+        $total = 0;
+        foreach ($items as $item) {
+            // $item can be array or object
+            $discount = is_object($item) ? ($item->discount ?? 0) : ($item['discount'] ?? 0);
+            $qty = is_object($item) ? ($item->quantity ?? 0) : ($item['quantity'] ?? 0);
+            $total += $discount * $qty;
+        }
+        return $total;
+    }
+}
+
+// Calculate percentage of discount
+if (! function_exists('calculate_percentage_discount')) {
+    function calculate_percentage_discount($originalPrice, $discountedPrice)
+    {
+        if ($originalPrice > 0 && $discountedPrice < $originalPrice) {
+            $discount = $originalPrice - $discountedPrice;
+            return ($discount / $originalPrice) * 100;
+        }
+
+        return 0;
+    }
+}
+
 # Is employee
 if (!function_exists('isPendingMember')) {
     function isPendingMember()
     {
-        return authUser()->isPendingMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isPendingMember') ? $user->isPendingMember() : false;
     }
 }
 
@@ -74,7 +106,8 @@ if (!function_exists('isPendingMember')) {
 if (!function_exists('isMember')) {
     function isMember()
     {
-        return authUser()->isMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isMember') ? $user->isMember() : false;
     }
 }
 
@@ -82,7 +115,8 @@ if (!function_exists('isMember')) {
 if (!function_exists('isEmployee')) {
     function isEmployee()
     {
-        return authUser()->isEmployee();
+        $user = authUser();
+        return $user && method_exists($user, 'isEmployee') ? $user->isEmployee() : false;
     }
 }
 
@@ -90,7 +124,8 @@ if (!function_exists('isEmployee')) {
 if (!function_exists('isBoard')) {
     function isBoard()
     {
-        return authUser()->isBoard();
+        $user = authUser();
+        return $user && method_exists($user, 'isBoard') ? $user->isBoard() : false;
     }
 }
 
@@ -98,7 +133,8 @@ if (!function_exists('isBoard')) {
 if (!function_exists('isActiveMember')) {
     function isActiveMember()
     {
-        return authUser()->isActiveMember();
+        $user = authUser();
+        return $user && method_exists($user, 'isActiveMember') ? $user->isActiveMember() : false;
     }
 }
 
@@ -138,5 +174,22 @@ if (!function_exists('csrfToken')) {
             return $session->token();
         }
         throw new RuntimeException('Session store not set.');
+    }
+}
+
+if (!function_exists('updateOrderTotals')) {
+    function updateOrderTotals(Order $order)
+    {
+        $order->load('items');
+
+        $totalItems = $order->items->sum('subtotal');
+        $shippingCost = calculateShippingCost($totalItems);
+        $total = $totalItems + $shippingCost;
+
+        $order->update([
+            'total_items' => $totalItems,
+            'shipping_cost' => $shippingCost,
+            'total' => $total
+        ]);
     }
 }

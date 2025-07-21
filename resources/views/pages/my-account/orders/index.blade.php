@@ -1,9 +1,11 @@
 @extends('layouts.pages.my-account.layout')
 
-@section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h4>
+@section('title', 'My Account - My Orders')
 
-    @include('layouts.partials.alerts')
+@section('account-content')
+    <h3 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h3>
+
+    @include('layouts.partials.alerts.alerts')
 
     @if($orders->isEmpty())
         <div class="bg-blue-100 text-blue-800 px-4 py-3 rounded-md shadow-sm mb-6">

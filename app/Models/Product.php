@@ -7,10 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\StockAdjustment;
+use Illuminate\Support\Facades\Cache;
 
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const CACHE_KEY_ALL = 'products:all';
+    public const CACHE_KEY_PAGE_PREFIX = 'products:page:';
+    public const CACHE_KEY_CATEGORY_PAGE = 'products:category';
 
     /**
      * The attributes that are mass assignable.
@@ -74,6 +80,14 @@ class Product extends Model
     }
 
     /**
+     * Get the stock adjustments for the product.
+     */
+    public function stockAdjustments()
+    {
+        return $this->hasMany(StockAdjustment::class);
+    }
+
+    /**
      * Check if the product has a discount available.
      */
     public function hasDiscount(): bool
@@ -87,6 +101,17 @@ class Product extends Model
     public function getDiscountedPrice(int $quantity): float
     {
         if ($this->hasDiscount() && $quantity >= $this->discount_min_qty) {
+            return $this->price - $this->discount;
+        }
+        return $this->price;
+    }
+
+    /**
+     * Calculate the price with discount
+     */
+    public function getPriceWithDiscount(): float
+    {
+        if ($this->hasDiscount()) {
             return $this->price - $this->discount;
         }
         return $this->price;
@@ -158,14 +183,24 @@ class Product extends Model
     }
 
     /**
-     * Get the photo URL for the product.
+     * Get the image URL for the product.
      */
-    public function getPhotoUrlAttribute(): ?string
+    public function getImageUrlAttribute(): ?string
     {
         if (!$this->photo) {
-            return null;
+            return asset('storage/products/product_no_image.png');
         }
         
         return asset('storage/products/' . $this->photo);
+    }
+
+    /**
+     * Get all products with Redis cache.
+     */
+    public static function allProducts()
+    {
+        return Cache::store('redis')->tags(['products'])->remember('products:all', 3600, function () {
+            return self::whereNull('deleted_at')->get();
+        });
     }
 }

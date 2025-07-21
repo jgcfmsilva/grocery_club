@@ -22,12 +22,12 @@ class EmailVerificationController extends Controller
             return redirect()->route('home')->with('info', 'The email is already validated!');
         }
 
-        return view('auth.email-confirmation');
+        return view('pages.auth.email-confirmation');
     }
 
     public function finish()
     {
-        return view('auth.email-validated');
+        return view('pages.auth.email-validated');
     }
 
     /**
@@ -70,6 +70,11 @@ class EmailVerificationController extends Controller
         }
 
         $user->sendEmailVerificationNotification();
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 3000)
+            ->success("A new verification email has been sent to your email address. Please check your inbox.");
 
         return back()->with('resent', true);
     }

@@ -17,11 +17,11 @@ class ForgotPasswordController extends Controller
 
             // checks if the email is not null
             if($request->only('email') == null):
-                return view('auth.forgot-password', [
+                return view('pages.auth.forgot-password', [
                     'email' => ''
                 ]);
             else:
-                return view('auth.forgot-password', [
+                return view('pages.auth.forgot-password', [
                     'email' => $request->only('email')['email']
                 ]);
             endif;

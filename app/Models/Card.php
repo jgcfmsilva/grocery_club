@@ -35,17 +35,23 @@ class Card extends Model
         return $this->hasMany(CardOperation::class);
     }
 
-    public function increaseBalance(float $amount): bool
+    public function increaseBalance(float $amount, array $operationData = []): bool
     {
         if ($amount <= 0) {
             throw new \InvalidArgumentException('The value to add must be positive.');
         }
 
         $this->balance += $amount;
-        return $this->save();
+        $saved = $this->save();
+
+        if ($saved && !empty($operationData)) {
+            $this->operations()->create($operationData);
+        }
+
+        return $saved;
     }
 
-    public function decreaseBalance(float $amount): bool
+    public function decreaseBalance(float $amount, array $operationData = []): bool
     {
         if ($amount <= 0) {
             throw new \InvalidArgumentException('The amount to decrease must be positive.');
@@ -56,7 +62,13 @@ class Card extends Model
         }
 
         $this->balance -= $amount;
-        return $this->save();
+        $saved = $this->save();
+
+        if ($saved && !empty($operationData)) {
+            $this->operations()->create($operationData);
+        }
+
+        return $saved;
     }
 
 }

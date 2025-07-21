@@ -4,6 +4,8 @@ namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\UserType;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CancelOrderRequest extends FormRequest
 {
@@ -27,5 +29,19 @@ class CancelOrderRequest extends FormRequest
         return [
             'reason' => $user->type === UserType::Member ? 'nullable' : 'required|string|max:255',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $messages = collect($validator->errors()->all())->implode("\n");
+
+        flash()
+            ->option('position', 'bottom-right')
+            ->option('timeout', 6000)
+            ->error($messages);
+
+        throw new HttpResponseException(
+            redirect()->back()->withInput()
+        );
     }
 }

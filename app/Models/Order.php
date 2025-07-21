@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -107,5 +109,44 @@ class Order extends Model
     public function isCanceled(): bool
     {
         return $this->status === OrderStatus::CANCELED;
+    }
+
+    /**
+     * Calculate the total discount for the order (sum of all item discounts).
+     */
+    public function calculate_order_total_discount(): float
+    {
+        return $this->items->sum(function ($item) {
+            return $item->discount * $item->quantity;
+        });
+    }
+
+    public function generateReceipt()
+    {
+        if ($this->status !== OrderStatus::COMPLETED) {
+            return;
+        }
+
+        try {
+            $this->load(['items.product', 'member.card']);
+
+            $pdf = Pdf::loadView('pdf.receipt', [
+                'order' => $this,
+                'items' => $this->items
+            ])->setOptions([
+                'defaultFont' => 'DejaVu Sans',
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+            ]);
+
+            $filename = "receipt_{$this->id}_" . time() . '.pdf';
+            $filePath = storage_path("app/private/receipts/{$filename}");
+
+            $pdf->save($filePath);
+
+            $this->update(['pdf_receipt' => $filename]);
+        } catch (\Exception $e) {
+            Log::error("Failed to generate receipt for order {$this->id}: " . $e->getMessage());
+        }
     }
 }

@@ -1,0 +1,66 @@
+#user-dropdown ul li a,
+#sidebar-item li a
+{
+    transition: all 0.3s ease-in-out;
+    transform: translateX(0);
+}
+
+#user-dropdown ul li a:hover,
+#sidebar-item li a:hover 
+{
+    transform: translateX(5px);
+}
+
+#user-dropdown ul li a:not(:hover),
+#sidebar-item li a:not(:hover)
+{
+    transform: translateX(0);
+}
+
+/* Estilo do campo principal do Select2 */
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #2b2b2b; /* gray-300 */
+    border-radius: 0.275rem;   /* rounded-md */
+    padding: 0.5rem 0.95rem;   /* py-2 px-3 */
+    height: auto;
+    font-size: 0.975rem;       /* text-sm */
+    line-height: 1.45rem;      /* leading-5 */
+    color: #111827;            /* text-gray-900 */
+}
+
+/* Texto dentro do campo */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    padding-left: 0;
+    padding-right: 0;
+    line-height: 1.55rem;
+}
+
+/* Seta do dropdown */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.75rem; /* right-3 */
+}
+
+/* Estilo da lista de opções */
+.select2-container--default .select2-results__option {
+    padding: 0.5rem 0.75rem; /* py-2 px-3 */
+    font-size: 0.975rem;     /* text-sm */
+    color: #2c2c2c;          /* text-gray-800 */
+    cursor: pointer;
+}
+
+/* Hover nas opções */
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #e5e7eb; /* gray-200 */
+    color: #5e5e5e;            /* text-gray-900 */
+}
+
+/* Foco (quando selecionado) */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* ring-blue-500/50 */
+    border-color: #3b82f6; /* blue-500 */
+}

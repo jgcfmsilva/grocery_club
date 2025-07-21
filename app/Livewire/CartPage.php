@@ -17,13 +17,11 @@ class CartPage extends Component
     public $shipping = 0;
     public $grandTotal = 0;
 
-    // user info
     public $nif;
     public $default_delivery_address;
 
     public function mount()
     {
-        // gets the user info
         $user = Auth::user();
 
         if($user != null) {
@@ -49,6 +47,7 @@ class CartPage extends Component
             }
         }
 
+        unset($item);
         $this->calculateTotals();
     }
 

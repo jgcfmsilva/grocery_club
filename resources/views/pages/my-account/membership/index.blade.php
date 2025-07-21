@@ -1,10 +1,12 @@
 @extends('layouts.pages.my-account.layout')
 
+@section('title', 'My Account - Membership')
+
 @section('account-content')
-    <h4 class="text-3xl font-bold text-gray-800 mb-4">Membership</h4>
+    <h3 class="text-3xl font-bold text-gray-800 mb-4">Membership</h3>
 
     <div class="max-w-3xl mx-auto px-4 py-12">
-        @if (authUser()->isMember())
+        @if (authUser()->isMemberOrBoard())
             <div class="border-5 border-gray-300 rounded-xl p-8 text-center shadow-lg">
                 <h2 class="text-2xl font-bold mb-4 text-dark">🎉 You're an active member!</h2>
                 <p class="mb-2 font-semibold text-dark">As a member, you now have access to the following benefits:</p>
@@ -18,8 +20,10 @@
             <div class="border-2 border-gray-300 rounded-xl p-8 shadow-lg text-center">
                 <h2 class="text-2xl font-semibold text-gray-700 mb-4">⛔ You're not a member yet</h2>
                 <p class="text-dark mb-6">
-                    To activate your account and enjoy full features, please pay the 
-                    <span class="font-semibold text-dark">{{ \App\Utils\Constants::MEMBERSHIP_FEE }}€</span> membership fee.
+                    To activate your account and enjoy full features, please pay the
+                    <span class="font-semibold text-dark">
+                        {{ number_format($membershipFee, 2, ',', '') }}€
+                    </span> membership fee.
                 </p>
                 <p class="mb-2 font-semibold text-dark text-left">Without membership, you won't be able to:</p>
                 <ul class="text-left list-disc list-inside space-y-1 text-red-500 font-medium mb-10">
@@ -27,7 +31,7 @@
                     <li>❌ Place new orders at any time</li>
                     <li>❌ Access exclusive membership statistics and insights</li>
                 </ul>
-                
+
                 <form method="POST" action="{{ route('my-account.membership.pay') }}">
                     @csrf
                     <button type="submit"

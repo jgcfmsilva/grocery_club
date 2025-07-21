@@ -338,11 +338,9 @@ html:not([dir="rtl"]) .toast-close-button {
 [data-bs-theme=light] .clr-scheme .topbar-info-right li a:not(.dropdown-menu a) {
     color: #fff !important
 }
+
 .topbar-info-right {
     gap: 30px;
-}
-.topbar-info-right li::before{
-    left: -16px !important;
 }
 
 .pagination li .page-link {
