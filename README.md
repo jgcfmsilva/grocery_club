@@ -1,77 +1,98 @@
-Grocery Club 🛒
-Grocery Club é uma mercearia online desenvolvida com Laravel, Blade e Livewire.
-A aplicação oferece uma experiência moderna e dinâmica, com envio de e-mails assíncrono e cache de produtos utilizando Redis.
-Tudo é executado dentro de containers Docker com Laravel Sail.
+# 🛒 Grocery Club
 
-⚙️ Tecnologias Utilizadas
-Laravel – Backend PHP
+**Grocery Club** é uma mercearia online desenvolvida com **Laravel**, **Blade** e **Livewire**, oferecendo uma experiência moderna, responsiva e dinâmica. A aplicação utiliza **Redis** para cache e envio de e-mails assíncronos, tudo executado dentro de containers **Docker** com **Laravel Sail**.
 
-Blade – Sistema de templates
+---
 
-Livewire – Componentes dinâmicos e reativos
+## ⚙️ Tecnologias Utilizadas
 
-Tailwind CSS – Estilização moderna (via Vite)
+- **Laravel** – Backend robusto em PHP
+- **Blade** – Sistema de templates server-side
+- **Livewire** – Componentes dinâmicos e reativos
+- **Tailwind CSS** – Estilização moderna com utilitários (via Vite)
+- **Redis** – Cache e filas assíncronas
+- **Docker + Laravel Sail** – Ambiente isolado e portátil
+- **MySQL** – Base de dados relacional
 
-Redis – Cache e filas
+---
 
-Docker + Laravel Sail – Ambiente isolado
+## 🚀 Requisitos
 
-MySQL – Base de dados
+Certifique-se de ter os seguintes requisitos instalados antes de iniciar:
 
-🚀 Requisitos
-Docker e Docker Compose instalados
+- [Docker](https://www.docker.com/) e Docker Compose
+- [Node.js](https://nodejs.org/) (versão 16 ou superior)
+- [PHP 8.1+](https://www.php.net/) (caso não utilize Laravel Sail)
+- [Composer](https://getcomposer.org/)
+- [NPM](https://www.npmjs.com/) (para o frontend com Tailwind CSS)
 
-Node.js (16+)
+---
 
-PHP 8.1+ (caso não use Sail)
+## 🛠️ Instalação e Configuração
 
-Composer
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/grocery-club.git
+   cd grocery-club
 
-NPM (para frontend com Tailwind)
+2. **Instalar dependêncas PHP**
+   ```bash
+  composer install
 
-🛠️ Instalação e Configuração do Projeto
-Clone o repositório
-git clone https://github.com/seu-usuario/grocery-club.git
-cd grocery-club
+3. **Instalar dependêncas JavaScript**
+   ```bash
+ npm install
 
-Instalar dependências PHP
-composer install
+ 4. **Correr com os containers**
+   ```bash
+ ./vendor/bin/sail up -d
 
-Instalar dependências JavaScript
-npm install
+5. **Criar as tabelas**
+   ```bash
+ ./vendor/bin/sail artisan migrate:fresh
 
-Subir os containers Docker com Sail
-./vendor/bin/sail up -d
+6. **Inserir dados**
+   ```bash
+ ./vendor/bin/sail artisan db:seed
 
-Executar as migrações
-./vendor/bin/sail artisan migrate:fresh
+7. **Link do storage**
+   ```bash
+ ./vendor/bin/sail artisan storage:link
 
-Popular o banco de dados com dados iniciais
-./vendor/bin/sail artisan db:seed
+8. **Tailwind**
+   ```bash
+ npm run dev
 
-Criar link simbólico do storage
-./vendor/bin/sail artisan storage:link
+💌 Envio de E-mails Assíncronos
 
-Compilar os assets com Tailwind CSS
-npm run dev
+O sistema de envio de e-mails utiliza filas com Redis como driver.
 
-💌 Fila de E-mails (Queue Server)
-O sistema de envio de e-mails está implementado com filas, usando Redis como driver.
-
-✅ Como iniciar o processador de filas:
+▶️ Como iniciar o processador de filas:
+   ```bash
 ./vendor/bin/sail artisan queue:work --queue=emails
 
-Esse comando mantém o worker ativo processando os e-mails em background.
 
 🧠 Cache com Redis
-O cache dos produtos e outras operações é feito utilizando Redis.
 
-✅ Como testar se a cache está funcionando:
-Abrir o Tinker:
+Operações de cache (como listagem de produtos) são otimizadas com Redis.
+
+✅ Teste rápido da cache:
+	1.	Acesse o Tinker:
+     ```bash
 ./vendor/bin/sail artisan tinker
 
-No shell interativo, digitar:
-cache()->put('teste_redis', 'ok', 60); cache()->get('teste_redis');
+    2.	Digite:
+   ```bash
+cache()->put('teste_redis', 'ok', 60);
+cache()->get('teste_redis');
 
-Se o Redis estiver corretamente configurado, o retorno será:
+	3.	Resultado esperado:
 => "ok"
+
+
+
+  
+
+   
+
+   
